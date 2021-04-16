@@ -4,7 +4,7 @@ import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import AppLoading from 'expo-app-loading';
 import { useFonts } from '@expo-google-fonts/inter';
 
-export default function App() {
+export default function App(props) {
   let [fontsLoaded] = useFonts({
     'Bebes Neue': require('../assets/fonts/BebasNeue-Regular.ttf'),
   });
@@ -12,20 +12,26 @@ export default function App() {
     return <AppLoading />;
   }
 
+  const goToSignupUser = () => {
+    props.navigation.navigate('SignUp');
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.home}>
         <Text style={styles.homeText}>WELCOME TO ZOOMIE APP</Text>
       </View>
-      <TouchableOpacity style={styles.btn}>
-        <Text style={styles.btnText}>SIGN UP FOR BENGKEL OWNERS</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.btn}>
-        <Text style={styles.btnText}>SIGN UP FOR USERS</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.btnGray}>
-        <Text style={styles.btnText}>LOGIN</Text>
-      </TouchableOpacity>
+      <View style={styles.btnGroup}>
+        <TouchableOpacity style={styles.btn}>
+          <Text style={styles.btnText}>SIGN UP FOR BENGKEL OWNERS</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.btn}>
+          <Text style={styles.btnText} onPress={() => goToSignupUser()}>SIGN UP FOR USERS</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.btnGray}>
+          <Text style={styles.btnText}>LOGIN</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
@@ -36,23 +42,28 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
   },
+  btnGroup: {
+    flex: 1,
+    justifyContent: 'center',
+  },
   btn: {
     marginTop: 20,
+    justifyContent: 'center',
     width: 330,
-    height: 64,
+    height: 58,
     backgroundColor: '#DB3022',
     borderRadius: 28,
   },
   btnGray: {
     marginTop: 20,
+    justifyContent: 'center',
     width: 330,
-    height: 64,
+    height: 58,
     backgroundColor: '#4F4F4F',
     borderRadius: 28,
   },
   btnText: {
     fontFamily: 'Bebes Neue',
-    top: 20,
     textAlign: 'center',
     alignItems: 'center',
     color: '#ffffff',
