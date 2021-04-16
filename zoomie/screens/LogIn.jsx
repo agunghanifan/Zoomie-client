@@ -3,15 +3,14 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, View, ScrollView, TextInput, TouchableOpacity } from 'react-native';
 import AppLoading from 'expo-app-loading';
 import { useFonts } from '@expo-google-fonts/inter';
-import { Link } from '@react-navigation/native';
 
-export default function App({ navigation: { navigate } }) {
+export default function Login ({ navigation: { navigate } }) {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
   // ini logic load font
   let [fontsLoaded] = useFonts({
-    'Bebes Neue': require('../assets/fonts/BebasNeue-Regular.ttf'),
+    'Bebes Neue': require('../assets/fonts/BebasNeue-Regular.ttf')
   });
   if (!fontsLoaded) {
     return <AppLoading />;
@@ -19,7 +18,7 @@ export default function App({ navigation: { navigate } }) {
   // end load font
 
   function navigateToSignUp () {
-    navigate('SignUp')
+    navigate('Signup User')
   }
 
   function logIn () {
@@ -35,7 +34,7 @@ export default function App({ navigation: { navigate } }) {
       <Text style={styles.title}>LOG IN HERE</Text>
       <View style={styles.center}>
         <TextInput style={styles.textinput} placeholder="Username" onChange={(event) => setUsername(event.nativeEvent.text)} />
-        <TextInput style={styles.textinput} secureTextEntry={true} placeholder="Password" onChange={(event) => setPassword(event.nativeEvent.text)} />  
+        <TextInput style={styles.textinput} secureTextEntry={true} placeholder="Password" onChange={(event) => setPassword(event.nativeEvent.text)} />
       </View>
       <Text style={styles.haveAccount} onPress={() => navigateToSignUp()}>FORGOT YOUR PASSWORD &#8594; </Text>
       <View style={styles.center}>
