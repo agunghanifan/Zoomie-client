@@ -11,6 +11,7 @@ import SignupUser from './screens/SignupUser'
 import Login from './screens/LogIn'
 import DetailShop from './screens/DetailShop'
 import ProfileUser from './screens/ProfileUser'
+import BookingsHistoryUser from './screens/BookingsHistoryUser'
 
 const Stack = createStackNavigator();
 
@@ -18,7 +19,7 @@ export default function App() {
   return (
     <Provider store={store}>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Profile User">
+        <Stack.Navigator initialRouteName="Bookings History User">
           <Stack.Screen
             name="Welcome Page"
             component={WelcomePage}
@@ -72,6 +73,14 @@ export default function App() {
             component={ProfileUser}
             options={{
               title: '',
+              headerTitleAlign: 'center'
+            }}
+          />
+          <Stack.Screen
+            name="Bookings History User"
+            component={BookingsHistoryUser}
+            options={{
+              title: 'Bookings & History',
               headerTitleAlign: 'center'
             }}
           />
