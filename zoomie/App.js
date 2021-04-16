@@ -14,7 +14,13 @@ export default function App() {
     <Provider store={store}>
       <NavigationContainer>
         <Stack.Navigator initialRouteName="Home">
-          <Stack.Screen name="Home" component={Home} options={{ title: 'My homes', headerTitleAlign: 'center' }}/>
+          <Stack.Screen name="Home" component={Home} options={{ 
+            title: '', 
+            headerTitleAlign: 'center',
+            headerStyle: {
+              backgroundColor: '#DB3022',
+            },
+          }}/>
           <Stack.Screen name="SignUp" component={SignUp} options={{ title: '', headerTitleAlign: 'center' }} />
         </Stack.Navigator>
       </NavigationContainer>
