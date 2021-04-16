@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View, Image, ScrollView } from 'react-native';
 import AppLoading from 'expo-app-loading';
 import { useFonts } from '@expo-google-fonts/inter';
-import GarageCard from '../components/GarageCard';
+import FavoriteCard from '../components/FavoriteCard';
 
 export default function Home() {
   let [fontsLoaded] = useFonts({
@@ -23,13 +23,11 @@ export default function Home() {
         />
       </View>
       <View>
-        <Text style={styles.title}>LIST BENGKEL</Text>
+        <Text style={styles.title}>LIST BENGKEL FAVORITES</Text>
       </View>
       <ScrollView>
-        <GarageCard />
-        <GarageCard />
-        <GarageCard />
-        <GarageCard />
+        <FavoriteCard />
+        <FavoriteCard />
       </ScrollView>
       <View>
       </View>

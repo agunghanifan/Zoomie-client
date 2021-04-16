@@ -4,7 +4,7 @@ import { StyleSheet, Text, View, ScrollView, TextInput, TouchableOpacity, Image 
 import AppLoading from 'expo-app-loading';
 import { useFonts } from '@expo-google-fonts/inter';
 
-export default function ProfileUser ({ navigation: { navigate } }) {
+export default function ProfileUser ({ navigation: { navigate, replace } }) {
 
   // ini logic load font
   let [fontsLoaded] = useFonts({
@@ -14,9 +14,22 @@ export default function ProfileUser ({ navigation: { navigate } }) {
     return <AppLoading />
   }
   // end load font
-  
+
+  function currentBookings () {
+    console.log('Masuk my booking')
+  }
+
+  function historyBookings () {
+    console.log("masuk history Bookings")
+  }
+
+  function logOut () {
+    console.log("Akun anda Logout")
+    navigate('Login User')
+  }
+
   return (
-    <ScrollView>
+    <View style={styles.container}>
       <Text style={styles.title}>MY PROFILE</Text>
       <Image
         style={styles.tinyLogo}
@@ -24,24 +37,40 @@ export default function ProfileUser ({ navigation: { navigate } }) {
           uri: 'https://image.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg'
         }}
       />
-      <Text>Derek Deskumar</Text>
-      <Text>Derekdeskumar@mail.com</Text>
+      <Text style={styles.textUsername}>Derek Deskumar</Text>
+      <Text style={styles.textEmail}>Derekdeskumar@mail.com</Text>
+      <View style={styles.btnBox}>
+        <View style={styles.capsText}>
+          <Text style={{ fontSize: 16, fontWeight: 'bold' }} onPress={() => currentBookings()}>My Booking</Text>
+          <Text style={{ fontSize: 11 }}>Already Have 1 Orders</Text>
+        </View>
+      </View>
+      <View style={styles.btnBox}>
+        <View style={styles.capsText}>
+          <Text style={{ fontSize: 16, fontWeight: 'bold' }} onPress={() => historyBookings()}>History Book</Text>
+          <Text style={{ fontSize: 11 }}>Your Recent History Book</Text>
+        </View>
+      </View>
+      <View style={styles.btnBox} >
+        <View style={styles.capsText}>
+          <Text style={{ fontSize: 16, fontWeight: 'bold' }} onPress={() => logOut()}>Logout</Text>
+          <Text style={{ fontSize: 11 }}>Logout from App</Text>
+        </View>
+      </View>
       <StatusBar style="auto" />
-    </ScrollView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F9F9F9',
-    alignItems: 'center',
-    justifyContent: 'center',
-    fontFamily: 'Bebes Neue'
+    paddingTop: 60,
+    fontFamily: 'Bebes Neue',
+    backgroundColor: '#F9F9F9'
   },
   title: {
-    left: 30,
-    top: 106,
+    left: 41,
     fontFamily: 'Bebes Neue',
     fontSize: 34,
     color: '#222222',
@@ -49,15 +78,30 @@ const styles = StyleSheet.create({
   tinyLogo: {
     width: 50,
     height: 50,
+    borderRadius: 50,
+    left: 41,
+    top: 10
   },
   textUsername: {
-    width: 98,
-    height: 22,
     left: 113,
-    top: 175,
+    top: -35,
     fontFamily: 'Bebes Neue',
     fontSize: 18,
-    lineHeight: 22,
     color: '#222222'
+  },
+  textEmail: {
+    left: 113,
+    top: -35
+  },
+  btnBox: {
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+    width: 409,
+    height: 72,
+    borderBottomColor: '#828282',
+    borderBottomWidth: 1
+  },
+  capsText: {
+    left: 38
   }
 });
