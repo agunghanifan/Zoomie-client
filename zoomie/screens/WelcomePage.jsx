@@ -13,7 +13,15 @@ export default function App(props) {
   }
 
   const goToSignupUser = () => {
-    props.navigation.navigate('SignUp');
+    props.navigation.navigate('Signup User');
+  }
+  const goToSignupGarage = () => {
+    console.log(`go to signup garage`);
+    // props.navigation.navigate('Signup User');
+  }
+  const goToLogin = () => {
+    console.log(`go to login`);
+    // props.navigation.navigate('Signup User');
   }
 
   return (
