@@ -12,6 +12,7 @@ import Login from './screens/LogIn'
 import DetailShop from './screens/DetailShop'
 import ProfileUser from './screens/ProfileUser'
 import BookingsHistoryUser from './screens/BookingsHistoryUser'
+import CheckoutUser from './screens/CheckoutUser'
 
 const Stack = createStackNavigator();
 
@@ -19,7 +20,7 @@ export default function App() {
   return (
     <Provider store={store}>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Bookings History User">
+        <Stack.Navigator initialRouteName="Checkout User">
           <Stack.Screen
             name="Welcome Page"
             component={WelcomePage}
@@ -81,6 +82,14 @@ export default function App() {
             component={BookingsHistoryUser}
             options={{
               title: 'Bookings & History',
+              headerTitleAlign: 'center'
+            }}
+          />
+          <Stack.Screen
+            name="Checkout User"
+            component={CheckoutUser}
+            options={{
+              title: 'Checkout',
               headerTitleAlign: 'center'
             }}
           />
