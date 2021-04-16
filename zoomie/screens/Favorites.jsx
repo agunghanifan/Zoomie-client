@@ -4,7 +4,7 @@ import AppLoading from 'expo-app-loading';
 import { useFonts } from '@expo-google-fonts/inter';
 import FavoriteCard from '../components/FavoriteCard';
 
-export default function Home() {
+export default function Favorites(props) {
   let [fontsLoaded] = useFonts({
     'Bebes Neue': require('../assets/fonts/BebasNeue-Regular.ttf'),
   });
@@ -23,11 +23,11 @@ export default function Home() {
         />
       </View>
       <View>
-        <Text style={styles.title}>LIST BENGKEL FAVORITES</Text>
+        <Text style={styles.title}>LIST FAVORITES REPAIR SHOP </Text>
       </View>
       <ScrollView>
-        <FavoriteCard />
-        <FavoriteCard />
+        <FavoriteCard props={props}/>
+        <FavoriteCard props={props}/>
       </ScrollView>
       <View>
       </View>

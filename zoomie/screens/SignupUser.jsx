@@ -4,7 +4,7 @@ import { StyleSheet, Text, View, ScrollView, TextInput, Button, TouchableOpacity
 import AppLoading from 'expo-app-loading';
 import { useFonts } from '@expo-google-fonts/inter';
 
-export default function SignupUser() {
+export default function SignupUser(props) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
@@ -18,6 +18,10 @@ export default function SignupUser() {
     return <AppLoading />;
   }
   // end load font
+  
+  const goToLogin = () => {
+    props.navigation.navigate('Login User');
+  }
 
   const signUp = () => {
     const newUser = {
@@ -28,14 +32,14 @@ export default function SignupUser() {
 
   return (
     <ScrollView>
-      <Text style={styles.title}>SIGN UP</Text>
       <View style={styles.center}>
+        <Text style={styles.title}>SIGN UP</Text>
         <TextInput style={styles.textinput} placeholder="Username" onChange={(event) => setUsername(event.nativeEvent.text)} />
         <TextInput style={styles.textinput} secureTextEntry={true} placeholder="Password" onChange={(event) => setPassword(event.nativeEvent.text)} />  
         <TextInput style={styles.textinput} placeholder="Email" onChange={(event) => setEmail(event.nativeEvent.text)} />
         <TextInput style={styles.textinput} placeholder="Name" onChange={(event) => setName(event.nativeEvent.text)} />
       </View>
-      <Text style={styles.haveAccount}>ALREADY HAVE AN ACCOUNT? &#8594;</Text>
+      <Text style={styles.haveAccount} onPress={() => goToLogin()}>ALREADY HAVE AN ACCOUNT? &#8594;</Text>
       <View style={styles.center}>
         <TouchableOpacity onPress={() => signUp()} style={styles.btnSignUp}>
           <Text style={styles.btnSignUpText}>SIGN UP</Text>
@@ -93,9 +97,8 @@ const styles = StyleSheet.create({
     margin: 5
   },
   title: {
-    marginTop: 80,
+    marginTop: 40,
     marginBottom: 50,
-    left: 14,
     height: 41,
     fontFamily: 'Bebes Neue',
     fontStyle: 'normal',

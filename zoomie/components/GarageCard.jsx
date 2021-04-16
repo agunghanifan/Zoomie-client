@@ -5,34 +5,48 @@ import { useFonts } from '@expo-google-fonts/inter';
 
 const width = Dimensions.get('window').width; 
 
-export default function GarageCard() {
+export default function GarageCard(props) {
   let [fontsLoaded] = useFonts({
     'Bebes Neue': require('../assets/fonts/BebasNeue-Regular.ttf'),
   });
   if (!fontsLoaded) {
     return <AppLoading />;
   }
+
+  const goToDetail = () => {
+    props.props.navigation.navigate('Detail Shop');
+  }
   
+  const booking = () => {
+    console.log(`Menuju halaman chat`);
+  }
+
+  const addFavorite = () => {
+    console.log(`add to favorite`);
+  } 
+
   return (
     <View style={styles.card}>
       <View>
-        <Image 
-          style={styles.cardImg}
-          source={{
-            uri: 'https://cdn.medcom.id/images/library/images/WhatsApp%20Image%202020-02-20%20at%2012_21_13%20PM.jpeg'
-          }}
-        />
+        <TouchableOpacity onPress={() => goToDetail()}>
+          <Image 
+            style={styles.cardImg}
+            source={{
+              uri: 'https://cdn.medcom.id/images/library/images/WhatsApp%20Image%202020-02-20%20at%2012_21_13%20PM.jpeg'
+            }}
+          />
+        </TouchableOpacity>
       </View>
       <View style={styles.cardInfo}>
         <View>
-          <Text style={styles.cardName}>Bangkel Makmur</Text>
-          <Text style={styles.cardAddress}>JL. SUKA MAJU</Text>
+          <Text style={styles.cardName} onPress={() => goToDetail()}>Bangkel Makmur</Text>
+          <Text style={styles.cardAddress} onPress={() => goToDetail()}>JL. SUKA MAJU</Text>
         </View>
         <View style={styles.btnGroups}>
-          <TouchableOpacity style={styles.btnFavorite}>
+          <TouchableOpacity style={styles.btnFavorite} onPress={() => addFavorite()}>
             <Text style={styles.btnFavoriteText}>FAVORITE</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.btnBook}>
+          <TouchableOpacity style={styles.btnBook} onPress={() => booking()}>
             <Text style={styles.btnFavoriteText}>Book</Text>
           </TouchableOpacity>
         </View>
