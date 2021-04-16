@@ -1,10 +1,10 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Image, ImageBackground } from 'react-native';
 import AppLoading from 'expo-app-loading';
 import { useFonts } from '@expo-google-fonts/inter';
 
-export default function App(props) {
+export default function WelcomePage(props) {
   let [fontsLoaded] = useFonts({
     'Bebes Neue': require('../assets/fonts/BebasNeue-Regular.ttf'),
   });
@@ -27,17 +27,28 @@ export default function App(props) {
   return (
     <View style={styles.container}>
       <View style={styles.home}>
-        <Text style={styles.homeText}>WELCOME TO ZOOMIE APP</Text>
+        <ImageBackground
+          source={require('../assets/img/wrench.jpg')}
+          imageStyle={{ borderRadius: 15}}
+          style={styles.homeBackground}
+        >
+          <Text style={styles.homeText}>WELCOME TO</Text>
+          <Text style={styles.homeText}>ZOOMIE</Text>
+        </ImageBackground>
       </View>
       <View style={styles.btnGroup}>
+        <Image
+          style={styles.logo}
+          source={require('../assets/img/zoomie-logo.png')}
+        />
         <TouchableOpacity style={styles.btn}>
-          <Text style={styles.btnText}>SIGN UP FOR BENGKEL OWNERS</Text>
+          <Text style={styles.btnText} onPress={() => goToSignupGarage()}>SIGN UP FOR REPAIR SHOP OWNERS</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.btn}>
           <Text style={styles.btnText} onPress={() => goToSignupUser()}>SIGN UP FOR USERS</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.btnGray}>
-          <Text style={styles.btnText}>LOGIN</Text>
+          <Text style={styles.btnText} onPress={() => goToLogin()}>LOGIN</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -51,21 +62,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   btnGroup: {
-    flex: 1,
     justifyContent: 'center',
   },
   btn: {
-    marginTop: 20,
+    marginTop: 13,
     justifyContent: 'center',
-    width: 330,
+    width: 320,
     height: 58,
     backgroundColor: '#DB3022',
     borderRadius: 28,
   },
   btnGray: {
-    marginTop: 20,
+    marginTop: 15,
     justifyContent: 'center',
-    width: 330,
+    width: 320,
     height: 58,
     backgroundColor: '#4F4F4F',
     borderRadius: 28,
@@ -81,16 +91,31 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     alignSelf: "stretch",
-    minHeight: 200,
-    backgroundColor: '#DB3022',
+    minHeight: 320,
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
+  },
+  homeBackground: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    minHeight: 320,
+    alignSelf: "stretch",
+    backgroundColor: '#4F4F4F',
     borderBottomLeftRadius: 20,
     borderBottomRightRadius: 20,
   },
   homeText: {
-    alignItems: 'center',
     fontFamily: 'Bebes Neue',
     fontStyle: 'normal',
-    fontSize: 34,
-    color: '#222222',
-  }
+    fontSize: 70,
+    color: '#ffffff',
+    textShadowColor: '#000',
+    textShadowRadius: 30,
+  },
+  logo: {
+    alignSelf: 'center',
+    width: 97,
+    height: 110,
+    margin: 20,
+  },
 });
