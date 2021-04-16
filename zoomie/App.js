@@ -5,6 +5,7 @@ import store from "./store/";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import Home from './screens/Home'
+import WelcomePage from './screens/WelcomePage'
 import SignUp from './screens/SignUp'
 
 const Stack = createStackNavigator();
@@ -13,8 +14,8 @@ export default function App() {
   return (
     <Provider store={store}>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Home">
-          <Stack.Screen name="Home" component={Home} options={{ 
+        <Stack.Navigator initialRouteName="Welcome Page">
+          <Stack.Screen name="Welcome Page" component={WelcomePage} options={{ 
             title: '', 
             headerTitleAlign: 'center',
             headerStyle: {
