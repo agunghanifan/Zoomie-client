@@ -4,7 +4,7 @@ import { Provider } from "react-redux";
 import store from "./store/";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import Home from './screens/Home'
+import Chat from './screens/Chat'
 import Main from './screens/Main'
 import WelcomePage from './screens/WelcomePage'
 import SignupUser from './screens/SignupUser'
@@ -20,7 +20,7 @@ export default function App() {
   return (
     <Provider store={store}>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Checkout User">
+        <Stack.Navigator initialRouteName="Welcome Page">
           <Stack.Screen
             name="Welcome Page"
             component={WelcomePage}
@@ -77,6 +77,14 @@ export default function App() {
               headerTitleAlign: 'center'
             }}
           />
+          <Stack.Screen 
+            name="Chat"
+            component={Chat}
+            options={{
+              title: 'Chat',
+              headerTitleAlign: 'center'
+            }}
+          />
           <Stack.Screen
             name="Bookings History User"
             component={BookingsHistoryUser}
@@ -89,7 +97,7 @@ export default function App() {
             name="Checkout User"
             component={CheckoutUser}
             options={{
-              title: 'Checkout',
+              title: 'Checkout
               headerTitleAlign: 'center'
             }}
           />

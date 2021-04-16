@@ -18,7 +18,7 @@ export default function GarageCard(props) {
   }
   
   const booking = () => {
-    console.log(`Menuju halaman chat`);
+    props.props.navigation.navigate('Chat');
   }
 
   const addFavorite = () => {
