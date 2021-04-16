@@ -8,6 +8,7 @@ import Home from './screens/Home'
 import Main from './screens/Main'
 import WelcomePage from './screens/WelcomePage'
 import SignupUser from './screens/SignupUser'
+import Login from './screens/LogIn'
 
 const Stack = createStackNavigator();
 
@@ -46,6 +47,14 @@ export default function App() {
               headerStyle: {
                 backgroundColor: '#F2F2F2',
               },
+            }}
+          />
+          <Stack.Screen
+            name="Login User"
+            component={Login}
+            options={{
+              title: '',
+              headerTitleAlign: 'center'
             }}
           />
         </Stack.Navigator>
