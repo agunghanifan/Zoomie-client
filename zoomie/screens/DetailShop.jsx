@@ -12,6 +12,10 @@ export default function Home(props) {
   if (!fontsLoaded) {
     return <AppLoading />;
   }
+
+  const booking = () => {
+    props.navigation.navigate('Chat');
+  }
   
   return (
     <View style={styles.container}>
@@ -41,7 +45,7 @@ export default function Home(props) {
         </View>
       </ScrollView>
       <View style={styles.containerBooking}>
-        <TouchableOpacity style={styles.btnBooking}>
+        <TouchableOpacity style={styles.btnBooking} onPress={() => booking()}>
           <Text style={styles.btnBookingText}>BOOKING / CHAT</Text>
         </TouchableOpacity>
       </View>

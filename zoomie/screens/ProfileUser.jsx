@@ -4,7 +4,7 @@ import { StyleSheet, Text, View, ScrollView, TextInput, TouchableOpacity, Image 
 import AppLoading from 'expo-app-loading';
 import { useFonts } from '@expo-google-fonts/inter';
 
-export default function ProfileUser ({ navigation: { navigate, replace } }) {
+export default function ProfileUser (props) {
 
   // ini logic load font
   let [fontsLoaded] = useFonts({
@@ -25,7 +25,7 @@ export default function ProfileUser ({ navigation: { navigate, replace } }) {
 
   function logOut () {
     console.log("Akun anda Logout")
-    navigate('Login User')
+    props.navigation.replace('Welcome Page')
   }
 
   return (

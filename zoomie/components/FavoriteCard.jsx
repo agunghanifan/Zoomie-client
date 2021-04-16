@@ -18,7 +18,7 @@ export default function FavoriteCard(props) {
   }
 
   const booking = () => {
-    console.log(`Menuju halaman chat`);
+    props.props.navigation.navigate('Chat');
   }
   
   const deleteFavorite = () => {

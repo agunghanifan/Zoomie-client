@@ -34,10 +34,10 @@ export default function SignupUser(props) {
     <ScrollView>
       <View style={styles.center}>
         <Text style={styles.title}>SIGN UP</Text>
-        <TextInput style={styles.textinput} placeholder="Username" onChange={(event) => setUsername(event.nativeEvent.text)} />
-        <TextInput style={styles.textinput} secureTextEntry={true} placeholder="Password" onChange={(event) => setPassword(event.nativeEvent.text)} />  
-        <TextInput style={styles.textinput} placeholder="Email" onChange={(event) => setEmail(event.nativeEvent.text)} />
-        <TextInput style={styles.textinput} placeholder="Name" onChange={(event) => setName(event.nativeEvent.text)} />
+        <TextInput style={styles.textinput} placeholder="Username" value={username} onChange={(event) => setUsername(event.nativeEvent.text)} />
+        <TextInput style={styles.textinput} secureTextEntry={true} placeholder="Password" value={password} onChange={(event) => setPassword(event.nativeEvent.text)} />  
+        <TextInput style={styles.textinput} placeholder="Email" value={email} onChange={(event) => setEmail(event.nativeEvent.text)} />
+        <TextInput style={styles.textinput} placeholder="Name" value={name} onChange={(event) => setName(event.nativeEvent.text)} />
       </View>
       <Text style={styles.haveAccount} onPress={() => goToLogin()}>ALREADY HAVE AN ACCOUNT? &#8594;</Text>
       <View style={styles.center}>
