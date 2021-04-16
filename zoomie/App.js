@@ -13,9 +13,9 @@ export default function App() {
   return (
     <Provider store={store}>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="SignUp">
-          <Stack.Screen name="Home" component={Home} options={{ title: 'My home', alignItems: 'center' }}/>
-          <Stack.Screen name="SignUp" component={SignUp} options={{ title: '', alignItems: 'center' }} />
+        <Stack.Navigator initialRouteName="Home">
+          <Stack.Screen name="Home" component={Home} options={{ title: 'My homes', headerTitleAlign: 'center' }}/>
+          <Stack.Screen name="SignUp" component={SignUp} options={{ title: '', headerTitleAlign: 'center' }} />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>
