@@ -41,12 +41,6 @@ export default function ProfileUser (props) {
       <Text style={styles.textEmail}>Derekdeskumar@mail.com</Text>
       <View style={styles.btnBox}>
         <View style={styles.capsText}>
-          <Text style={{ fontSize: 16, fontWeight: 'bold' }} onPress={() => currentBookings()}>My Booking</Text>
-          <Text style={{ fontSize: 11 }}>Already Have 1 Orders</Text>
-        </View>
-      </View>
-      <View style={styles.btnBox}>
-        <View style={styles.capsText}>
           <Text style={{ fontSize: 16, fontWeight: 'bold' }} onPress={() => historyBookings()}>History Book</Text>
           <Text style={{ fontSize: 11 }}>Your Recent History Book</Text>
         </View>

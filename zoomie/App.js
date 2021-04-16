@@ -11,6 +11,8 @@ import SignupUser from './screens/SignupUser'
 import Login from './screens/LogIn'
 import DetailShop from './screens/DetailShop'
 import ProfileUser from './screens/ProfileUser'
+import BookingsHistoryUser from './screens/BookingsHistoryUser'
+import CheckoutUser from './screens/CheckoutUser'
 
 const Stack = createStackNavigator();
 
@@ -80,6 +82,22 @@ export default function App() {
             component={Chat}
             options={{
               title: 'Chat',
+              headerTitleAlign: 'center'
+            }}
+          />
+          <Stack.Screen
+            name="Bookings History User"
+            component={BookingsHistoryUser}
+            options={{
+              title: 'Bookings & History',
+              headerTitleAlign: 'center'
+            }}
+          />
+          <Stack.Screen
+            name="Checkout User"
+            component={CheckoutUser}
+            options={{
+              title: 'Checkout
               headerTitleAlign: 'center'
             }}
           />
