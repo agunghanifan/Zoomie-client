@@ -4,7 +4,7 @@ import AppLoading from 'expo-app-loading';
 import { useFonts } from '@expo-google-fonts/inter';
 import GarageCard from '../components/GarageCard';
 
-export default function Home() {
+export default function Home(props) {
   let [fontsLoaded] = useFonts({
     'Bebes Neue': require('../assets/fonts/BebasNeue-Regular.ttf'),
   });
@@ -23,13 +23,15 @@ export default function Home() {
         />
       </View>
       <View>
-        <Text style={styles.title}>LIST BENGKEL</Text>
+        <Text style={styles.title}>LIST REPAIR SHOP</Text>
       </View>
       <ScrollView>
-        <GarageCard />
-        <GarageCard />
-        <GarageCard />
-        <GarageCard />
+        <GarageCard props={props}/>
+        <GarageCard props={props}/>
+        <GarageCard props={props}/>
+        <GarageCard props={props}/>
+        <GarageCard props={props}/>
+        <GarageCard props={props}/>
       </ScrollView>
       <View>
       </View>

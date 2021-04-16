@@ -9,6 +9,7 @@ import Main from './screens/Main'
 import WelcomePage from './screens/WelcomePage'
 import SignupUser from './screens/SignupUser'
 import Login from './screens/LogIn'
+import DetailShop from './screens/DetailShop'
 import ProfileUser from './screens/ProfileUser'
 
 const Stack = createStackNavigator();
@@ -55,6 +56,14 @@ export default function App() {
             component={Login}
             options={{
               title: '',
+              headerTitleAlign: 'center'
+            }}
+          />
+          <Stack.Screen
+            name="Detail Shop"
+            component={DetailShop}
+            options={{
+              title: 'REPAIR SHOP DETAIL',
               headerTitleAlign: 'center'
             }}
           />

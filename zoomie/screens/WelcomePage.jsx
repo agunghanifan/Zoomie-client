@@ -15,13 +15,14 @@ export default function WelcomePage(props) {
   const goToSignupUser = () => {
     props.navigation.navigate('Signup User');
   }
+
   const goToSignupGarage = () => {
     console.log(`go to signup garage`);
     // props.navigation.navigate('Signup User');
   }
+  
   const goToLogin = () => {
-    console.log(`go to login`);
-    // props.navigation.navigate('Signup User');
+    props.navigation.navigate('Login User');
   }
 
   return (
