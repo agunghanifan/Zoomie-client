@@ -1,86 +1,169 @@
-import React, { useState } from 'react'
-import { View, Text, StyleSheet, Dimensions, TouchableOpacity, ScrollView, TextInput } from 'react-native'
+import { StatusBar } from 'expo-status-bar';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, Text, View, ScrollView, TextInput, Button, TouchableOpacity, Image, Dimensions, Alert } from 'react-native';
 import AppLoading from 'expo-app-loading';
 import { useFonts } from '@expo-google-fonts/inter';
+import * as ImagePicker from 'expo-image-picker';
+import base64 from 'react-native-base64'
 
-const width = Dimensions.get('window').width;
+const width = Dimensions.get('window').width; 
 
 export default function EditProfileBengkel (props) {
-
   const { username, email } = props.route.params
+  const [profilImage, setProfilImage] = useState(null);
+  const [name, setName] = useState('');
+  const [garageName, setGarageName] = useState('');
+  const [garageStatus, setGarageStatus] = useState('');
+  const [garageAddress, setGarageAddress] = useState('');
+  const [garageDescription, setGarageDescription] = useState('');
+  const [garageImage, setGarageImage] = useState(null);
 
+  useEffect(() => {
+    (async () => {
+      if (Platform.OS !== 'web') {
+        const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+        if (status !== 'granted') {
+          alert('Sorry, we need camera roll permissions to make this work!');
+        }
+      }
+    })();
+  }, []);
+
+  const pickProfilImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+    console.log(result);
+    if (!result.cancelled) {
+      setProfilImage(result.uri);
+    }
+  };
+
+  const pickGarageImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+    console.log(result);
+    if (!result.cancelled) {
+      setGarageImage(result.uri);
+    }
+  };
+
+  // ini logic load font
   let [fontsLoaded] = useFonts({
     'Bebes Neue': require('../assets/fonts/BebasNeue-Regular.ttf'),
   });
   if (!fontsLoaded) {
     return <AppLoading />;
   }
+  // end load font
+  
+  const goToLogin = () => {
+    props.navigation.navigate('Login User');
+  }
 
-  const updateProfile = () => {
-    console.log(`Sukses edit`);
-    props.navigation.navigate('Profile Bengkel');
+  function validateEmail(email) {
+    const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(email);
+  }
+
+  const signUp = () => {
+    // Validation
+    // check password and repeat password
+    if (!name || !garageName || !garageAddress || !garageStatus || !garageDescription) {
+      Alert.alert("Please fill all of the field!");
+    } else if (!validateEmail(email)) {
+      Alert.alert("email format wrong!");
+    }
+    else {
+      // if validated, then go to sign up process
+      const newUser = {
+        username,
+        email: email.toLowerCase(),
+        name,
+        profilImage: base64.encode(profilImage),
+        garageName,
+        garageAddress,
+        garageStatus,
+        garageDescription,
+        garageImage: base64.encode(garageImage)
+      }
+      console.log(newUser);
+    }
   }
 
   return (
-    <View style={styles.container}>
-      <ScrollView>
-        <Text style={styles.title}>Edit Profile</Text>
-        <View style={styles.cardInfo}>
-          <View style={styles.paddingCardText}>
-            <Text style={{ fontSize: 14, fontWeight: 'bold'}}>{username}</Text>
-            <Text style={{ fontSize: 14, fontWeight: 'bold'}}>{email}</Text>
+    <ScrollView>
+      <View style={styles.center}>
+        <Text style={styles.subTitle}>User Profile</Text>
+        <TextInput style={styles.textinput} placeholder="Name" value={name} onChange={(event) => setName(event.nativeEvent.text)} />
+        <View style={styles.uploadImage}>
+          <View>
+            <Button title="Pick an profile image" onPress={pickProfilImage} />
           </View>
+          {profilImage && <Image source={{ uri: profilImage }} style={{ width: width * 0.4, height: width * 0.4 }} />}
         </View>
-        <View style={styles.detailOrder}>
-          <Text style={styles.label}>Nama bengkel</Text>
-          <TextInput
-            style={styles.textinput}
-            placeholder="Tanggal"
-          />
-          <Text style={styles.label}>Description</Text>
-          <TextInput
-            style={styles.textinput}
-            placeholder="Status"
-          />
-          <Text style={styles.label}>Address</Text>
-          <TextInput
-            style={styles.textArea}
-            placeholder="Address"
-          />
-          <Text style={styles.label}>Picture Bengkel</Text>
-          <TextInput
-            style={styles.textinput}
-            placeholder="Picture Bengkel"
-          />
-          <Text style={styles.label}>Picture Profile</Text>
-          <TextInput
-            style={styles.textinput}
-            placeholder="Picture Profile"
-          />
+        <Text style={styles.subTitle}>Garage Profile</Text>
+        <TextInput style={styles.textinput} placeholder="Garage Name" value={garageName} onChange={(event) => setGarageName(event.nativeEvent.text)} />
+        <TextInput style={styles.textinput} placeholder="Garage Address" value={garageAddress} onChange={(event) => setGarageAddress(event.nativeEvent.text)} />
+        <TextInput style={styles.textinput} placeholder="Garage Status" value={garageStatus} onChange={(event) => setGarageStatus(event.nativeEvent.text)} />
+        <TextInput style={styles.textinput} placeholder="Garage Description" value={garageDescription} onChange={(event) => setGarageDescription(event.nativeEvent.text)} />
+        <View style={styles.uploadImage}>
+          <View>
+            <Button title="Pick an garage image" onPress={pickGarageImage} />
+          </View>
+          {garageImage && <Image source={{ uri: garageImage }} style={{ width: width * 0.4, height: width * 0.4 }} />}
         </View>
-      </ScrollView>
-      <View style={styles.btnGroup}>
-        <TouchableOpacity style={styles.btnBooking} onPress={() => updateProfile()}>
-          <Text style={styles.btnBookingText}>Update Order</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.btnBack} onPress={() => props.navigation.goBack()}>
-          <Text style={styles.btnBookingText}>Back</Text>
+      </View>
+      <View style={styles.center}>
+        <TouchableOpacity onPress={() => signUp()} style={styles.btnSignUp}>
+          <Text style={styles.btnSignUpText}>EDIT PROFILE</Text>
         </TouchableOpacity>
       </View>
-    </View>
-  )
+      <StatusBar style="auto" />
+    </ScrollView>
+  );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#F9F9F9',
+    alignItems: 'center',
+    justifyContent: 'center',
+    fontFamily: 'Bebas Neue'
   },
-  title: {
-    left: 10,
-    top: 19,
+  btnSignUp: {
+    marginTop: 20,
+    marginBottom: 20,
+    width: 330,
+    height: 64,
+    backgroundColor: '#DB3022',
+    borderRadius: 28,
+  },
+  btnSignUpText: {
     fontFamily: 'Bebes Neue',
-    fontWeight: 'bold',
-    fontSize: 16
+    top: 20,
+    textAlign: 'center',
+    alignItems: 'center',
+    color: '#ffffff',
+    fontSize: 20,
+  },
+  center: {
+    alignItems: 'center',
+  },
+  haveAccount: {
+    fontFamily: 'Bebes Neue',
+    fontStyle: 'normal',
+    fontSize: 16,
+    left: 185,
+    marginTop: 10,
   },
   textinput: {
     backgroundColor: '#fff',
@@ -95,81 +178,24 @@ const styles = StyleSheet.create({
     fontFamily: 'Bebes Neue',
     margin: 5
   },
-  textArea: {
-    backgroundColor: '#fff',
-    alignItems: 'flex-start',
-    justifyContent: 'flex-start',
-    width: 330,
-    height: 80,
-    borderRadius: 4,
-    backgroundColor: '#ffffff',
-    elevation: 4,
-    paddingLeft: 20,
+  title: {
+    marginTop: 40,
+    marginBottom: 20,
+    height: 41,
     fontFamily: 'Bebes Neue',
-    margin: 5
+    fontStyle: 'normal',
+    fontSize: 34,
+    lineHeight: 41
   },
-  label: {
-    left: 30,
+  subTitle: {
+    marginTop: 20,
     fontFamily: 'Bebes Neue',
-    alignSelf: 'flex-start'
+    fontStyle: 'normal',
+    fontSize: 16,
+    alignSelf: 'flex-start',
+    left: 10,
   },
-  cardInfo: {
-    alignSelf: 'center',
-    width: width * 0.9,
-    height: 108,
-    top: 30,
-    borderRadius: 10,
-    backgroundColor: '#ffffff',
-  },
-  paddingCardText: {
-    padding: 18,
-    paddingBottom: 30,
-    shadowColor: '#000000',
-    shadowRadius: 10,
-    shadowOffset: {
-      height: 10,
-      width: 10
-    }
-  },
-  detailOrder: {
-    top: 50,
-    minHeight: 700,
-    alignItems: 'center',
-  },
-  cardItems: {
-    alignSelf: 'center',
-    top: 50,
-    backgroundColor: '#ffffff',
-    width: width * 0.9,
-    // height: 150,
-    borderRadius: 10,
-  },
-  btnGroup: {
-    position: 'relative',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-around',
-    padding: 10
-  },
-  btnBooking: {
-    width: width * 0.45,
-    height: 48,
-    backgroundColor: '#db3022',
-    borderRadius: 28,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  btnBack: {
-    width: width * 0.45,
-    height: 48,
-    backgroundColor: '#4F4F4F',
-    borderRadius: 28,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  btnBookingText: {
-    fontFamily: 'Bebes Neue',
-    color: '#ffffff',
-    fontSize: 18,
-  },
-})
+  uploadImage: {
+    flexDirection: 'row'
+  }
+});
