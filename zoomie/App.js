@@ -18,6 +18,7 @@ import CheckoutUser from './screens/CheckoutUser'
 import SuccessPage from './screens/SuccessPage'
 import ProfileBengkel from './screens/ProfileBengkel'
 import OrderHistoryBengkel from './screens/OrderHistoryBengkel'
+import EditProfileBengkel from './screens/EditProfileBengkel'
 
 const Stack = createStackNavigator();
 
@@ -25,7 +26,7 @@ export default function App() {
   return (
     <Provider store={store}>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Main Garage">
+        <Stack.Navigator initialRouteName="Welcome Page">
           <Stack.Screen
             name="Welcome Page"
             component={WelcomePage}
@@ -148,6 +149,14 @@ export default function App() {
             component={OrderHistoryBengkel}
             options={{
               title: 'History Orders',
+              headerTitleAlign: 'center'
+            }}
+          />
+          <Stack.Screen
+            name="Edit Profil Bengkel"
+            component={EditProfileBengkel}
+            options={{
+              title: 'Edit Profil Bengkel',
               headerTitleAlign: 'center'
             }}
           />
