@@ -8,12 +8,17 @@ import * as ImagePicker from 'expo-image-picker';
 const width = Dimensions.get('window').width; 
 
 export default function SignupUser(props) {
+  const [profilImage, setProfilImage] = useState(null);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [repeatPassword, setRepeatPassword] = useState('');
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
-  const [profilImage, setProfilImage] = useState(null);
+  const [garageName, setGarageName] = useState('');
+  const [garageStatus, setGarageStatus] = useState('');
+  const [garageAddress, setGarageAddress] = useState('');
+  const [garageDescription, setGarageDescription] = useState('');
+  const [garageImage, setGarageImage] = useState(null);
 
   useEffect(() => {
     (async () => {
@@ -25,7 +30,7 @@ export default function SignupUser(props) {
       }
     })();
   }, []);
-  
+
   const pickProfilImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -36,6 +41,19 @@ export default function SignupUser(props) {
     console.log(result);
     if (!result.cancelled) {
       setProfilImage(result.uri);
+    }
+  };
+
+  const pickGarageImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+    console.log(result);
+    if (!result.cancelled) {
+      setGarageImage(result.uri);
     }
   };
 
@@ -64,17 +82,24 @@ export default function SignupUser(props) {
       Alert.alert("password didn't match or please check your password!");
       setPassword('');
       setRepeatPassword('');
-    } else if ( !username || !name || !email ) {
+    } else if (!username || !name || !garageName || !email || !garageAddress || !garageStatus || !garageDescription) {
       Alert.alert("Please fill all of the field!");
-    } else if ( !validateEmail(email) ) {
+    } else if (!validateEmail(email)) {
       Alert.alert("email format wrong!");
-    } else {
+    }
+    else {
+      // if validated, then go to sign up process
       const newUser = {
         username,
         password,
-        email,
+        email: email.toLowerCase(),
         name,
-        profilImage
+        profilImage,
+        garageName,
+        garageAddress,
+        garageStatus,
+        garageDescription,
+        garageImage
       }
       console.log(newUser);
     }
@@ -83,10 +108,11 @@ export default function SignupUser(props) {
   return (
     <ScrollView>
       <View style={styles.center}>
-        <Text style={styles.title}>SIGN UP</Text>
+        <Text style={styles.title}>SIGN UP REPAIR SHOP</Text>
+        <Text style={styles.subTitle}>User Profile</Text>
         <TextInput style={styles.textinput} placeholder="Username" value={username} onChange={(event) => setUsername(event.nativeEvent.text)} />
         <TextInput style={styles.textinput} secureTextEntry={true} placeholder="Password" value={password} onChange={(event) => setPassword(event.nativeEvent.text)} />  
-        <TextInput style={styles.textinput} secureTextEntry={true} placeholder="Password" value={repeatPassword} onChange={(event) => setRepeatPassword(event.nativeEvent.text)} />  
+        <TextInput style={styles.textinput} secureTextEntry={true} placeholder="Repeat Password" value={repeatPassword} onChange={(event) => setRepeatPassword(event.nativeEvent.text)} />  
         <TextInput style={styles.textinput} placeholder="Email" value={email} onChange={(event) => setEmail(event.nativeEvent.text)} />
         <TextInput style={styles.textinput} placeholder="Name" value={name} onChange={(event) => setName(event.nativeEvent.text)} />
         <View style={styles.uploadImage}>
@@ -94,6 +120,17 @@ export default function SignupUser(props) {
             <Button title="Pick an profile image" onPress={pickProfilImage} />
           </View>
           {profilImage && <Image source={{ uri: profilImage }} style={{ width: width * 0.4, height: width * 0.4 }} />}
+        </View>
+        <Text style={styles.subTitle}>Garage Profile</Text>
+        <TextInput style={styles.textinput} placeholder="Garage Name" value={garageName} onChange={(event) => setGarageName(event.nativeEvent.text)} />
+        <TextInput style={styles.textinput} placeholder="Garage Address" value={garageAddress} onChange={(event) => setGarageAddress(event.nativeEvent.text)} />
+        <TextInput style={styles.textinput} placeholder="Garage Status" value={garageStatus} onChange={(event) => setGarageStatus(event.nativeEvent.text)} />
+        <TextInput style={styles.textinput} placeholder="Garage Description" value={garageDescription} onChange={(event) => setGarageDescription(event.nativeEvent.text)} />
+        <View style={styles.uploadImage}>
+          <View>
+            <Button title="Pick an garage image" onPress={pickGarageImage} />
+          </View>
+          {garageImage && <Image source={{ uri: garageImage }} style={{ width: width * 0.4, height: width * 0.4 }} />}
         </View>
       </View>
       <Text style={styles.haveAccount} onPress={() => goToLogin()}>ALREADY HAVE AN ACCOUNT? &#8594;</Text>
@@ -117,6 +154,7 @@ const styles = StyleSheet.create({
   },
   btnSignUp: {
     marginTop: 20,
+    marginBottom: 20,
     width: 330,
     height: 64,
     backgroundColor: '#DB3022',
@@ -155,12 +193,20 @@ const styles = StyleSheet.create({
   },
   title: {
     marginTop: 40,
-    marginBottom: 50,
+    marginBottom: 20,
     height: 41,
     fontFamily: 'Bebes Neue',
     fontStyle: 'normal',
     fontSize: 34,
     lineHeight: 41
+  },
+  subTitle: {
+    marginTop: 20,
+    fontFamily: 'Bebes Neue',
+    fontStyle: 'normal',
+    fontSize: 16,
+    alignSelf: 'flex-start',
+    left: 10,
   },
   uploadImage: {
     flexDirection: 'row'
