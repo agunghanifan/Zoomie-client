@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, Text, View, ScrollView, TextInput, TouchableOpacity, Image } from 'react-native';
+import { StyleSheet, Text, View, Image, Alert } from 'react-native';
 import AppLoading from 'expo-app-loading';
 import { useFonts } from '@expo-google-fonts/inter';
 
@@ -15,17 +15,18 @@ export default function ProfileUser (props) {
   }
   // end load font
 
-  function currentBookings () {
-    console.log('Masuk my booking')
-  }
-
   function historyBookings () {
     console.log("masuk history Bookings")
+    props.navigation.navigate('Bookings History User')
   }
 
   function logOut () {
-    console.log("Akun anda Logout")
-    props.navigation.replace('Welcome Page')
+    Alert.alert("Logout", "Are you sure to Logout?",
+      [
+        { text: "Cancel", onPress: () => null, style: "cancel" },
+        { text: "Logout", onPress: () => props.navigation.replace('Welcome Page') }
+      ]
+    );    
   }
 
   return (

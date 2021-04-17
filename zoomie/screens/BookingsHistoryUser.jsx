@@ -18,11 +18,11 @@ export default function BookingsHistoryUser (props) {
     <View style={styles.container}>
       <View>
         <Text style={styles.title}>Current Booking's</Text>
-        <ActiveBookingUserCard />
+        <ActiveBookingUserCard props={props}/>
       </View>
       <View>
         <Text style={styles.title}>History Booking's</Text>
-        <HistoryCard />
+        <HistoryCard props={props}/>
       </View>
     </View>
   );

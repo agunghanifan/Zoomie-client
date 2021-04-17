@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, Image, TouchableOpacity, Dimensions } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity, Dimensions, Alert } from 'react-native';
 import AppLoading from 'expo-app-loading';
 import { useFonts } from '@expo-google-fonts/inter';
 
@@ -22,7 +22,12 @@ export default function FavoriteCard(props) {
   }
   
   const deleteFavorite = () => {
-    console.log(`deleted from favorite`);
+    Alert.alert("Delete Favorites", "Are you sure to delete?",
+      [
+        { text: "Cancel", onPress: () => null, style: "cancel" },
+        { text: "Delete", onPress: () => Alert.alert("Deleted from Favorites!") }
+      ]
+    );    
   } 
   
   return (

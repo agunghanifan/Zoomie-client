@@ -6,13 +6,18 @@ import { useFonts } from '@expo-google-fonts/inter';
 
 const width = Dimensions.get('window').width;
 
-export default function CheckoutUser() {
+export default function CheckoutUser(props) {
 
   let [fontsLoaded] = useFonts({
     'Bebes Neue': require('../assets/fonts/BebasNeue-Regular.ttf'),
   });
   if (!fontsLoaded) {
     return <AppLoading />;
+  }
+
+  const goToSuccess = () => {
+    console.log(`Menuju halaman sukses`);
+    props.navigation.navigate('Success');
   }
 
   return (
@@ -44,7 +49,7 @@ export default function CheckoutUser() {
         </View>
       </ScrollView>
       <View style={styles.containerBooking}>
-          <TouchableOpacity style={styles.btnBooking}>
+          <TouchableOpacity style={styles.btnBooking} onPress={() => goToSuccess()}>
             <Text style={styles.btnBookingText}>ORDER COMPLETE</Text>
           </TouchableOpacity>
         </View>

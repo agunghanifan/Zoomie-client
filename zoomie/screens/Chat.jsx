@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, Image, FlatList, Dimensions, TouchableOpacity, TextInput } from 'react-native';
+import { StyleSheet, Text, View, Alert, FlatList, Dimensions, TouchableOpacity, TextInput } from 'react-native';
 import AppLoading from 'expo-app-loading';
 import { useFonts } from '@expo-google-fonts/inter';
 import { Entypo } from '@expo/vector-icons';
@@ -25,6 +25,15 @@ export default function Chat(props) {
   const sendMessage = () => {
     console.log(chat);
     setChat('')
+  }
+
+  const goToCheckout = () => {
+    Alert.alert("Submit Booking", "Are you sure to Submit Booking?",
+      [
+        { text: "Cancel", onPress: () => null, style: "cancel" },
+        { text: "YES", onPress: () => props.navigation.navigate('Checkout User') }
+      ]
+    );    
   }
   
   // data chat dummy
@@ -72,7 +81,7 @@ export default function Chat(props) {
         </TouchableOpacity>
       </View>
       <View style={styles.btnGroup}>
-        <TouchableOpacity style={styles.btnBooking}>
+        <TouchableOpacity style={styles.btnBooking} onPress={() => goToCheckout()}>
           <Text style={styles.btnBookingText}>SUBMIT BOOKING</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.btnCancel} onPress={() => goToHome()}>

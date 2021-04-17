@@ -13,6 +13,7 @@ import DetailShop from './screens/DetailShop'
 import ProfileUser from './screens/ProfileUser'
 import BookingsHistoryUser from './screens/BookingsHistoryUser'
 import CheckoutUser from './screens/CheckoutUser'
+import SuccessPage from './screens/SuccessPage'
 
 const Stack = createStackNavigator();
 
@@ -20,7 +21,7 @@ export default function App() {
   return (
     <Provider store={store}>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Welcome Page">
+        <Stack.Navigator initialRouteName="Success">
           <Stack.Screen
             name="Welcome Page"
             component={WelcomePage}
@@ -97,7 +98,16 @@ export default function App() {
             name="Checkout User"
             component={CheckoutUser}
             options={{
-              title: 'Checkout
+              title: 'Checkout',
+              headerTitleAlign: 'center'
+            }}
+          />
+          <Stack.Screen
+            name="Success"
+            component={SuccessPage}
+            options={{
+              title: '',
+              headerShown: false,
               headerTitleAlign: 'center'
             }}
           />

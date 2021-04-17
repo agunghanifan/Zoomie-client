@@ -15,10 +15,17 @@ export default function ActiveBookingUserCard (props) {
 
   const goToChat = () => {
     console.log('Menuju halaman chat');
+    console.log(props.props);
+    props.props.navigation.navigate('Chat');
   }
   
   const goToCheckout = () => {
     console.log(`Menuju halaman checkout`);
+    props.props.navigation.navigate('Checkout User');
+  }
+
+  const goToDetail = () => {
+    props.props.navigation.navigate('Detail Shop');
   }
 
   return (

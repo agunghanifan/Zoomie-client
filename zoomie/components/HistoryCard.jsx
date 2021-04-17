@@ -13,6 +13,10 @@ export default function HistoryCard (props) {
     return <AppLoading />;
   }
 
+  const goToDetail = () => {
+    props.props.navigation.navigate('Detail Shop');
+  }
+
   return (
     <View style={styles.card}>
       <View>

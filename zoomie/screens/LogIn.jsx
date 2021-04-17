@@ -18,7 +18,7 @@ export default function Login (props) {
   // end load font
 
   function navigateToSignUp () {
-    props.navigation.navigate('Signup User')
+    props.navigation.navigate('Welcome Page')
   }
 
   function logIn () {
