@@ -6,12 +6,14 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import Chat from './screens/Chat'
 import Main from './screens/Main'
+import MainGarage from './screens/MainGarage'
 import WelcomePage from './screens/WelcomePage'
 import SignupUser from './screens/SignupUser'
 import Login from './screens/LogIn'
 import DetailShop from './screens/DetailShop'
 import ProfileUser from './screens/ProfileUser'
 import BookingsHistoryUser from './screens/BookingsHistoryUser'
+import EditOrderGarage from './screens/EditOrderGarage'
 import CheckoutUser from './screens/CheckoutUser'
 import SuccessPage from './screens/SuccessPage'
 import ProfileBengkel from './screens/ProfileBengkel'
@@ -23,7 +25,7 @@ export default function App() {
   return (
     <Provider store={store}>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Profile Bengkel">
+        <Stack.Navigator initialRouteName="Main Garage">
           <Stack.Screen
             name="Welcome Page"
             component={WelcomePage}
@@ -48,6 +50,17 @@ export default function App() {
           <Stack.Screen
             name="Main"
             component={Main}
+            options={{
+              title: '',
+              headerShown: false,
+              headerStyle: {
+                backgroundColor: '#F2F2F2',
+              },
+            }}
+          />
+          <Stack.Screen
+            name="Main Garage"
+            component={MainGarage}
             options={{
               title: '',
               headerShown: false,
@@ -101,6 +114,14 @@ export default function App() {
             component={CheckoutUser}
             options={{
               title: 'Checkout',
+              headerTitleAlign: 'center'
+            }}
+          />
+          <Stack.Screen
+            name="Edit Order"
+            component={EditOrderGarage}
+            options={{
+              title: 'Edit Order',
               headerTitleAlign: 'center'
             }}
           />

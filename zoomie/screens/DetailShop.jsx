@@ -5,7 +5,7 @@ import { useFonts } from '@expo-google-fonts/inter';
 
 const width = Dimensions.get('window').width; 
 
-export default function Home(props) {
+export default function DetailShop(props) {
   let [fontsLoaded] = useFonts({
     'Bebes Neue': require('../assets/fonts/BebasNeue-Regular.ttf'),
   });
