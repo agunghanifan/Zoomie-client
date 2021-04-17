@@ -9,6 +9,7 @@ import Main from './screens/Main'
 import MainGarage from './screens/MainGarage'
 import WelcomePage from './screens/WelcomePage'
 import SignupUser from './screens/SignupUser'
+import SignupGarage from './screens/SignupGarage'
 import Login from './screens/LogIn'
 import DetailShop from './screens/DetailShop'
 import ProfileUser from './screens/ProfileUser'
@@ -25,7 +26,7 @@ export default function App() {
   return (
     <Provider store={store}>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Main Garage">
+        <Stack.Navigator initialRouteName="Welcome Page">
           <Stack.Screen
             name="Welcome Page"
             component={WelcomePage}
@@ -42,6 +43,14 @@ export default function App() {
           <Stack.Screen
             name="Signup User"
             component={SignupUser}
+            options={{
+              title: '',
+              headerTitleAlign: 'center'
+            }}
+          />
+          <Stack.Screen
+            name="Signup Garage"
+            component={SignupGarage}
             options={{
               title: '',
               headerTitleAlign: 'center'
