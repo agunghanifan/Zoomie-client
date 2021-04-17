@@ -1,8 +1,10 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, ScrollView, TextInput, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, TextInput, TouchableOpacity, Alert } from 'react-native';
 import AppLoading from 'expo-app-loading';
 import { useFonts } from '@expo-google-fonts/inter';
+import axios from '../axios'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Login (props) {
   const [username, setUsername] = useState('')
@@ -21,13 +23,30 @@ export default function Login (props) {
     props.navigation.navigate('Welcome Page')
   }
 
-  function logIn () {
-    const data = {
-      username,
-      password
+  async function logIn () {
+    try {
+      const user = {
+        username,
+        password
+      }
+      console.log(user)  
+      const { data } = await axios.post('/login', user)
+      await AsyncStorage.setItem('@access_token', data.data.access_token)
+      await AsyncStorage.setItem('@email', data.data.email)
+      await AsyncStorage.setItem('@username', data.data.username)
+      await AsyncStorage.setItem('@roles', data.data.roles)
+
+      props.navigation.replace('Main')
     }
-    console.log(data)
-    props.navigation.replace('Main')
+    catch (err) {
+      console.log(err);
+      console.log(err.response);
+
+      // If login username / password wrong
+      if (err.response.data.error) {
+        Alert.alert(`Error`, err.response.data.errors.toString())
+      }
+    }
   }
   
   return (
