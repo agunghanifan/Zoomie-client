@@ -19,7 +19,8 @@ export default function Chat(props) {
   }
 
   const goToHome = () => {
-    props.navigation.navigate('Home')
+    // props.navigation.navigate('Home')
+    props.navigation.goBack();
   }
 
   const sendMessage = () => {

@@ -1,18 +1,18 @@
 import * as React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import Home from './Home'
+import HomeGarage from './HomeGarage'
 import Favorites from './Favorites'
 import ProfileUser from './ProfileUser'
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 const Tab = createBottomTabNavigator();
 
-export default function Main() {
+export default function MainGarage() {
   return (
-    <Tab.Navigator initialRouteName="Home"  tabBarOptions={{ activeTintColor: '#DB3022', inactiveTintColor: 'gray'}}>
+    <Tab.Navigator initialRouteName="Home Garage"  tabBarOptions={{ activeTintColor: '#DB3022', inactiveTintColor: 'gray'}}>
       <Tab.Screen
-        name="Home"
-        component={Home}
+        name="Home Garage"
+        component={HomeGarage}
         options={{
           tabBarLabel: 'Home',
           tabBarIcon: ({ color, size }) => (
