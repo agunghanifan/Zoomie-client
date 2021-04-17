@@ -36,16 +36,13 @@ export default function Login (props) {
       await AsyncStorage.setItem('@username', data.data.username)
       await AsyncStorage.setItem('@roles', data.data.roles)
 
-      props.navigation.replace('Main')
+      if (data.data.roles == 'user') props.navigation.replace('Main')
+      else props.navigation.replace('Main Garage')
     }
     catch (err) {
       console.log(err);
       console.log(err.response);
-
-      // If login username / password wrong
-      if (err.response.data.error) {
-        Alert.alert(`Error`, err.response.data.errors.toString())
-      }
+      Alert.alert(`Error`, err.response.data.errors.toString())
     }
   }
   
