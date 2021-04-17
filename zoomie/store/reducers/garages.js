@@ -1,14 +1,12 @@
 const initialState = {
-  users: [],
-  user: {},
+  garages: [],
   loading: false,
   error: false,
 }
 
 export default function reducer (state = initialState, action) {
   const { type, payload } = action;
-  if ( type === 'users/setUsers' ) return { ...state, users: payload }
-  if ( type === 'user/setUser' ) return { ...state, user: payload }
+  if ( type === 'garages/setGarages' ) return { ...state, garages: payload }
   if ( type === 'loading/setLoading' ) return { ...state, loading: payload }
   if ( type === 'error/setError' ) return { ...state, error: payload }
   return state

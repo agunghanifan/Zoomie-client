@@ -1,16 +1,40 @@
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { StyleSheet, Text, View, Image, Alert } from 'react-native';
 import AppLoading from 'expo-app-loading';
 import { useFonts } from '@expo-google-fonts/inter';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from '../axios'
 
 export default function ProfileUser (props) {
+  const user = useSelector(state => state.users.user);
+
+  const dispatch = useDispatch();
+
+  useEffect(_ => {
+    async function getUser() {
+      try {
+        const id = await AsyncStorage.getItem('@id');
+        const headers = {
+          access_token: await AsyncStorage.getItem('@access_token')
+        }
+        const { data } = await axios.get('/user/' + id, { headers });
+        dispatch({ type: 'user/setUser', payload: data });
+      }
+      catch (err) {
+        console.log(err);
+      }
+    }
+
+    getUser()
+  }, [])
 
   // ini logic load font
   let [fontsLoaded] = useFonts({
     'Bebes Neue': require('../assets/fonts/BebasNeue-Regular.ttf'),
   });
-  if (!fontsLoaded) {
+  if (!fontsLoaded || !user) {
     return <AppLoading />
   }
   // end load font
@@ -20,13 +44,18 @@ export default function ProfileUser (props) {
     props.navigation.navigate('Bookings History User')
   }
 
-  function logOut () {
+  function logOutBtn () {
     Alert.alert("Logout", "Are you sure to Logout?",
       [
         { text: "Cancel", onPress: () => null, style: "cancel" },
-        { text: "Logout", onPress: () => props.navigation.replace('Welcome Page') }
+        { text: "Logout", onPress: () => logOut() }
       ]
     );    
+  }
+
+  async function logOut () {
+    await AsyncStorage.clear();
+    props.navigation.replace('Welcome Page');
   }
 
   return (
@@ -38,8 +67,8 @@ export default function ProfileUser (props) {
           uri: 'https://image.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg'
         }}
       />
-      <Text style={styles.textUsername}>Derek Deskumar</Text>
-      <Text style={styles.textEmail}>Derekdeskumar@mail.com</Text>
+      <Text style={styles.textUsername}>{user.name}</Text>
+      <Text style={styles.textEmail}>{user.email}</Text>
       <View style={styles.btnBox}>
         <View style={styles.capsText}>
           <Text style={{ fontSize: 16, fontWeight: 'bold' }} onPress={() => historyBookings()}>History Book</Text>
@@ -48,7 +77,7 @@ export default function ProfileUser (props) {
       </View>
       <View style={styles.btnBox} >
         <View style={styles.capsText}>
-          <Text style={{ fontSize: 16, fontWeight: 'bold' }} onPress={() => logOut()}>Logout</Text>
+          <Text style={{ fontSize: 16, fontWeight: 'bold' }} onPress={() => logOutBtn()}>Logout</Text>
           <Text style={{ fontSize: 11 }}>Logout from App</Text>
         </View>
       </View>
