@@ -20,6 +20,14 @@ export default function ProfileBengkel (props) {
     props.navigation.navigate('Order History Bengkel')
   }
 
+  function goToEditProfile () {
+    console.log("masuk page edit profile")
+    props.navigation.navigate('Edit Profil Bengkel', {
+      username: 'sririyanto',
+      email: 'sririyanto@gmail.com'
+    })
+  }
+
   function logOut () {
     Alert.alert("Logout", "Are you sure to Logout?",
       [
@@ -38,12 +46,18 @@ export default function ProfileBengkel (props) {
           uri: 'https://image.freepik.com/free-photo/adorable-dark-skinned-adult-woman-dressed-yellow-jumper-using-mobile-phone-with-happy-expression_273609-34293.jpg'
         }}
       />
-      <Text style={styles.textUsername}>Sri Riyanto</Text>
-      <Text style={styles.textEmail}>Sririyanto@mail.com</Text>
+      <Text style={styles.textUsername}>sririyanto</Text>
+      <Text style={styles.textEmail}>sririyanto@mail.com</Text>
       <View style={styles.btnBox}>
         <View style={styles.capsText}>
           <Text style={{ fontSize: 16, fontWeight: 'bold' }} onPress={() => historyOrders()}>History Book</Text>
           <Text style={{ fontSize: 11 }}>Your Recent History Book</Text>
+        </View>
+      </View>
+      <View style={styles.btnBox}>
+        <View style={styles.capsText}>
+          <Text style={{ fontSize: 16, fontWeight: 'bold' }} onPress={() => goToEditProfile()}>Edit Profile</Text>
+          <Text style={{ fontSize: 11 }}>Edit your profile here</Text>
         </View>
       </View>
       <View style={styles.btnBox} >
