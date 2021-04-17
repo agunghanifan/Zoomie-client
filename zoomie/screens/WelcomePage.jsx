@@ -17,7 +17,6 @@ export default function WelcomePage(props) {
   }
 
   const goToSignupGarage = () => {
-    console.log(`go to signup garage`);
     props.navigation.navigate('Signup Garage');
   }
   
