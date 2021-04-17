@@ -27,7 +27,7 @@ export default function App() {
   return (
     <Provider store={store}>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Welcome Page">
+        <Stack.Navigator initialRouteName="Profile Bengkel">
           <Stack.Screen
             name="Welcome Page"
             component={WelcomePage}
