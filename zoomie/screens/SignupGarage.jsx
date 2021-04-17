@@ -4,6 +4,7 @@ import { StyleSheet, Text, View, ScrollView, TextInput, Button, TouchableOpacity
 import AppLoading from 'expo-app-loading';
 import { useFonts } from '@expo-google-fonts/inter';
 import * as ImagePicker from 'expo-image-picker';
+import base64 from 'react-native-base64'
 
 const width = Dimensions.get('window').width; 
 
@@ -94,12 +95,12 @@ export default function SignupUser(props) {
         password,
         email: email.toLowerCase(),
         name,
-        profilImage,
+        profilImage: base64.encode(profilImage),
         garageName,
         garageAddress,
         garageStatus,
         garageDescription,
-        garageImage
+        garageImage: base64.encode(garageImage)
       }
       console.log(newUser);
     }

@@ -4,6 +4,7 @@ import { StyleSheet, Text, View, ScrollView, TextInput, Button, TouchableOpacity
 import AppLoading from 'expo-app-loading';
 import { useFonts } from '@expo-google-fonts/inter';
 import * as ImagePicker from 'expo-image-picker';
+import base64 from 'react-native-base64'
 
 const width = Dimensions.get('window').width; 
 
@@ -72,9 +73,9 @@ export default function SignupUser(props) {
       const newUser = {
         username,
         password,
-        email,
+        email: email.toLowerCase(),
         name,
-        profilImage
+        profilImage: base64.encode(profilImage)
       }
       console.log(newUser);
     }
@@ -83,7 +84,7 @@ export default function SignupUser(props) {
   return (
     <ScrollView>
       <View style={styles.center}>
-        <Text style={styles.title}>SIGN UP</Text>
+        <Text style={styles.title}>SIGN UP USER</Text>
         <TextInput style={styles.textinput} placeholder="Username" value={username} onChange={(event) => setUsername(event.nativeEvent.text)} />
         <TextInput style={styles.textinput} secureTextEntry={true} placeholder="Password" value={password} onChange={(event) => setPassword(event.nativeEvent.text)} />  
         <TextInput style={styles.textinput} secureTextEntry={true} placeholder="Password" value={repeatPassword} onChange={(event) => setRepeatPassword(event.nativeEvent.text)} />  
