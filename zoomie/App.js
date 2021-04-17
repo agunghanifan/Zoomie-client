@@ -16,6 +16,8 @@ import BookingsHistoryUser from './screens/BookingsHistoryUser'
 import EditOrderGarage from './screens/EditOrderGarage'
 import CheckoutUser from './screens/CheckoutUser'
 import SuccessPage from './screens/SuccessPage'
+import ProfileBengkel from './screens/ProfileBengkel'
+import OrderHistoryBengkel from './screens/OrderHistoryBengkel'
 
 const Stack = createStackNavigator();
 
@@ -129,6 +131,23 @@ export default function App() {
             options={{
               title: '',
               headerShown: false,
+              headerTitleAlign: 'center'
+            }}
+          />
+          <Stack.Screen
+            name="Profile Bengkel"
+            component={ProfileBengkel}
+            options={{
+              title: '',
+              headerShown: false,
+              headerTitleAlign: 'center'
+            }}
+          />
+          <Stack.Screen
+            name="Order History Bengkel"
+            component={OrderHistoryBengkel}
+            options={{
+              title: 'History Orders',
               headerTitleAlign: 'center'
             }}
           />
