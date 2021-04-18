@@ -27,11 +27,11 @@ export function fetchAllTransactionById () {
         access_token: await AsyncStorage.getItem('@access_token')
       }
       const userId = await AsyncStorage.getItem('@id')
-      console.log(userId, headers)
+      // console.log(userId, headers)
       const { data } = await axios.get('/transactions', { headers });
-      console.log(data, "ini data fetch all trans")
+      // console.log(data, "ini data fetch all trans")
       const filterData = data.filter(transaction => +transaction.Garage.userId === +userId)
-      console.log(filterData)
+      // console.log(filterData)
       dispatch(setTransactions(filterData));
     } catch (err) {
         console.log(err);
@@ -49,6 +49,8 @@ export function fetchTransactionById (payload) {
     }
     const { data } = await axios.get(`/transactions/${payload}`, { headers });
     // console.log(data, "ini data dari fetchtransbyID")
+    console.log(data, "ini dari fetch transaction by id")
     dispatch(setTransactionsById(data))
+    dispatch(setLoading(false))
   }
 }

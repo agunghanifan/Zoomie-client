@@ -1,10 +1,38 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import { StyleSheet, Text, View, TouchableOpacity, Image, ImageBackground } from 'react-native';
 import AppLoading from 'expo-app-loading';
 import { useFonts } from '@expo-google-fonts/inter';
+import axios from '../axios'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function WelcomePage(props) {
+  const dispatch = useDispatch();
+  
+  useEffect(_ => {
+    // check access token
+  async function checkLocalStorage() {
+    try {
+      const id = await AsyncStorage.getItem('@id');
+      const headers = {
+        access_token: await AsyncStorage.getItem('@access_token')
+      }
+      // kalo ada token, dia pindah halaman 
+      if (headers.access_token) {
+        const { data } = await axios.get('/user/' + id, { headers });
+        dispatch({ type: 'user/setUser', payload: data });
+        if (data.roles == 'user') props.navigation.replace('Main')
+        else props.navigation.replace('Main Garage')
+      }
+      // kalo ga ada dia ga ngelakuin apa2
+    }
+    catch (err) {
+      console.log(err);
+    }
+  }
+  checkLocalStorage()
+  }, [])
+
   let [fontsLoaded] = useFonts({
     'Bebes Neue': require('../assets/fonts/BebasNeue-Regular.ttf'),
   });

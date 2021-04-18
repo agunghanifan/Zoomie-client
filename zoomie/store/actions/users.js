@@ -5,6 +5,11 @@ export function setUsers (payload) {
   return { type: 'users/setUsers', payload }
 }
 
+export function setUser (payload) {
+  return { type: 'user/setUser', payload }
+}
+
+
 export function setLoading (payload) {
   return { type: 'loading/setLoading', payload }
 }
@@ -28,7 +33,7 @@ export function currentUser () {
       const idUser = await AsyncStorage.getItem('@id')
       // console.log(idUser)
       const { data } = await axios.get(`/user/${idUser}`, { headers });
-      console.log(data)
+      // console.log(data)
       dispatch(setCurrentUser(data));
     } catch (err) {
       console.log(err);

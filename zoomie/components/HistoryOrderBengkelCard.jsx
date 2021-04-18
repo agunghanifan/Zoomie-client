@@ -2,10 +2,14 @@ import React from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity, Dimensions } from 'react-native';
 import AppLoading from 'expo-app-loading';
 import { useFonts } from '@expo-google-fonts/inter';
+import statusTranslate from '../helpers/statusTranslate'
 
 const width = Dimensions.get('window').width; 
 
 export default function HistoryOrderBengkel (props) {
+
+  const { transaction } = props
+
   let [fontsLoaded] = useFonts({
     'Bebes Neue': require('../assets/fonts/BebasNeue-Regular.ttf'),
   });
@@ -13,14 +17,10 @@ export default function HistoryOrderBengkel (props) {
     return <AppLoading />;
   }
 
-  const goToDetail = () => {
-    props.props.navigation.navigate('Detail Shop');
-  }
-
   return (
     <View style={styles.card}>
       <View>
-        <TouchableOpacity onPress={() => goToDetail()}>
+        <TouchableOpacity>
           <Image 
             style={styles.cardImg}
             source={{
@@ -31,19 +31,18 @@ export default function HistoryOrderBengkel (props) {
       </View>
       <View style={styles.cardInfo}>
         <View>
-          <Text style={styles.cardName}>Derek Deskumar</Text>
-          <Text style={styles.cardAddress}>derekdeskumar@mail.com</Text>
+          <Text style={styles.cardName}>{transaction.User.name}</Text>
+          <Text style={styles.cardAddress}>{transaction.User.email}</Text>
         </View>
         <View style={styles.containerInfo}>
           <Text style={styles.shopInfo}>
-            LIST ITEM SERVICE {'\n'}
-            &nbsp; &#183; GANTI OLI {'\n'}
-            &nbsp; &#183; TUNE UP {'\n'}
-            &nbsp; &#183; SERVICE {'\n'}
-            &nbsp; &#183; GANTI OLI {'\n'}
-            &nbsp; &#183; SPARE PART {'\n'}
-            &nbsp; &#183; BONGKAR PASANG MESIN {'\n'}
-            &nbsp; &#183; BONGKAR PASANG MESIN {'\n'}
+            {transaction.description}
+          </Text>
+          <Text style={styles.shopInfo}>
+            {transaction.price}
+          </Text>
+          <Text style={styles.shopInfo}>
+            {statusTranslate(transaction.status)}
           </Text>
         </View>
       </View>

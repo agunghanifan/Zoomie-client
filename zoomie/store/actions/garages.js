@@ -22,12 +22,12 @@ export function getDataGarage () {
       }
       // console.log(headers)
       const idUser = await AsyncStorage.getItem('@id')
-      console.log(idUser)
+      // console.log(idUser)
       const { data } = await axios.get(`/garage`, { headers });
       // console.log(data, "ini data getDataGarage")
       const dataFilter = data.filter(garage => +garage.userId === +idUser)
       // console.log(dataFilter, 'ini yang kena filter')
-      console.log(dataFilter)
+      // console.log(dataFilter)
       dispatch(setGarageLogin(dataFilter));
     } catch (err) {
       console.log(err);

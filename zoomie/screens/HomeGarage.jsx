@@ -23,8 +23,8 @@ export default function HomeGarage (props) {
     dispatch(getDataGarage())
     const timing = setInterval(() => {
       if (transactions) {
-        setDataFilter(transactions.filter(transaction => transaction.status === 0))
-        console.log(dataFilter, "ini data filter")
+        setDataFilter(transactions.filter(transaction => transaction.status < 10))
+        // console.log(dataFilter, "ini data filter")
       } else null
       clearInterval(timing)
     }, 300);
@@ -44,7 +44,7 @@ export default function HomeGarage (props) {
         <Image 
           style={styles.tinyProfPic}
           source={{
-            uri: 'https://www.worldfuturecouncil.org/wp-content/uploads/2020/02/dummy-profile-pic-300x300-1.png'
+            uri: 'https://image.freepik.com/free-photo/adorable-dark-skinned-adult-woman-dressed-yellow-jumper-using-mobile-phone-with-happy-expression_273609-34293.jpg'
           }}
         />
       </View>

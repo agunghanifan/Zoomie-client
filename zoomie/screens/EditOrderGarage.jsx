@@ -3,31 +3,47 @@ import { View, Text, StyleSheet, Dimensions, TouchableOpacity, ScrollView, TextI
 import AppLoading from 'expo-app-loading';
 import { useFonts } from '@expo-google-fonts/inter';
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchTransactionById } from '../store/actions/transactions'
+import { fetchTransactionById, setLoading } from '../store/actions/transactions'
 import statusTranslate from '../helpers/statusTranslate'
-import DatePicker from 'react-native-date-picker'
+import { useIsFocused } from "@react-navigation/native";
 
 const width = Dimensions.get('window').width;
 
 export default function EditOrderGarage (props) {
 
   const { id } = props.route.params
-  const transactionsById = useSelector(state => state.transactions.transactionsById)
+  const loading = useSelector(state => state.transactions.loading)
   const dispatch = useDispatch()
-  const [serviceDate, setServiceDate] = useState(Date(transactionsById.date).toLocaleDateString())
-  const [status, setStatus] = useState(statusTranslate(transactionsById.status))
-  const [note, setNote] = useState(transactionsById.description)
-  const [totalprice, setTotalPrice] = useState(String(transactionsById.price))
+  const [serviceDate, setServiceDate] = useState('')
+  const [status, setStatus] = useState('')
+  const [note, setNote] = useState('')
+  const [totalprice, setTotalPrice] = useState('')
+  const transactionsById = useSelector(state => state.transactions.transactionsById)
+  const isFocused = useIsFocused()
 
 
   useEffect(() => {
+    dispatch(setLoading(true))
+    console.log(transactionsById.id, "ini sebelum fetch")
     dispatch(fetchTransactionById(id))
-  }, [])
+    console.log(id, "ini id props sebelum fetch")
+    const timing = setInterval(() => {
+      console.log(id, "ini id dari useEffect")
+      console.log(transactionsById.id, "ini id transaction dari useEffect")
+      if(!loading) {
+        setServiceDate(transactionsById?.date)
+        setStatus(statusTranslate(transactionsById?.status))
+        setNote(transactionsById?.description)
+        setTotalPrice(String(transactionsById?.price))
+      }
+      clearInterval(timing)
+    }, 1000);
+  }, [id])
 
   let [fontsLoaded] = useFonts({
     'Bebes Neue': require('../assets/fonts/BebasNeue-Regular.ttf'),
   });
-  if (!fontsLoaded) {
+  if (!fontsLoaded || !transactionsById || loading) {
     return <AppLoading />;
   }
 

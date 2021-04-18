@@ -8,6 +8,7 @@ const initialState = {
 
 export default function reducer (state = initialState, action) {
   const { type, payload } = action;
+  console.log(payload, 'ini di state transaction')
   if ( type === 'transactions/setTransactions' ) return { ...state, transactions: payload }
   if ( type === 'loading/setLoading' ) return { ...state, loading: payload }
   if ( type === 'error/setError' ) return { ...state, error: payload }

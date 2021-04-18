@@ -20,7 +20,7 @@ export default function SuccessPage(props) {
         style={styles.emptyImage}
         source={require('../assets/img/order-empty.png')}
       />
-      <Text style={styles.title}>No nearest repairshop yet</Text>
+      <Text style={styles.title}>No favorite repairshop yet</Text>
     </View>
   );
 }

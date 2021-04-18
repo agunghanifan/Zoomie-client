@@ -8,11 +8,11 @@ import base64 from 'react-native-base64'
 import { useDispatch, useSelector } from 'react-redux'
 import { currentUser } from '../store/actions/users'
 import { getDataGarage } from '../store/actions/garages'
+import { useIsFocused } from "@react-navigation/native";
 
 const width = Dimensions.get('window').width; 
 
 export default function EditProfileBengkel (props) {
-  const user = useSelector(state => state.users.user)
   const garageLogIn = useSelector(state => state.garages.garageLogIn)
   const [profilImage, setProfilImage] = useState(null);
   // const [name, setName] = useState(user.name);
@@ -21,6 +21,7 @@ export default function EditProfileBengkel (props) {
   const [garageDescription, setGarageDescription] = useState(garageLogIn[0].description);
   const [garageImage, setGarageImage] = useState(null);
   const dispatch = useDispatch()
+  const isFocused = useIsFocused()
 
   useEffect(() => {
     (async () => {
@@ -33,7 +34,7 @@ export default function EditProfileBengkel (props) {
     })();
     dispatch(currentUser())
     dispatch(getDataGarage())
-  }, []);
+  }, [isFocused]);
 
   const pickProfilImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({

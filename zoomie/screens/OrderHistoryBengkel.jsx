@@ -18,8 +18,8 @@ export default function OrderHistoryBengkel (props) {
     dispatch(fetchAllTransactionById())
     const timing = setInterval(() => {
       if (transactions) {
-        setDataFilter(transactions.filter(transaction => transaction.status === 1))
-        console.log(dataFilter, "ini data filter")
+        setDataFilter(transactions.filter(transaction => transaction.status === 10))
+        // console.log(dataFilter, "ini data filter")
       } else null
       clearInterval(timing)
     }, 300);
@@ -42,7 +42,7 @@ export default function OrderHistoryBengkel (props) {
             return <HistoryOrderCard transaction={transaction} key={index}/>
           })
         }
-        <Text>{JSON.stringify(dataFilter)} ini filter</Text>
+        {/* <Text>{JSON.stringify(dataFilter)} ini filter</Text> */}
       </View>
     </View>
   );
