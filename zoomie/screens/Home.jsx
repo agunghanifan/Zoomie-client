@@ -8,6 +8,8 @@ import GarageEmpty from '../components/GarageEmpty';
 import axios from '../axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useIsFocused } from "@react-navigation/native";
+import { setUser } from '../store/actions/users'
+import { setGarages } from '../store/actions/garages'
 
 export default function Home(props) {
   const garages = useSelector(state => state.garages.garages);
@@ -22,7 +24,7 @@ export default function Home(props) {
           access_token: await AsyncStorage.getItem('@access_token')
         }
         const { data } = await axios.get('/garage', { headers });
-        dispatch({ type: 'garages/setGarages', payload: data })
+        dispatch(setGarages(data))
       } catch (error) {
         console.log(error.response);
       }
@@ -34,7 +36,7 @@ export default function Home(props) {
           access_token: await AsyncStorage.getItem('@access_token')
         }
         const { data } = await axios.get('/user/' + id, { headers });
-        dispatch({ type: 'user/setUser', payload: data });
+        dispatch(setUser(data));
         setImage(data.image)
       }
       catch (err) {

@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, Image, TouchableOpacity, Dimensions } from 'rea
 import statusTranslate from '../helpers/statusTranslate';
 import AppLoading from 'expo-app-loading';
 import { useFonts } from '@expo-google-fonts/inter';
+import Moment from 'moment';
 
 const width = Dimensions.get('window').width; 
 
@@ -31,14 +32,9 @@ export default function ActiveBookingUserCard (props) {
     });
   }
 
-  const goToDetail = (garage) => {
-    props.props.navigation.navigate('Detail Shop', {
-      garage
-    });
-  }
-
   const formatDate = (date) => {
-    return new Date(date).toLocaleDateString();
+    Moment.locale('en');
+    return Moment(date).format('ddd, DD MMM YYYY');
   }
 
   return (

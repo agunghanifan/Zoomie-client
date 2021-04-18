@@ -1,11 +1,6 @@
-export function setUsers (payload) {
-  return { type: 'users/setUsers', payload }
+export function setGarages (payload) {
+  return { type: 'garages/setGarages', payload }
 }
-
-export function setUser (payload) {
-  return { type: 'user/setUser', payload }
-}
-
 
 export function setLoading (payload) {
   return { type: 'loading/setLoading', payload }
