@@ -129,20 +129,20 @@ export default function ProfileUser (props) {
           image && <Image source={{ uri: image }} style={styles.profilPic} />
         }
       </TouchableOpacity>
-      <View style={{width:70, height:1, left:45, top: 10}}>
+      <View style={{width:70, left:44, top: 5, height: 15}}>
         <Button title="save" fontFamily="Bebes Neue" onPress={uploadImage} />
       </View>
       <Text style={styles.textUsername}>{user.name}</Text>
       <Text style={styles.textEmail}>{user.email}</Text>
       <View style={styles.btnBox}>
         <View style={styles.capsText}>
-          <Text style={{ fontSize: 16, fontWeight: 'bold' }} onPress={() => historyBookings()}>History Book</Text>
-          <Text style={{ fontSize: 11 }}>Your Recent History Book</Text>
+          <Text style={{ fontSize: 16, fontWeight: 'bold' }} onPress={() => historyBookings()}>Your Order and History</Text>
+          <Text style={{ fontSize: 11 }}>Your Order Process and Recent History Book</Text>
         </View>
       </View>
       <View style={styles.btnBox} >
         <View style={styles.capsText}>
-          <Text style={{ fontSize: 16, fontWeight: 'bold' }} onPress={() => logOutBtn()}>Logout</Text>
+          <Text style={{ fontSize: 16, fontWeight: 'bold'}} onPress={() => logOutBtn()}>Logout</Text>
           <Text style={{ fontSize: 11 }}>Logout from App</Text>
         </View>
       </View>
@@ -180,15 +180,15 @@ const styles = StyleSheet.create({
     top: 10
   },
   textUsername: {
-    left: 133,
-    top: -45,
+    left: 130,
+    top: -64,
     fontFamily: 'Bebes Neue',
     fontSize: 18,
     color: '#222222'
   },
   textEmail: {
-    left: 133,
-    top: -45
+    left: 130,
+    top: -64,
   },
   btnBox: {
     justifyContent: 'center',
@@ -199,6 +199,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1
   },
   capsText: {
+    alignSelf: 'stretch',
     left: 38
   }
 });

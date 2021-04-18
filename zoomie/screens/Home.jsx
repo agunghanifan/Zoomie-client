@@ -13,6 +13,7 @@ export default function Home(props) {
   const garages = useSelector(state => state.garages.garages);
   const dispatch = useDispatch();
   const isFocused = useIsFocused();
+  const [image, setImage] = useState(null);
 
   useEffect(_ => {
     async function getGarages () {
@@ -26,7 +27,21 @@ export default function Home(props) {
         console.log(error.response);
       }
     }
-
+    async function getUser() {
+      try {
+        const id = await AsyncStorage.getItem('@id');
+        const headers = {
+          access_token: await AsyncStorage.getItem('@access_token')
+        }
+        const { data } = await axios.get('/user/' + id, { headers });
+        dispatch({ type: 'user/setUser', payload: data });
+        setImage(data.image)
+      }
+      catch (err) {
+        console.log(err);
+      }
+    }
+    getUser()
     getGarages ();
   }, [isFocused])
 
@@ -46,6 +61,9 @@ export default function Home(props) {
             uri: 'https://www.worldfuturecouncil.org/wp-content/uploads/2020/02/dummy-profile-pic-300x300-1.png'
           }}
         />
+        {
+          image && <Image source={{ uri: image }} style={styles.profilPic} />
+        }
       </View>
       <View>
         <Text style={styles.title}>LIST REPAIR SHOP</Text>
@@ -74,6 +92,15 @@ const styles = StyleSheet.create({
     marginTop: 60
   },
   tinyProfPic: {
+    alignSelf: 'flex-end',
+    width: 50,
+    height: 50,
+    borderRadius: 50,
+    justifyContent: 'flex-end',
+    right: 20,
+  },
+  profilPic:{
+    position: 'absolute',
     alignSelf: 'flex-end',
     width: 50,
     height: 50,

@@ -43,7 +43,7 @@ export default function BookingsHistoryUser (props) {
         <Text style={styles.title}>Current Booking's</Text>
         {
           transactions.map(transaction => {
-            if (transaction.status < 9) {
+            if (transaction.status < 10) {
               return (
                 <ActiveBookingUserCard
                   props={props}
@@ -59,7 +59,7 @@ export default function BookingsHistoryUser (props) {
         <Text style={styles.title}>History Booking's</Text>
         {
           transactions.map(transaction => {
-            if (transaction.status > 8) {
+            if (transaction.status >= 10 && transaction.status != 99) {
               return (
                 <HistoryCard
                   props={props}

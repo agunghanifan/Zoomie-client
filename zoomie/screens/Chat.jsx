@@ -52,7 +52,7 @@ export default function Chat(props) {
     }
     const { data } = await axios.post('/transactions', newTransactions, { headers })
     console.log(data);
-    props.navigation.navigate('Bookings History User')
+    props.navigation.navigate('Success')
   }
   
   // data chat dummy

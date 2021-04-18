@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
   btnBooking: {
     width: width * 0.9,
     height: 48,
-    backgroundColor: '#4F4F4F',
+    backgroundColor: '#DB3022',
     borderRadius: 28,
     alignItems: 'center',
     justifyContent: 'center',

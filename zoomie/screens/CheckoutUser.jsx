@@ -1,12 +1,14 @@
-import React from 'react'
-import { View, Text, StyleSheet, Dimensions, TouchableOpacity, ScrollView } from 'react-native'
-
+import React from 'react';
+import { View, Text, StyleSheet, Dimensions, TouchableOpacity, ScrollView } from 'react-native';
+import statusTranslate from '../helpers/statusTranslate';
 import AppLoading from 'expo-app-loading';
 import { useFonts } from '@expo-google-fonts/inter';
 
 const width = Dimensions.get('window').width;
 
 export default function CheckoutUser(props) {
+  const { transaction } = props.route.params;
+  console.log(transaction);
 
   let [fontsLoaded] = useFonts({
     'Bebes Neue': require('../assets/fonts/BebasNeue-Regular.ttf'),
@@ -15,42 +17,37 @@ export default function CheckoutUser(props) {
     return <AppLoading />;
   }
 
-  const goToSuccess = () => {
-    console.log(`Menuju halaman sukses`);
-    props.navigation.navigate('Success');
+  const goBack = () => {
+    props.navigation.goBack();
   }
 
   return (
     <View style={styles.container}>
       <ScrollView>
-        <Text style={styles.title}>BENGKEL INFOS</Text>
+        <Text style={styles.title}>REPAIR SHOP INFO</Text>
         <View style={styles.cardInfo}>
           <View style={styles.paddingCardText}>
-            <Text style={{ fontSize: 14, fontWeight: 'bold'}}>Bengkel Makmur</Text>
-            <Text style={{ fontSize: 14, fontWeight: 'bold'}}>JL. Suka Maju</Text>
+            <Text style={styles.garageName}>{transaction.Garage.name}</Text>
+            <Text style={styles.garageAddress}>{transaction.Garage.address}</Text>
           </View>
         </View>
         <View style={styles.antrian}>
-          <Text style={{ fontSize: 18, fontWeight: 'bold'}}>STATUS: ON PROGRESS</Text>
+          <Text style={styles.status}>STATUS: {statusTranslate(transaction.status)}</Text>
           <Text style={{ fontSize: 16, fontWeight: 'bold', margin: 10 }}>Antrian ke -</Text>
           <Text style={{ fontSize: 96, fontWeight: 'bold'}}>8</Text>
         </View>
         <View style={styles.cardItems}>
           <View style={styles.paddingCardText}>
-            <Text>LIST ITEM SERVICE</Text>
+            <Text style={styles.garageName}>Notes from repair shop</Text>
             <View style={styles.paddingCardText}>
-              <Text>Ganti Oli</Text>
-              <Text>Ganti Lampu Depan</Text>
-              <Text>Ganti Knalpot</Text>
-              <Text>Ganti Kapas Rem</Text>
-              <Text>Ganti Kapas Rem</Text>
+              <Text style={styles.garageTextInfo}>{transaction.description ? transaction.description : '- no note yet -'}</Text>
             </View>
           </View>
         </View>
       </ScrollView>
       <View style={styles.containerBooking}>
-          <TouchableOpacity style={styles.btnBooking} onPress={() => goToSuccess()}>
-            <Text style={styles.btnBookingText}>ORDER COMPLETE</Text>
+          <TouchableOpacity style={styles.btnBooking} onPress={() => goBack()}>
+            <Text style={styles.btnBookingText}>Back</Text>
           </TouchableOpacity>
         </View>
     </View>
@@ -70,7 +67,6 @@ const styles = StyleSheet.create({
   cardInfo: {
     alignSelf: 'center',
     width: width * 0.9,
-    height: 108,
     top: 30,
     borderRadius: 10,
     backgroundColor: '#ffffff',
@@ -94,7 +90,7 @@ const styles = StyleSheet.create({
     top: 50,
     backgroundColor: '#ffffff',
     width: width * 0.9,
-    // height: 150,
+    minHeight: width * 0.7,
     borderRadius: 10,
   },
   containerBooking: {
@@ -106,7 +102,7 @@ const styles = StyleSheet.create({
   btnBooking: {
     width: width * 0.9,
     height: 48,
-    backgroundColor: '#db3022',
+    backgroundColor: '#4F4F4F',
     borderRadius: 28,
     alignItems: 'center',
     justifyContent: 'center',
@@ -115,5 +111,29 @@ const styles = StyleSheet.create({
     fontFamily: 'Bebes Neue',
     color: '#ffffff',
     fontSize: 18,
+  },
+  garageName: {
+    fontFamily: 'Bebes Neue',
+    fontStyle: 'normal',
+    fontSize: 20,
+    color: '#000',
+  },
+  garageAddress: {
+    fontFamily: 'Bebes Neue',
+    fontStyle: 'normal',
+    fontSize: 14,
+    color: '#9B9B9B',
+  },
+  garageTextInfo: {
+    fontFamily: 'Bebes Neue',
+    fontStyle: 'normal',
+    fontSize: 18,
+    color: '#000',
+  },
+  status: {
+    fontFamily: 'Bebes Neue',
+    fontStyle: 'normal',
+    fontSize: 20,
+    color: '#000',
   },
 })
