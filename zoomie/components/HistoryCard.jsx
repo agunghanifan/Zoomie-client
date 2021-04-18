@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, Image, TouchableOpacity, Dimensions } from 'rea
 import statusTranslate from '../helpers/statusTranslate';
 import AppLoading from 'expo-app-loading';
 import { useFonts } from '@expo-google-fonts/inter';
+import Moment from 'moment';
 
 const width = Dimensions.get('window').width; 
 
@@ -15,21 +16,22 @@ export default function HistoryCard (props) {
   if (!fontsLoaded) {
     return <AppLoading />;
   }
-
-  const goToDetail = (garage) => {
-    props.props.navigation.navigate('Detail Shop', {
-      garage
+  
+  const goToDetailOrder = (transaction) => {
+    props.props.navigation.navigate('Checkout User', {
+      transaction
     });
   }
   
   const formatDate = (date) => {
-    return new Date(date).toLocaleDateString();
+    Moment.locale('en');
+    return Moment(date).format('ddd, DD MMM YYYY');
   }
 
   return (
     <View style={styles.card}>
       <View>
-        <TouchableOpacity onPress={() => goToDetail(transaction.Garage)}>
+        <TouchableOpacity onPress={() => goToDetailOrder(transaction)}>
           <Image 
             style={styles.cardImg}
             source={{
@@ -38,12 +40,14 @@ export default function HistoryCard (props) {
           />
         </TouchableOpacity>
       </View>
-      <View style={styles.cardInfo}>
-        <Text style={styles.cardDate} onPress={() => goToDetail(transaction.Garage)}>{formatDate(transaction.date)}</Text>
-        <Text style={styles.cardName} onPress={() => goToDetail(transaction.Garage)}>{transaction.Garage.name}</Text>
-          <Text style={styles.cardStatus} onPress={() => goToDetailOrder(transaction)}>({statusTranslate(transaction.status)})</Text>
-        <Text style={styles.cardAddress} onPress={() => goToDetail(transaction.Garage)}>{transaction.Garage.address}</Text>
-        <Text style={styles.cardName} onPress={() => goToDetail(transaction.Garage)}>{transaction.description}</Text>
+      <View style={styles.cardInfo} onPress={() => goToDetailOrder(transaction)}>
+        <TouchableOpacity onPress={() => goToDetailOrder(transaction)}>
+          <Text style={styles.cardDate} >{formatDate(transaction.date)}</Text>
+          <Text style={styles.cardName} >{transaction.Garage.name}</Text>
+          <Text style={styles.cardAddress} >{transaction.Garage.address}</Text>
+          <Text style={styles.cardStatus} >({statusTranslate(transaction.status)})</Text>
+          <Text style={styles.cardName} >{transaction.description}</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );

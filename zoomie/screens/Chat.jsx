@@ -13,7 +13,7 @@ let newId = 100;
 export default function Chat(props) {
   const [chat, setChat] = useState('');
   const { garage } = props.route.params;
-  console.log(garage, "garage from chat");
+  // console.log(garage, "garage from chat");
 
   let [fontsLoaded] = useFonts({
     'Bebes Neue': require('../assets/fonts/BebasNeue-Regular.ttf'),

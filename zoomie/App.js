@@ -123,7 +123,7 @@ export default function App() {
             name="Checkout User"
             component={CheckoutUser}
             options={{
-              title: 'Checkout',
+              title: 'Booking Detail',
               headerTitleAlign: 'center'
             }}
           />
