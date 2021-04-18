@@ -6,6 +6,8 @@ import { useFonts } from '@expo-google-fonts/inter';
 const width = Dimensions.get('window').width; 
 
 export default function HistoryCard (props) {
+  const { transaction } = props;
+
   let [fontsLoaded] = useFonts({
     'Bebes Neue': require('../assets/fonts/BebasNeue-Regular.ttf'),
   });
@@ -13,14 +15,20 @@ export default function HistoryCard (props) {
     return <AppLoading />;
   }
 
-  const goToDetail = () => {
-    props.props.navigation.navigate('Detail Shop');
+  const goToDetail = (garage) => {
+    props.props.navigation.navigate('Detail Shop', {
+      garage
+    });
+  }
+  
+  const formatDate = (date) => {
+    return new Date(date).toLocaleDateString();
   }
 
   return (
     <View style={styles.card}>
       <View>
-        <TouchableOpacity onPress={() => goToDetail()}>
+        <TouchableOpacity onPress={() => goToDetail(transaction.Garage)}>
           <Image 
             style={styles.cardImg}
             source={{
@@ -30,21 +38,10 @@ export default function HistoryCard (props) {
         </TouchableOpacity>
       </View>
       <View style={styles.cardInfo}>
-        <View>
-          <Text style={styles.cardName} onPress={() => goToDetail()}>Bangkel Makmur</Text>
-          <Text style={styles.cardAddress} onPress={() => goToDetail()}>JL. SUKA MAJU</Text>
-        </View>
-        <View style={styles.containerInfo}>
-          <Text style={styles.shopInfo}>
-            LIST ITEM SERVICE {'\n'}
-            &nbsp; GANTI OLI {'\n'}
-            &nbsp; &#183; TUNE UP {'\n'}
-            &nbsp; &#183; SERVICE {'\n'}
-            &nbsp; &#183; GANTI OLI {'\n'}
-            &nbsp; &#183; SPARE PART {'\n'}
-            &nbsp; &#183; BONGKAR PASANG MESIN {'\n'}
-          </Text>
-        </View>
+        <Text style={styles.cardDate} onPress={() => goToDetail(transaction.Garage)}>{formatDate(transaction.date)}</Text>
+        <Text style={styles.cardName} onPress={() => goToDetail(transaction.Garage)}>{transaction.Garage.name}</Text>
+        <Text style={styles.cardAddress} onPress={() => goToDetail(transaction.Garage)}>{transaction.Garage.address}</Text>
+        <Text style={styles.cardName} onPress={() => goToDetail(transaction.Garage)}>{transaction.description}</Text>
       </View>
     </View>
   );
@@ -53,7 +50,7 @@ export default function HistoryCard (props) {
 const styles = StyleSheet.create({
   card: {
     backgroundColor: '#ffffff',
-    alignSelf: 'stretch',
+    width: width * 0.9,
     margin: 20,
     paddingLeft: 10,
     paddingTop: 5,
@@ -68,14 +65,23 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   cardInfo: {
+    width: width * 0.48,
     marginLeft: 20,
   },
   cardName: {
     fontFamily: 'Bebes Neue',
     fontStyle: 'normal',
     fontSize: 20,
+    color: '#000',
   },
   cardAddress: {
+    fontFamily: 'Bebes Neue',
+    fontStyle: 'normal',
+    fontSize: 14,
+    color: '#9B9B9B',
+  },
+  cardDate: {
+    alignSelf: 'flex-end',
     fontFamily: 'Bebes Neue',
     fontStyle: 'normal',
     fontSize: 14,
