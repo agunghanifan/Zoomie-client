@@ -66,6 +66,8 @@ export default function SignupUser(props) {
       Alert.alert("password didn't match or please check your password!");
       setPassword('');
       setRepeatPassword('');
+    } else if (password.length < 6) {
+      Alert.alert("password length minimal must be 6 digit!");
     } else if ( !username || !name || !email ) {
       Alert.alert("Please fill all of the field!");
     } else if ( !validateEmail(email) ) {
