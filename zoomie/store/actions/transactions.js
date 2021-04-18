@@ -54,3 +54,19 @@ export function fetchTransactionById (payload) {
     dispatch(setLoading(false))
   }
 }
+
+export function updateTransactions (payload) {
+  return async (dispatch) => {
+    dispatch(setError(null))
+    const headers = {
+      access_token: await AsyncStorage.getItem('@access_token')
+    }
+    const { data } = await axios.patch(`/transactions/${payload.id}`, { headers, data: {
+      date: payload.date,
+      status: payload.status,
+      price: payload.price,
+      description: payload.description
+    } });
+    console.log(data)
+  }
+}
