@@ -1,14 +1,36 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux'
 import { StyleSheet, Text, View, Image, ScrollView } from 'react-native';
 import AppLoading from 'expo-app-loading';
 import { useFonts } from '@expo-google-fonts/inter';
 import FavoriteCard from '../components/FavoriteCard';
+import FavoriteEmpty from '../components/FavoriteEmpty';
+import axios from '../axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useIsFocused } from "@react-navigation/native";
 
 export default function Favorites(props) {
+  const favorites = useSelector(state => state.favorites.favorites);
+  const dispatch = useDispatch();
+  const isFocused = useIsFocused();
+
+  useEffect(_ => {
+    getFavorites ();
+  }, [isFocused])
+
+  async function getFavorites () {
+    const headers = {
+      access_token: await AsyncStorage.getItem('@access_token')
+    }
+    const { data } = await axios.get('/favorites', { headers });
+    dispatch({ type: 'favorites/setFavorites', payload: data });
+  }
+
+
   let [fontsLoaded] = useFonts({
     'Bebes Neue': require('../assets/fonts/BebasNeue-Regular.ttf'),
   });
-  if (!fontsLoaded) {
+  if (!fontsLoaded || !favorites) {
     return <AppLoading />;
   }
   
@@ -26,8 +48,17 @@ export default function Favorites(props) {
         <Text style={styles.title}>LIST FAVORITES REPAIR SHOP </Text>
       </View>
       <ScrollView>
-        <FavoriteCard props={props}/>
-        <FavoriteCard props={props}/>
+        {
+          favorites.length < 1 ? <FavoriteEmpty /> :
+          favorites.map(favorite => (
+            <FavoriteCard
+              refetch={getFavorites}
+              props={props}
+              favorite={favorite}
+              key={favorite.id}
+            />
+          ))
+        }
       </ScrollView>
       <View>
       </View>

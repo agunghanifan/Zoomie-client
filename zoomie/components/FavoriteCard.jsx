@@ -2,10 +2,14 @@ import React from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity, Dimensions, Alert } from 'react-native';
 import AppLoading from 'expo-app-loading';
 import { useFonts } from '@expo-google-fonts/inter';
+import axios from '../axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const width = Dimensions.get('window').width; 
 
 export default function FavoriteCard(props) {
+  const { favorite } = props;
+
   let [fontsLoaded] = useFonts({
     'Bebes Neue': require('../assets/fonts/BebasNeue-Regular.ttf'),
   });
@@ -13,27 +17,42 @@ export default function FavoriteCard(props) {
     return <AppLoading />;
   }
 
-  const goToDetail = () => {
-    props.props.navigation.navigate('Detail Shop');
+  const goToDetail = (garage) => {
+    props.props.navigation.navigate('Detail Shop', {
+      garage
+    })
   }
 
   const booking = () => {
     props.props.navigation.navigate('Chat');
   }
   
-  const deleteFavorite = () => {
+  const deleteFavoriteBtn = (id) => {
     Alert.alert("Delete Favorites", "Are you sure to delete?",
       [
         { text: "Cancel", onPress: () => null, style: "cancel" },
-        { text: "Delete", onPress: () => Alert.alert("Deleted from Favorites!") }
+        { text: "Delete", onPress: () => deleteFavorite(id)}
       ]
     );    
   } 
+
+  const deleteFavorite = async (id) => {
+    try {
+      const headers = {
+        access_token: await AsyncStorage.getItem('@access_token')
+      }
+      const { data } = await axios.delete('/favorites/' + id, { headers });
+      props.refetch();
+      Alert.alert("Deleted from Favorites!");
+    } catch (err) {
+      console.log(err.response);
+    }
+  }
   
   return (
     <View style={styles.card}>
       <View>
-        <TouchableOpacity onPress={() => goToDetail()}>
+        <TouchableOpacity onPress={() => goToDetail(favorite.Garage)}>
           <Image 
             style={styles.cardImg}
             source={{
@@ -45,12 +64,12 @@ export default function FavoriteCard(props) {
       </View>
       <View style={styles.cardInfo}>
         <View>
-          <Text style={styles.cardName} onPress={() => goToDetail()}>Bangkel Makmur</Text>
-          <Text style={styles.cardAddress} onPress={() => goToDetail()}>JL. SUKA MAJU</Text>
+          <Text style={styles.cardName} onPress={() => goToDetail(favorite.Garage)}>{favorite.Garage.name}</Text>
+          <Text style={styles.cardAddress} onPress={() => goToDetail(favorite.Garage)}>Address</Text>
         </View>
         <View style={styles.btnGroups}>
           <TouchableOpacity style={styles.btnFavorite}>
-            <Text style={styles.btnFavoriteText} onPress={() => deleteFavorite()}>DELETE FAVORITE</Text>
+            <Text style={styles.btnFavoriteText} onPress={() => deleteFavoriteBtn(favorite.id)}>DELETE FAVORITE</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.btnBook} onPress={() => booking()}>
             <Text style={styles.btnFavoriteText}>BOOK</Text>

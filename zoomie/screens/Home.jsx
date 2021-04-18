@@ -4,30 +4,36 @@ import { StyleSheet, Text, View, Image, ScrollView } from 'react-native';
 import AppLoading from 'expo-app-loading';
 import { useFonts } from '@expo-google-fonts/inter';
 import GarageCard from '../components/GarageCard';
+import GarageEmpty from '../components/GarageEmpty';
 import axios from '../axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useIsFocused } from "@react-navigation/native";
 
 export default function Home(props) {
   const garages = useSelector(state => state.garages.garages);
   const dispatch = useDispatch();
+  const isFocused = useIsFocused();
 
   useEffect(_ => {
     async function getGarages () {
-      const headers = {
-        access_token: await AsyncStorage.getItem('@access_token')
+      try {
+        const headers = {
+          access_token: await AsyncStorage.getItem('@access_token')
+        }
+        const { data } = await axios.get('/garage', { headers });
+        dispatch({ type: 'garages/setGarages', payload: data })
+      } catch (error) {
+        console.log(error.response);
       }
-      const { data } = await axios.get('/garage', { headers });
-      console.log(data, '<<< data');
-      console.log(`halo`);
     }
 
     getGarages ();
-  }, [])
+  }, [isFocused])
 
   let [fontsLoaded] = useFonts({
     'Bebes Neue': require('../assets/fonts/BebasNeue-Regular.ttf'),
   });
-  if (!fontsLoaded) {
+  if (!fontsLoaded || !garages) {
     return <AppLoading />;
   }
   
@@ -45,12 +51,16 @@ export default function Home(props) {
         <Text style={styles.title}>LIST REPAIR SHOP</Text>
       </View>
       <ScrollView>
-        <GarageCard props={props}/>
-        <GarageCard props={props}/>
-        <GarageCard props={props}/>
-        <GarageCard props={props}/>
-        <GarageCard props={props}/>
-        <GarageCard props={props}/>
+        {
+          garages.length < 1 ? <GarageEmpty /> :
+          garages.map(garage => (
+            <GarageCard
+              props={props}
+              garage={garage}
+              key={garage.id}
+            />
+          ))
+        }
       </ScrollView>
       <View>
       </View>

@@ -6,6 +6,9 @@ import { useFonts } from '@expo-google-fonts/inter';
 const width = Dimensions.get('window').width; 
 
 export default function ActiveBookingUserCard (props) {
+  const { transaction } = props;
+  // console.log(transaction);
+
   let [fontsLoaded] = useFonts({
     'Bebes Neue': require('../assets/fonts/BebasNeue-Regular.ttf'),
   });
@@ -13,10 +16,12 @@ export default function ActiveBookingUserCard (props) {
     return <AppLoading />;
   }
 
-  const goToChat = () => {
+  const goToChat = (garage) => {
     console.log('Menuju halaman chat');
     console.log(props.props);
-    props.props.navigation.navigate('Chat');
+    props.props.navigation.navigate('Chat', {
+      garage
+    });
   }
   
   const goToCheckout = () => {
@@ -24,14 +29,20 @@ export default function ActiveBookingUserCard (props) {
     props.props.navigation.navigate('Checkout User');
   }
 
-  const goToDetail = () => {
-    props.props.navigation.navigate('Detail Shop');
+  const goToDetail = (garage) => {
+    props.props.navigation.navigate('Detail Shop', {
+      garage
+    });
+  }
+
+  const formatDate = (date) => {
+    return new Date(date).toLocaleDateString();
   }
 
   return (
     <View style={styles.card}>
       <View>
-        <TouchableOpacity onPress={() => goToDetail()}>
+        <TouchableOpacity onPress={() => goToDetail(transaction.Garage)}>
           <Image 
             style={styles.cardImg}
             source={{
@@ -42,15 +53,16 @@ export default function ActiveBookingUserCard (props) {
       </View>
       <View style={styles.cardInfo}>
         <View>
-          <Text style={styles.cardName} onPress={() => goToDetail()}>Bangkel Makmur</Text>
-          <Text style={styles.cardAddress} onPress={() => goToDetail()}>JL. SUKA MAJU</Text>
+          <Text style={styles.cardDate} onPress={() => goToDetail(transaction.Garage)}>{formatDate(transaction.date)}</Text>
+          <Text style={styles.cardName} onPress={() => goToDetail(transaction.Garage)}>{transaction.Garage.name}</Text>
+          <Text style={styles.cardAddress} onPress={() => goToDetail(transaction.Garage)}>{transaction.Garage.address}</Text>
         </View>
         <View style={styles.btnGroups}>
-          <TouchableOpacity style={styles.btnFavorite} onPress={() => goToChat()}>
+          <TouchableOpacity style={styles.btnFavorite} onPress={() => goToChat(transaction.Garage)}>
             <Text style={styles.btnFavoriteText}>CHAT</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.btnBook} onPress={() => goToCheckout()}>
-            <Text style={styles.btnFavoriteText}>CHECKOUT PAGE</Text>
+          <TouchableOpacity style={styles.btnBook} onPress={() => goToCheckout(transaction.Garage)}>
+            <Text style={styles.btnFavoriteText}>Detail Order</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -82,8 +94,16 @@ const styles = StyleSheet.create({
     fontFamily: 'Bebes Neue',
     fontStyle: 'normal',
     fontSize: 20,
+    color: '#000',
   },
   cardAddress: {
+    fontFamily: 'Bebes Neue',
+    fontStyle: 'normal',
+    fontSize: 14,
+    color: '#9B9B9B',
+  },
+  cardDate: {
+    alignSelf: 'flex-end',
     fontFamily: 'Bebes Neue',
     fontStyle: 'normal',
     fontSize: 14,

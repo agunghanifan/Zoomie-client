@@ -15,7 +15,7 @@ export default function SignupUser(props) {
   const [repeatPassword, setRepeatPassword] = useState('');
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
-  const [image, setImage] = useState(null);
+  // const [image, setImage] = useState(null);
 
   useEffect(() => {
     (async () => {
@@ -101,12 +101,12 @@ export default function SignupUser(props) {
         <TextInput style={styles.textinput} secureTextEntry={true} placeholder="Password" value={repeatPassword} onChange={(event) => setRepeatPassword(event.nativeEvent.text)} />  
         <TextInput style={styles.textinput} placeholder="Email" value={email} onChange={(event) => setEmail(event.nativeEvent.text)} />
         <TextInput style={styles.textinput} placeholder="Name" value={name} onChange={(event) => setName(event.nativeEvent.text)} />
-        <View style={styles.uploadImage}>
+        {/* <View style={styles.uploadImage}>
           <View>
             <Button title="Pick an profile image" onPress={pickImage} />
           </View>
           {image && <Image source={{ uri: image }} style={{ width: width * 0.4, height: width * 0.4 }} />}
-        </View>
+        </View> */}
       </View>
       <Text style={styles.haveAccount} onPress={() => goToLogin()}>ALREADY HAVE AN ACCOUNT? &#8594;</Text>
       <View style={styles.center}>
