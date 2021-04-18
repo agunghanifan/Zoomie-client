@@ -14,8 +14,9 @@ export default function SuccessPage(props) {
     return <AppLoading />;
   }
 
-  const goToHome = () => {
+  const goToHistory = () => {
     props.navigation.replace('Main');
+    props.navigation.navigate('Bookings History User')
   }
 
   return (
@@ -26,12 +27,13 @@ export default function SuccessPage(props) {
           source={require('../assets/img/success.png')}
         />
         <Text style={styles.successTitle}>SUCCESS!</Text>
-        <Text style={styles.successText}>YOUR ORDER HAS BEEN FINISHED</Text>
-        <Text style={styles.successText}>ITS TIME TO RELAX AND FOCUS ON OTHER TASK!</Text>
+        <Text style={styles.successText}>YOUR ORDER HAS BEEN SENT TO GARAGE</Text>
+        <Text style={styles.successText}>PLEASE WAIT FOR GARAGE'S CONFIRM</Text>
+        <Text style={styles.successText}>JUST RELAX AND FOCUS ON OTHER TASK!</Text>
       </View>
       <View style={styles.btnGroup}>
         <TouchableOpacity style={styles.btn}>
-          <Text style={styles.btnText} onPress={() => goToHome()}>RETURN TO HOMEPAGE</Text>
+          <Text style={styles.btnText} onPress={() => goToHistory()}>SEE BOOKLIST AND HISTORY</Text>
         </TouchableOpacity>
       </View>
     </View>

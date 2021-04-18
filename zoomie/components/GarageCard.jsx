@@ -117,6 +117,7 @@ const styles = StyleSheet.create({
   },
   btnGroups: {
     marginTop: 20,
+    marginBottom: 10,
     flexDirection: 'row',
   },
   btnFavorite: {

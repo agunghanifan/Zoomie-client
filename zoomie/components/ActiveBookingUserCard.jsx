@@ -1,5 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity, Dimensions } from 'react-native';
+import statusTranslate from '../helpers/statusTranslate';
 import AppLoading from 'expo-app-loading';
 import { useFonts } from '@expo-google-fonts/inter';
 
@@ -24,9 +25,10 @@ export default function ActiveBookingUserCard (props) {
     });
   }
   
-  const goToCheckout = () => {
-    console.log(`Menuju halaman checkout`);
-    props.props.navigation.navigate('Checkout User');
+  const goToDetailOrder = (transaction) => {
+    props.props.navigation.navigate('Checkout User', {
+      transaction
+    });
   }
 
   const goToDetail = (garage) => {
@@ -42,7 +44,7 @@ export default function ActiveBookingUserCard (props) {
   return (
     <View style={styles.card}>
       <View>
-        <TouchableOpacity onPress={() => goToDetail(transaction.Garage)}>
+        <TouchableOpacity onPress={() => goToDetailOrder(transaction)}>
           <Image 
             style={styles.cardImg}
             source={{
@@ -53,15 +55,16 @@ export default function ActiveBookingUserCard (props) {
       </View>
       <View style={styles.cardInfo}>
         <View>
-          <Text style={styles.cardDate} onPress={() => goToDetail(transaction.Garage)}>{formatDate(transaction.date)}</Text>
-          <Text style={styles.cardName} onPress={() => goToDetail(transaction.Garage)}>{transaction.Garage.name}</Text>
-          <Text style={styles.cardAddress} onPress={() => goToDetail(transaction.Garage)}>{transaction.Garage.address}</Text>
+          <Text style={styles.cardDate} onPress={() => goToDetailOrder(transaction)}>{formatDate(transaction.date)}</Text>
+          <Text style={styles.cardName} onPress={() => goToDetailOrder(transaction)}>{transaction.Garage.name}</Text>
+          <Text style={styles.cardStatus} onPress={() => goToDetailOrder(transaction)}>({statusTranslate(transaction.status)})</Text>
+          <Text style={styles.cardAddress} onPress={() => goToDetailOrder(transaction)}>{transaction.Garage.address}</Text>
         </View>
         <View style={styles.btnGroups}>
           <TouchableOpacity style={styles.btnFavorite} onPress={() => goToChat(transaction.Garage)}>
             <Text style={styles.btnFavoriteText}>CHAT</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.btnBook} onPress={() => goToCheckout(transaction.Garage)}>
+          <TouchableOpacity style={styles.btnBook} onPress={() => goToDetailOrder(transaction)}>
             <Text style={styles.btnFavoriteText}>Detail Order</Text>
           </TouchableOpacity>
         </View>
@@ -88,12 +91,19 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   cardInfo: {
+    flexWrap: 'wrap',
     marginLeft: 20,
   },
   cardName: {
     fontFamily: 'Bebes Neue',
     fontStyle: 'normal',
     fontSize: 20,
+    color: '#000',
+  },
+  cardStatus: {
+    fontFamily: 'Bebes Neue',
+    fontStyle: 'normal',
+    fontSize: 15,
     color: '#000',
   },
   cardAddress: {
@@ -111,6 +121,7 @@ const styles = StyleSheet.create({
   },
   btnGroups: {
     marginTop: 20,
+    marginBottom: 10,
     flexDirection: 'row',
   },
   btnFavorite: {

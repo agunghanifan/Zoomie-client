@@ -1,5 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity, Dimensions } from 'react-native';
+import statusTranslate from '../helpers/statusTranslate';
 import AppLoading from 'expo-app-loading';
 import { useFonts } from '@expo-google-fonts/inter';
 
@@ -40,6 +41,7 @@ export default function HistoryCard (props) {
       <View style={styles.cardInfo}>
         <Text style={styles.cardDate} onPress={() => goToDetail(transaction.Garage)}>{formatDate(transaction.date)}</Text>
         <Text style={styles.cardName} onPress={() => goToDetail(transaction.Garage)}>{transaction.Garage.name}</Text>
+          <Text style={styles.cardStatus} onPress={() => goToDetailOrder(transaction)}>({statusTranslate(transaction.status)})</Text>
         <Text style={styles.cardAddress} onPress={() => goToDetail(transaction.Garage)}>{transaction.Garage.address}</Text>
         <Text style={styles.cardName} onPress={() => goToDetail(transaction.Garage)}>{transaction.description}</Text>
       </View>
@@ -72,6 +74,12 @@ const styles = StyleSheet.create({
     fontFamily: 'Bebes Neue',
     fontStyle: 'normal',
     fontSize: 20,
+    color: '#000',
+  },
+  cardStatus: {
+    fontFamily: 'Bebes Neue',
+    fontStyle: 'normal',
+    fontSize: 15,
     color: '#000',
   },
   cardAddress: {
