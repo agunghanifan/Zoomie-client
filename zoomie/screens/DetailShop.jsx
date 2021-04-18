@@ -6,6 +6,9 @@ import { useFonts } from '@expo-google-fonts/inter';
 const width = Dimensions.get('window').width; 
 
 export default function DetailShop(props) {
+  const { garage } = props.route.params;
+  console.log(garage, "garage from detail");
+
   let [fontsLoaded] = useFonts({
     'Bebes Neue': require('../assets/fonts/BebasNeue-Regular.ttf'),
   });
@@ -13,8 +16,10 @@ export default function DetailShop(props) {
     return <AppLoading />;
   }
 
-  const booking = () => {
-    props.navigation.navigate('Chat');
+  const booking = (id) => {
+    props.navigation.navigate('Chat', {
+      garage
+    })
   }
   
   return (
@@ -29,23 +34,17 @@ export default function DetailShop(props) {
           />
         </View>
         <View style={styles.containerTitle}>
-          <Text style={styles.shopName}>BENGKEL MAKMUR</Text>
-          <Text style={styles.shopAddress}>JL. SUKA MAJU</Text>
+          <Text style={styles.shopName}>{garage.name}</Text>
+          <Text style={styles.shopAddress}>{garage.address}</Text>
         </View>
         <View style={styles.containerInfo}>
           <Text style={styles.shopInfo}>
-            BENGKEL MOTOR {'\n'}
-            &nbsp; BENGKEL MOTOR {'\n'}
-            &nbsp; &#183; TUNE UP {'\n'}
-            &nbsp; &#183; SERVICE {'\n'}
-            &nbsp; &#183; GANTI OLI {'\n'}
-            &nbsp; &#183; SPARE PART {'\n'}
-            &nbsp; &#183; BONGKAR PASANG MESIN {'\n'}
+            {garage.description}
           </Text>
         </View>
       </ScrollView>
       <View style={styles.containerBooking}>
-        <TouchableOpacity style={styles.btnBooking} onPress={() => booking()}>
+        <TouchableOpacity style={styles.btnBooking} onPress={() => booking(garage.id)}>
           <Text style={styles.btnBookingText}>BOOKING / CHAT</Text>
         </TouchableOpacity>
       </View>
@@ -73,7 +72,7 @@ const styles = StyleSheet.create({
   btnBooking: {
     width: width * 0.9,
     height: 48,
-    backgroundColor: '#4F4F4F',
+    backgroundColor: '#DB3022',
     borderRadius: 28,
     alignItems: 'center',
     justifyContent: 'center',

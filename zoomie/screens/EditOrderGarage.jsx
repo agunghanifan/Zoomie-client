@@ -2,21 +2,26 @@ import React, { useEffect, useState } from 'react'
 import { View, Text, StyleSheet, Dimensions, TouchableOpacity, ScrollView, TextInput } from 'react-native'
 import AppLoading from 'expo-app-loading';
 import { useFonts } from '@expo-google-fonts/inter';
-import { useDispatch } from 'react-redux'
-import { fetchAllTransactionById } from '../store/actions/transactions'
+import { useDispatch, useSelector } from 'react-redux'
+import { fetchTransactionById } from '../store/actions/transactions'
+import statusTranslate from '../helpers/statusTranslate'
+import DatePicker from 'react-native-date-picker'
 
 const width = Dimensions.get('window').width;
 
 export default function EditOrderGarage (props) {
 
-  const { name, description } = props.route.params
-  const [serviceDate, setServiceDate] = useState('')
-  const [status, setStatus] = useState('')
-  const [note, setNote] = useState('')
-  const [totalprice, setTotalPrice] = useState(0)
+  const { id } = props.route.params
+  const transactionsById = useSelector(state => state.transactions.transactionsById)
+  const dispatch = useDispatch()
+  const [serviceDate, setServiceDate] = useState(Date(transactionsById.date).toLocaleDateString())
+  const [status, setStatus] = useState(statusTranslate(transactionsById.status))
+  const [note, setNote] = useState(transactionsById.description)
+  const [totalprice, setTotalPrice] = useState(String(transactionsById.price))
 
 
   useEffect(() => {
+    dispatch(fetchTransactionById(id))
   }, [])
 
   let [fontsLoaded] = useFonts({
@@ -27,6 +32,9 @@ export default function EditOrderGarage (props) {
   }
 
   const goToSuccess = () => {
+    const data = {
+
+    }
     console.log(`Menuju halaman sukses`);
     props.navigation.navigate('Success');
   }
@@ -37,15 +45,16 @@ export default function EditOrderGarage (props) {
         <Text style={styles.title}>ORDER INFO</Text>
         <View style={styles.cardInfo}>
           <View style={styles.paddingCardText}>
-            <Text style={{ fontSize: 14, fontWeight: 'bold'}}>{name}</Text>
-            <Text style={{ fontSize: 14, fontWeight: 'bold'}}>{description}</Text>
+            
+            <Text style={{ fontSize: 14, fontWeight: 'bold'}}>{transactionsById?.User?.name}</Text>
+            <Text style={{ fontSize: 14, fontWeight: 'bold'}}>{transactionsById?.description}</Text>
           </View>
         </View>
         <View style={styles.detailOrder}>
           <Text style={styles.label}>Service Date</Text>
           <TextInput
-            style={styles.textinput}
-            placeholder="Tanggal"
+            style={styles.textArea}
+            placeholder="Date"
             value={serviceDate}
             onChange={(e) => setServiceDate(e.nativeEvent.target)}
           />
@@ -72,6 +81,7 @@ export default function EditOrderGarage (props) {
           />
         </View>
       </ScrollView>
+      {/* <Text>{JSON.stringify(transactionsById)}</Text> */}
       <View style={styles.btnGroup}>
         <TouchableOpacity style={styles.btnBooking} onPress={() => goToSuccess()}>
           <Text style={styles.btnBookingText}>Update Order</Text>

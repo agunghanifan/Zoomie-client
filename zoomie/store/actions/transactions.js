@@ -13,9 +13,9 @@ export function setError (payload) {
   return { type: 'error/setError', payload }
 }
 
-// export function setHistoryTransactions (payload) {
-//   return { type: 'transactions/setTransactionsHistory', payload }
-// }
+export function setTransactionsById (payload) {
+  return { type: 'transactionsById/setTransactionsById', payload }
+}
 
 
 export function fetchAllTransactionById () {
@@ -40,22 +40,15 @@ export function fetchAllTransactionById () {
   } 
 }
 
-// export function fetchHistoryTransaction () {
-//   return async (dispatch) => {
-//     try {
-//       dispatch(setError(null))
-//       const headers = {
-//         access_token: await AsyncStorage.getItem('@access_token')
-//       }
-//       const dataStatus = {
-//         status: 0
-//       }
-//       const { data } = await axios.get('/transactions/', { headers, data: dataStatus });
-//       console.log(data)
-//       dispatch(setTransactions(data));
-//     } catch (err) {
-//         console.log(err);
-//         dispatch(setError(err))
-//     }
-//   } 
-// }
+export function fetchTransactionById (payload) {
+  return async (dispatch) => {
+    dispatch(setError(null))
+    console.log("masuk fetch transaksi by id")
+    const headers = {
+      access_token: await AsyncStorage.getItem('@access_token')
+    }
+    const { data } = await axios.get(`/transactions/${payload}`, { headers });
+    // console.log(data, "ini data dari fetchtransbyID")
+    dispatch(setTransactionsById(data))
+  }
+}

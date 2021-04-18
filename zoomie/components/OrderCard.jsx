@@ -18,8 +18,7 @@ export default function GarageCard(props) {
 
   const goToOrderDetail = () => {
     navigation.navigate('Edit Order', {
-      name: transaction.User.name,
-      description: transaction.description
+      id: transaction.id
     });
   }
   

@@ -4,12 +4,16 @@ import AppLoading from 'expo-app-loading';
 import { useFonts } from '@expo-google-fonts/inter';
 import { Entypo } from '@expo/vector-icons';
 import ChatCard from '../components/ChatCard';
+import axios from '../axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const width = Dimensions.get('window').width; 
 let newId = 100;
 
 export default function Chat(props) {
   const [chat, setChat] = useState('');
+  const { garage } = props.route.params;
+  console.log(garage, "garage from chat");
 
   let [fontsLoaded] = useFonts({
     'Bebes Neue': require('../assets/fonts/BebasNeue-Regular.ttf'),
@@ -28,13 +32,27 @@ export default function Chat(props) {
     setChat('')
   }
 
-  const goToCheckout = () => {
+  const bookingBtn = () => {
     Alert.alert("Submit Booking", "Are you sure to Submit Booking?",
       [
         { text: "Cancel", onPress: () => null, style: "cancel" },
-        { text: "YES", onPress: () => props.navigation.navigate('Checkout User') }
+        { text: "YES", onPress: () => confirmBooking() }
       ]
     );    
+  }
+
+  const confirmBooking = async () => {
+    //bikin baru transaksi
+    const headers = {
+      access_token: await AsyncStorage.getItem('@access_token')
+    }
+    const newTransactions = {
+      description: '',
+      garageId: garage.id
+    }
+    const { data } = await axios.post('/transactions', newTransactions, { headers })
+    console.log(data);
+    props.navigation.navigate('Success')
   }
   
   // data chat dummy
@@ -72,6 +90,7 @@ export default function Chat(props) {
       />
       <View style={styles.containerChat}>
         <TextInput
+          multiline
           placeholder="Message"
           style={styles.chatInput}
           onChange={(event) => setChat(event.nativeEvent.text)} 
@@ -82,7 +101,7 @@ export default function Chat(props) {
         </TouchableOpacity>
       </View>
       <View style={styles.btnGroup}>
-        <TouchableOpacity style={styles.btnBooking} onPress={() => goToCheckout()}>
+        <TouchableOpacity style={styles.btnBooking} onPress={() => bookingBtn()}>
           <Text style={styles.btnBookingText}>SUBMIT BOOKING</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.btnCancel} onPress={() => goToHome()}>

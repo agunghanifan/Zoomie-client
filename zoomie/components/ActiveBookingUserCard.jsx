@@ -1,11 +1,15 @@
 import React from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity, Dimensions } from 'react-native';
+import statusTranslate from '../helpers/statusTranslate';
 import AppLoading from 'expo-app-loading';
 import { useFonts } from '@expo-google-fonts/inter';
 
 const width = Dimensions.get('window').width; 
 
 export default function ActiveBookingUserCard (props) {
+  const { transaction } = props;
+  // console.log(transaction);
+
   let [fontsLoaded] = useFonts({
     'Bebes Neue': require('../assets/fonts/BebasNeue-Regular.ttf'),
   });
@@ -13,25 +17,34 @@ export default function ActiveBookingUserCard (props) {
     return <AppLoading />;
   }
 
-  const goToChat = () => {
+  const goToChat = (garage) => {
     console.log('Menuju halaman chat');
     console.log(props.props);
-    props.props.navigation.navigate('Chat');
+    props.props.navigation.navigate('Chat', {
+      garage
+    });
   }
   
-  const goToCheckout = () => {
-    console.log(`Menuju halaman checkout`);
-    props.props.navigation.navigate('Checkout User');
+  const goToDetailOrder = (transaction) => {
+    props.props.navigation.navigate('Checkout User', {
+      transaction
+    });
   }
 
-  const goToDetail = () => {
-    props.props.navigation.navigate('Detail Shop');
+  const goToDetail = (garage) => {
+    props.props.navigation.navigate('Detail Shop', {
+      garage
+    });
+  }
+
+  const formatDate = (date) => {
+    return new Date(date).toLocaleDateString();
   }
 
   return (
     <View style={styles.card}>
       <View>
-        <TouchableOpacity onPress={() => goToDetail()}>
+        <TouchableOpacity onPress={() => goToDetailOrder(transaction)}>
           <Image 
             style={styles.cardImg}
             source={{
@@ -42,15 +55,17 @@ export default function ActiveBookingUserCard (props) {
       </View>
       <View style={styles.cardInfo}>
         <View>
-          <Text style={styles.cardName} onPress={() => goToDetail()}>Bangkel Makmur</Text>
-          <Text style={styles.cardAddress} onPress={() => goToDetail()}>JL. SUKA MAJU</Text>
+          <Text style={styles.cardDate} onPress={() => goToDetailOrder(transaction)}>{formatDate(transaction.date)}</Text>
+          <Text style={styles.cardName} onPress={() => goToDetailOrder(transaction)}>{transaction.Garage.name}</Text>
+          <Text style={styles.cardStatus} onPress={() => goToDetailOrder(transaction)}>({statusTranslate(transaction.status)})</Text>
+          <Text style={styles.cardAddress} onPress={() => goToDetailOrder(transaction)}>{transaction.Garage.address}</Text>
         </View>
         <View style={styles.btnGroups}>
-          <TouchableOpacity style={styles.btnFavorite} onPress={() => goToChat()}>
+          <TouchableOpacity style={styles.btnFavorite} onPress={() => goToChat(transaction.Garage)}>
             <Text style={styles.btnFavoriteText}>CHAT</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.btnBook} onPress={() => goToCheckout()}>
-            <Text style={styles.btnFavoriteText}>CHECKOUT PAGE</Text>
+          <TouchableOpacity style={styles.btnBook} onPress={() => goToDetailOrder(transaction)}>
+            <Text style={styles.btnFavoriteText}>Detail Order</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -76,12 +91,20 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   cardInfo: {
+    flexWrap: 'wrap',
     marginLeft: 20,
   },
   cardName: {
     fontFamily: 'Bebes Neue',
     fontStyle: 'normal',
     fontSize: 20,
+    color: '#000',
+  },
+  cardStatus: {
+    fontFamily: 'Bebes Neue',
+    fontStyle: 'normal',
+    fontSize: 15,
+    color: '#000',
   },
   cardAddress: {
     fontFamily: 'Bebes Neue',
@@ -89,8 +112,16 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#9B9B9B',
   },
+  cardDate: {
+    alignSelf: 'flex-end',
+    fontFamily: 'Bebes Neue',
+    fontStyle: 'normal',
+    fontSize: 14,
+    color: '#9B9B9B',
+  },
   btnGroups: {
     marginTop: 20,
+    marginBottom: 10,
     flexDirection: 'row',
   },
   btnFavorite: {
