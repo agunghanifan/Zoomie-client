@@ -1,40 +1,53 @@
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { StyleSheet, Text, View, Image, Alert } from 'react-native';
 import AppLoading from 'expo-app-loading';
 import { useFonts } from '@expo-google-fonts/inter';
+import { useIsFocused } from '@react-navigation/native'
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useDispatch, useSelector } from 'react-redux'
+import { currentUser } from '../store/actions/users'
 
 export default function ProfileBengkel (props) {
+  const isFocused = useIsFocused()
+  const dispatch = useDispatch()
+  const user = useSelector(state => state.users.user)
 
+  useEffect(() => {
+    dispatch(currentUser())
+  }, [isFocused])
+  
   // ini logic load font
   let [fontsLoaded] = useFonts({
     'Bebes Neue': require('../assets/fonts/BebasNeue-Regular.ttf'),
   });
-  if (!fontsLoaded) {
+  if (!fontsLoaded || !user ) {
     return <AppLoading />
   }
   // end load font
 
-  function historyOrders () {
-    console.log("masuk history Bookings")
-    props.navigation.navigate('Order History Bengkel')
-  }
+  // function historyOrders () {
+  //   console.log("masuk history Bookings")
+  //   props.navigation.navigate('Order History Bengkel')
+  // }
 
   function goToEditProfile () {
     console.log("masuk page edit profile")
-    props.navigation.navigate('Edit Profil Bengkel', {
-      username: 'sririyanto',
-      email: 'sririyanto@gmail.com'
-    })
+    props.navigation.navigate('Edit Profil Bengkel')
   }
 
   function logOut () {
     Alert.alert("Logout", "Are you sure to Logout?",
       [
         { text: "Cancel", onPress: () => null, style: "cancel" },
-        { text: "Logout", onPress: () => props.navigation.replace('Welcome Page') }
+        { text: "Logout", onPress: () => logOut() }
       ]
     );    
+  }
+  
+  async function logOut () {
+    await AsyncStorage.clear();
+    props.navigation.replace('Welcome Page');
   }
 
   return (
@@ -46,14 +59,9 @@ export default function ProfileBengkel (props) {
           uri: 'https://image.freepik.com/free-photo/adorable-dark-skinned-adult-woman-dressed-yellow-jumper-using-mobile-phone-with-happy-expression_273609-34293.jpg'
         }}
       />
-      <Text style={styles.textUsername}>sririyanto</Text>
-      <Text style={styles.textEmail}>sririyanto@mail.com</Text>
-      <View style={styles.btnBox}>
-        <View style={styles.capsText}>
-          <Text style={{ fontSize: 16, fontWeight: 'bold' }} onPress={() => historyOrders()}>History Book</Text>
-          <Text style={{ fontSize: 11 }}>Your Recent History Book</Text>
-        </View>
-      </View>
+      {/* <Text>{JSON.stringify(user)}</Text> */}
+      <Text style={styles.textUsername}>{user?.username}</Text>
+      <Text style={styles.textEmail}>{user?.email}</Text>
       <View style={styles.btnBox}>
         <View style={styles.capsText}>
           <Text style={{ fontSize: 16, fontWeight: 'bold' }} onPress={() => goToEditProfile()}>Edit Profile</Text>

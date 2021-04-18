@@ -5,6 +5,7 @@ import AppLoading from 'expo-app-loading';
 import { useFonts } from '@expo-google-fonts/inter';
 import * as ImagePicker from 'expo-image-picker';
 import base64 from 'react-native-base64'
+import axios from '../axios'
 
 const width = Dimensions.get('window').width; 
 
@@ -14,7 +15,7 @@ export default function SignupUser(props) {
   const [repeatPassword, setRepeatPassword] = useState('');
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
-  const [profilImage, setProfilImage] = useState(null);
+  const [image, setImage] = useState(null);
 
   useEffect(() => {
     (async () => {
@@ -27,7 +28,7 @@ export default function SignupUser(props) {
     })();
   }, []);
   
-  const pickProfilImage = async () => {
+  const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
@@ -36,7 +37,7 @@ export default function SignupUser(props) {
     });
     console.log(result);
     if (!result.cancelled) {
-      setProfilImage(result.uri);
+      setImage(result.uri);
     }
   };
 
@@ -58,7 +59,7 @@ export default function SignupUser(props) {
     return re.test(email);
   }
 
-  const signUp = () => {
+  const signUp = async () => {
     // Validation
     // check password and repeat password
     if (password !== repeatPassword || !password) {
@@ -70,14 +71,24 @@ export default function SignupUser(props) {
     } else if ( !validateEmail(email) ) {
       Alert.alert("email format wrong!");
     } else {
-      const newUser = {
-        username,
-        password,
-        email: email.toLowerCase(),
-        name,
-        profilImage: base64.encode(profilImage)
+      try {
+        const newUser = {
+          username: username.toLowerCase(),
+          password,
+          email: email.toLowerCase(),
+          name,
+          image: base64.encode(image)
+        }
+        console.log(newUser);
+        const { data } = await axios.post('/register', newUser)
+        console.log(data);
+        Alert.alert(`Register Success`, `Please login using ${newUser.username}`);
+        props.navigation.replace('Login User')
       }
-      console.log(newUser);
+      catch (err) {
+        console.log(err.response.data);
+        Alert.alert(`Error`, err.response.data.errors[0].errors[0].message);
+      }
     }
   }
 
@@ -92,9 +103,9 @@ export default function SignupUser(props) {
         <TextInput style={styles.textinput} placeholder="Name" value={name} onChange={(event) => setName(event.nativeEvent.text)} />
         <View style={styles.uploadImage}>
           <View>
-            <Button title="Pick an profile image" onPress={pickProfilImage} />
+            <Button title="Pick an profile image" onPress={pickImage} />
           </View>
-          {profilImage && <Image source={{ uri: profilImage }} style={{ width: width * 0.4, height: width * 0.4 }} />}
+          {image && <Image source={{ uri: image }} style={{ width: width * 0.4, height: width * 0.4 }} />}
         </View>
       </View>
       <Text style={styles.haveAccount} onPress={() => goToLogin()}>ALREADY HAVE AN ACCOUNT? &#8594;</Text>

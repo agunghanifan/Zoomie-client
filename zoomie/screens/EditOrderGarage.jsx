@@ -1,11 +1,23 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { View, Text, StyleSheet, Dimensions, TouchableOpacity, ScrollView, TextInput } from 'react-native'
 import AppLoading from 'expo-app-loading';
 import { useFonts } from '@expo-google-fonts/inter';
+import { useDispatch } from 'react-redux'
+import { fetchAllTransactionById } from '../store/actions/transactions'
 
 const width = Dimensions.get('window').width;
 
-export default function EditOrderGarage(props) {
+export default function EditOrderGarage (props) {
+
+  const { name, description } = props.route.params
+  const [serviceDate, setServiceDate] = useState('')
+  const [status, setStatus] = useState('')
+  const [note, setNote] = useState('')
+  const [totalprice, setTotalPrice] = useState(0)
+
+
+  useEffect(() => {
+  }, [])
 
   let [fontsLoaded] = useFonts({
     'Bebes Neue': require('../assets/fonts/BebasNeue-Regular.ttf'),
@@ -25,8 +37,8 @@ export default function EditOrderGarage(props) {
         <Text style={styles.title}>ORDER INFO</Text>
         <View style={styles.cardInfo}>
           <View style={styles.paddingCardText}>
-            <Text style={{ fontSize: 14, fontWeight: 'bold'}}>Bapack Sukardi</Text>
-            <Text style={{ fontSize: 14, fontWeight: 'bold'}}>Astrea Supra</Text>
+            <Text style={{ fontSize: 14, fontWeight: 'bold'}}>{name}</Text>
+            <Text style={{ fontSize: 14, fontWeight: 'bold'}}>{description}</Text>
           </View>
         </View>
         <View style={styles.detailOrder}>
@@ -34,21 +46,29 @@ export default function EditOrderGarage(props) {
           <TextInput
             style={styles.textinput}
             placeholder="Tanggal"
+            value={serviceDate}
+            onChange={(e) => setServiceDate(e.nativeEvent.target)}
           />
           <Text style={styles.label}>Status</Text>
           <TextInput
             style={styles.textinput}
             placeholder="Status"
+            value={status}
+            onChange={(e) => setStatus(e.nativeEvent.target)}
           />
           <Text style={styles.label}>NOTE</Text>
           <TextInput
             style={styles.textArea}
             placeholder="Note"
+            value={note}
+            onChange={(e) => setNote(e.nativeEvent.target)}
           />
           <Text style={styles.label}>Total Price</Text>
           <TextInput
             style={styles.textinput}
             placeholder="Total Price"
+            value={totalprice}
+            onChange={(e) => setTotalPrice(e.nativeEvent.target)}
           />
         </View>
       </ScrollView>

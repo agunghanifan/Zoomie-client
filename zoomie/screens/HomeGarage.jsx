@@ -1,23 +1,46 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, Image, ScrollView } from 'react-native';
 import AppLoading from 'expo-app-loading';
 import { useFonts } from '@expo-google-fonts/inter';
 import OrderCard from '../components/OrderCard';
 import OrderEmpty from '../components/OrderEmpty';
+import { useDispatch, useSelector } from 'react-redux'
+import { fetchAllTransactionById } from '../store/actions/transactions'
+import { useIsFocused } from '@react-navigation/native'
+import { getDataGarage } from '../store/actions/garages'
 
-export default function HomeGarage(props) {
+export default function HomeGarage (props) {
+
+  const transactions = useSelector(state => state.transactions.transactions)
+  const garageLogIn = useSelector(state => state.garages.garageLogIn)
+  const [dataFilter, setDataFilter] = useState([])
+  const dispatch = useDispatch()
+  const isFocused = useIsFocused()
+
+  useEffect(() => {
+    console.log('masuk useEffect')
+    dispatch(fetchAllTransactionById())
+    dispatch(getDataGarage())
+    const timing = setInterval(() => {
+      if (transactions) {
+        setDataFilter(transactions.filter(transaction => transaction.status === 0))
+        console.log(dataFilter, "ini data filter")
+      } else null
+      clearInterval(timing)
+    }, 300);
+  }, [isFocused])
 
   let [fontsLoaded] = useFonts({
     'Bebes Neue': require('../assets/fonts/BebasNeue-Regular.ttf'),
   });
-  if (!fontsLoaded) {
+  if (!fontsLoaded || !transactions || !garageLogIn) {
     return <AppLoading />;
   }
   
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text  style={styles.headerText}>Bengkel Odading</Text>
+        <Text style={styles.headerText}>{garageLogIn[0]?.name}</Text>
         <Image 
           style={styles.tinyProfPic}
           source={{
@@ -26,11 +49,15 @@ export default function HomeGarage(props) {
         />
       </View>
       <ScrollView>
-        <OrderCard />
-        <OrderEmpty />
+        {
+          dataFilter.length === 0 ? <OrderEmpty /> :
+          dataFilter.map(transaction => {
+            return <OrderCard transaction={transaction} key={transaction.id} navigation={props.navigation}/>
+          })
+
+        }
+        {/* <Text>{JSON.stringify(dataFilter)}</Text> */}
       </ScrollView>
-      <View>
-      </View>
     </View>
   );
 }

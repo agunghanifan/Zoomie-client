@@ -5,6 +5,7 @@ import AppLoading from 'expo-app-loading';
 import { useFonts } from '@expo-google-fonts/inter';
 import * as ImagePicker from 'expo-image-picker';
 import base64 from 'react-native-base64'
+import axios from '../axios/'
 
 const width = Dimensions.get('window').width; 
 
@@ -29,19 +30,6 @@ export default function SignupUser(props) {
     })();
   }, []);
 
-  // const pickProfilImage = async () => {
-  //   let result = await ImagePicker.launchImageLibraryAsync({
-  //     mediaTypes: ImagePicker.MediaTypeOptions.All,
-  //     allowsEditing: true,
-  //     aspect: [4, 3],
-  //     quality: 1,
-  //   });
-  //   console.log(result);
-  //   if (!result.cancelled) {
-  //     setProfilImage(result.uri);
-  //   }
-  // };
-
   const pickGarageImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -54,15 +42,6 @@ export default function SignupUser(props) {
       setImage(result.uri);
     }
   };
-
-  // ini logic load font
-  let [fontsLoaded] = useFonts({
-    'Bebes Neue': require('../assets/fonts/BebasNeue-Regular.ttf'),
-  });
-  if (!fontsLoaded) {
-    return <AppLoading />;
-  }
-  // end load font
   
   const goToLogin = () => {
     props.navigation.navigate('Login User');
@@ -73,7 +52,7 @@ export default function SignupUser(props) {
     return re.test(email);
   }
 
-  const signUp = () => {
+  const signUp = async () => {
     // Validation
     // check password and repeat password
     if (password !== repeatPassword || !password) {
@@ -96,9 +75,28 @@ export default function SignupUser(props) {
         description,
         image: base64.encode(image)
       }
-      console.log(newUser);
+      try {
+        console.log(newUser);
+        const { data } = await axios.post('/garage', newUser)
+        console.log(data);
+        Alert.alert(`Register Success`, `Please login using ${newUser.username}`);
+        props.navigation.replace('Login User')
+      }
+      catch (err) {
+        console.log(err.response.data);
+        Alert.alert(`Error`, err.response.data.errors[0].errors[0].message);
+      }
     }
   }
+
+  // ini logic load font
+  let [fontsLoaded] = useFonts({
+    'Bebes Neue': require('../assets/fonts/BebasNeue-Regular.ttf'),
+  });
+  if (!fontsLoaded) {
+    return <AppLoading />;
+  }
+  // end load font
 
   return (
     <ScrollView>
@@ -118,7 +116,7 @@ export default function SignupUser(props) {
         <Text style={styles.subTitle}>Garage Profile</Text>
         <TextInput style={styles.textinput} placeholder="Garage Name" value={name} onChange={(event) => setName(event.nativeEvent.text)} />
         <TextInput style={styles.textinput} placeholder="Garage Address" value={address} onChange={(event) => setAddress(event.nativeEvent.text)} />
-        <TextInput style={styles.textinput} placeholder="Garage Description" value={description} onChange={(event) => setDescription(event.nativeEvent.text)} />
+        <TextInput multiline style={styles.textinput} placeholder="Garage Description" value={description} onChange={(event) => setDescription(event.nativeEvent.text)} />
         <View style={styles.uploadImage}>
           <View>
             <Button title="Pick an garage image" onPress={pickGarageImage} />

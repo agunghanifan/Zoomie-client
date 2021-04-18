@@ -5,18 +5,22 @@ import AppLoading from 'expo-app-loading';
 import { useFonts } from '@expo-google-fonts/inter';
 import * as ImagePicker from 'expo-image-picker';
 import base64 from 'react-native-base64'
+import { useDispatch, useSelector } from 'react-redux'
+import { currentUser } from '../store/actions/users'
+import { getDataGarage } from '../store/actions/garages'
 
 const width = Dimensions.get('window').width; 
 
 export default function EditProfileBengkel (props) {
-  const { username, email } = props.route.params
+  const user = useSelector(state => state.users.user)
+  const garageLogIn = useSelector(state => state.garages.garageLogIn)
   const [profilImage, setProfilImage] = useState(null);
-  const [name, setName] = useState('');
-  const [garageName, setGarageName] = useState('');
-  const [garageStatus, setGarageStatus] = useState('');
-  const [garageAddress, setGarageAddress] = useState('');
-  const [garageDescription, setGarageDescription] = useState('');
+  // const [name, setName] = useState(user.name);
+  const [garageName, setGarageName] = useState(garageLogIn[0].name);
+  const [garageAddress, setGarageAddress] = useState(garageLogIn[0].address);
+  const [garageDescription, setGarageDescription] = useState(garageLogIn[0].description);
   const [garageImage, setGarageImage] = useState(null);
+  const dispatch = useDispatch()
 
   useEffect(() => {
     (async () => {
@@ -27,6 +31,8 @@ export default function EditProfileBengkel (props) {
         }
       }
     })();
+    dispatch(currentUser())
+    dispatch(getDataGarage())
   }, []);
 
   const pickProfilImage = async () => {
@@ -63,34 +69,19 @@ export default function EditProfileBengkel (props) {
     return <AppLoading />;
   }
   // end load font
-  
-  const goToLogin = () => {
-    props.navigation.navigate('Login User');
-  }
-
-  function validateEmail(email) {
-    const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    return re.test(email);
-  }
 
   const signUp = () => {
     // Validation
     // check password and repeat password
-    if (!name || !garageName || !garageAddress || !garageStatus || !garageDescription) {
+    if (!garageName || !garageAddress || !garageDescription) {
       Alert.alert("Please fill all of the field!");
-    } else if (!validateEmail(email)) {
-      Alert.alert("email format wrong!");
     }
     else {
       // if validated, then go to sign up process
       const newUser = {
-        username,
-        email: email.toLowerCase(),
-        name,
         profilImage: base64.encode(profilImage),
         garageName,
         garageAddress,
-        garageStatus,
         garageDescription,
         garageImage: base64.encode(garageImage)
       }
@@ -102,7 +93,7 @@ export default function EditProfileBengkel (props) {
     <ScrollView>
       <View style={styles.center}>
         <Text style={styles.subTitle}>User Profile</Text>
-        <TextInput style={styles.textinput} placeholder="Name" value={name} onChange={(event) => setName(event.nativeEvent.text)} />
+        {/* <TextInput style={styles.textinput} placeholder="Name" value={name} onChange={(event) => setName(event.nativeEvent.text)} /> */}
         <View style={styles.uploadImage}>
           <View>
             <Button title="Pick an profile image" onPress={pickProfilImage} />
@@ -112,8 +103,7 @@ export default function EditProfileBengkel (props) {
         <Text style={styles.subTitle}>Garage Profile</Text>
         <TextInput style={styles.textinput} placeholder="Garage Name" value={garageName} onChange={(event) => setGarageName(event.nativeEvent.text)} />
         <TextInput style={styles.textinput} placeholder="Garage Address" value={garageAddress} onChange={(event) => setGarageAddress(event.nativeEvent.text)} />
-        <TextInput style={styles.textinput} placeholder="Garage Status" value={garageStatus} onChange={(event) => setGarageStatus(event.nativeEvent.text)} />
-        <TextInput style={styles.textinput} placeholder="Garage Description" value={garageDescription} onChange={(event) => setGarageDescription(event.nativeEvent.text)} />
+        <TextInput style={styles.textinput} multiline placeholder="Garage Description" value={garageDescription} onChange={(event) => setGarageDescription(event.nativeEvent.text)} />
         <View style={styles.uploadImage}>
           <View>
             <Button title="Pick an garage image" onPress={pickGarageImage} />
@@ -121,6 +111,8 @@ export default function EditProfileBengkel (props) {
           {garageImage && <Image source={{ uri: garageImage }} style={{ width: width * 0.4, height: width * 0.4 }} />}
         </View>
       </View>
+      {/* <Text>{JSON.stringify(garageLogIn)}</Text>
+      <Text>{JSON.stringify(user)}</Text> */}
       <View style={styles.center}>
         <TouchableOpacity onPress={() => signUp()} style={styles.btnSignUp}>
           <Text style={styles.btnSignUpText}>EDIT PROFILE</Text>

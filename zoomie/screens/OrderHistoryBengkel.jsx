@@ -1,11 +1,29 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, Image, ScrollView } from 'react-native';
 import AppLoading from 'expo-app-loading';
 import { useFonts } from '@expo-google-fonts/inter';
-import HistoryCard from '../components/HistoryCard';
+import { useDispatch, useSelector } from 'react-redux'
 import HistoryOrderCard from '../components/HistoryOrderBengkelCard'
+import { fetchAllTransactionById } from '../store/actions/transactions'
+import OrderEmpty from '../components/OrderEmpty'
+import { useIsFocused } from '@react-navigation/native'
 
 export default function OrderHistoryBengkel (props) {
+  const dispatch = useDispatch()
+  const transactions = useSelector(state => state.transactions.transactions)
+  const [dataFilter, setDataFilter] = useState([])
+  const isFocused = useIsFocused()
+
+  useEffect(() => {
+    dispatch(fetchAllTransactionById())
+    const timing = setInterval(() => {
+      if (transactions) {
+        setDataFilter(transactions.filter(transaction => transaction.status === 1))
+        console.log(dataFilter, "ini data filter")
+      } else null
+      clearInterval(timing)
+    }, 300);
+  }, [isFocused])
 
   let [fontsLoaded] = useFonts({
     'Bebes Neue': require('../assets/fonts/BebasNeue-Regular.ttf'),
@@ -18,7 +36,13 @@ export default function OrderHistoryBengkel (props) {
     <View style={styles.container}>
       <View>
         <Text style={styles.title}>History Orders</Text>
-        <HistoryOrderCard props={props}/>
+        {
+          dataFilter.length === 0 ? <OrderEmpty /> :
+          dataFilter.map((transaction, index) => {
+            return <HistoryOrderCard transaction={transaction} key={index}/>
+          })
+        }
+        <Text>{JSON.stringify(dataFilter)} ini filter</Text>
       </View>
     </View>
   );
@@ -27,7 +51,7 @@ export default function OrderHistoryBengkel (props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: 10
+    marginTop: 60
   },
   tinyProfPic: {
     alignSelf: 'flex-end',

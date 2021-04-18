@@ -6,6 +6,9 @@ import { useFonts } from '@expo-google-fonts/inter';
 const width = Dimensions.get('window').width; 
 
 export default function GarageCard(props) {
+  const { transaction, navigation } = props
+  let dateNewFormat = new Date(transaction.date).toLocaleDateString()
+
   let [fontsLoaded] = useFonts({
     'Bebes Neue': require('../assets/fonts/BebasNeue-Regular.ttf'),
   });
@@ -14,7 +17,10 @@ export default function GarageCard(props) {
   }
 
   const goToOrderDetail = () => {
-    props.props.navigation.navigate('Edit Order');
+    navigation.navigate('Edit Order', {
+      name: transaction.User.name,
+      description: transaction.description
+    });
   }
   
   const chat = () => {
@@ -39,9 +45,9 @@ export default function GarageCard(props) {
       </View>
       <View style={styles.cardInfo}>
         <View>
-          <Text style={styles.cardDate} onPress={() => goToDetail()}>2020 / 04 / 17</Text>
-          <Text style={styles.cardName} onPress={() => goToDetail()}>Bapack Sulthon</Text>
-          <Text style={styles.cardInfo} onPress={() => goToDetail()}>Astrea Supra</Text>
+          <Text style={styles.cardDate} onPress={() => goToDetail()}>{dateNewFormat}</Text>
+          <Text style={styles.cardName} onPress={() => goToDetail()}>{transaction.User.name}</Text>
+          <Text style={styles.cardInfo} onPress={() => goToDetail()}>{transaction.description}</Text>
         </View>
         <View style={styles.btnGroups}>
           <TouchableOpacity style={styles.btnFavorite} onPress={() => finishOrder()}>
@@ -51,6 +57,7 @@ export default function GarageCard(props) {
             <Text style={styles.btnFavoriteText}>CHAT</Text>
           </TouchableOpacity>
         </View>
+        {/* <Text>{JSON.stringify(transaction)}</Text> */}
       </View>
     </View>
   );
