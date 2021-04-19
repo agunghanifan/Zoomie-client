@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { View, Text, StyleSheet, Dimensions, TouchableOpacity, ScrollView, TextInput } from 'react-native'
+import { View, Text, StyleSheet, Dimensions, TouchableOpacity, ScrollView, TextInput, Button } from 'react-native'
 import AppLoading from 'expo-app-loading';
 import { useFonts } from '@expo-google-fonts/inter';
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchTransactionById, setLoading, updateTransactions } from '../store/actions/transactions'
 import statusTranslate from '../helpers/statusTranslate'
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 const width = Dimensions.get('window').width;
 
@@ -17,19 +18,38 @@ export default function EditOrderGarage (props) {
   const [status, setStatus] = useState('')
   const [note, setNote] = useState('')
   const [totalprice, setTotalPrice] = useState('')
+  const [date, setDate] = useState(new Date(1598051730000));
+  const [mode, setMode] = useState('date');
+  const [show, setShow] = useState(false);
   let transactionsById = useSelector(state => state.transactions.transactionsById)
 
+  const onChange = (event, selectedDate) => {
+    const currentDate = selectedDate || date;
+    setShow(Platform.OS === 'web');
+    setDate(currentDate);
+  };
+
+  const showMode = (currentMode) => {
+    setShow(true);
+    setMode(currentMode);
+  };
+
+  const showDatepicker = () => {
+    showMode('date');
+  };
 
   useEffect(() => {
     dispatch(setLoading(true))
     dispatch(fetchTransactionById(id))
-    if(!loading) {
-      setServiceDate(transactionsById?.date)
-      setStatus(statusTranslate(transactionsById?.status))
-      setNote(transactionsById?.description)
-      setTotalPrice(String(transactionsById?.price))
-    }
   }, [id])
+
+  useEffect(() => {
+    // setServiceDate(transactionsById?.date)
+    setStatus(String(transactionsById?.status))
+    setNote(String(transactionsById?.description))
+    setTotalPrice(String(transactionsById?.price))
+    setDate(new Date(transactionsById?.date))
+  }, [transactionsById])
 
   let [fontsLoaded] = useFonts({
     'Bebes Neue': require('../assets/fonts/BebasNeue-Regular.ttf'),
@@ -41,14 +61,22 @@ export default function EditOrderGarage (props) {
   const goToSuccess = () => {
     const data = {
       id,
-      date: serviceDate,
-      status,
-      description: note,
-      price: totalprice
+      date,
+      status: String(status),
+      description: String(note),
+      price: String(totalprice)
     }
+    // console.log(data)
     dispatch(updateTransactions(data))
-    console.log(`Menuju halaman sukses`);
-    props.navigation.navigate('Success');
+    props.navigation.navigate('Main Garage');
+  }
+
+  const onBack = () => {
+    // setServiceDate('')
+    setStatus('')
+    setNote('')
+    setTotalPrice('')
+    props.navigation.goBack()
   }
 
   return (
@@ -62,20 +90,35 @@ export default function EditOrderGarage (props) {
             <Text style={{ fontSize: 14, fontWeight: 'bold'}}>{transactionsById?.description}</Text>
           </View>
         </View>
+        <View style={{ marginTop: 40 }}>
+          <Button onPress={showDatepicker} title="Show date picker!" />
+        </View>
+        <View style={{ left: 150 }}>
+          {show && (
+            <DateTimePicker
+              testID="dateTimePicker"
+              value={date}
+              mode={mode}
+              is24Hour={true}
+              display="default"
+              onChange={onChange}
+            />
+          )}
+        </View>
         <View style={styles.detailOrder}>
-          <Text style={styles.label}>Service Date</Text>
+          {/* <Text style={styles.label}>Service Date</Text>
           <TextInput
             style={styles.textArea}
             placeholder="Date"
             value={serviceDate}
             onChange={(e) => setServiceDate(e.nativeEvent.target)}
-          />
+          /> */}
           <Text style={styles.label}>Status</Text>
           <TextInput
             style={styles.textinput}
             placeholder="Status"
             value={status}
-            onChange={(e) => setStatus(e.nativeEvent.target)}
+            onChangeText={setStatus}
           />
           <Text style={styles.label}>NOTE</Text>
           <TextInput
@@ -83,14 +126,14 @@ export default function EditOrderGarage (props) {
             style={styles.textArea}
             placeholder="Note"
             value={note}
-            onChange={(e) => setNote(e.nativeEvent.target)}
+            onChangeText={setNote}
           />
           <Text style={styles.label}>Total Price</Text>
           <TextInput
             style={styles.textinput}
             placeholder="Total Price"
             value={totalprice}
-            onChange={(e) => setTotalPrice(e.nativeEvent.target)}
+            onChangeText={setTotalPrice}
           />
         </View>
       </ScrollView>
@@ -99,7 +142,7 @@ export default function EditOrderGarage (props) {
         <TouchableOpacity style={styles.btnBooking} onPress={() => goToSuccess()}>
           <Text style={styles.btnBookingText}>Update Order</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.btnBack} onPress={() => props.navigation.goBack()}>
+        <TouchableOpacity style={styles.btnBack} onPress={() => onBack()}>
           <Text style={styles.btnBookingText}>Back</Text>
         </TouchableOpacity>
       </View>

@@ -16,14 +16,11 @@ export default function OrderHistoryBengkel (props) {
 
   useEffect(() => {
     dispatch(fetchAllTransactionById())
-    const timing = setInterval(() => {
-      if (transactions) {
-        setDataFilter(transactions.filter(transaction => transaction.status === 10))
-        // console.log(dataFilter, "ini data filter")
-      } else null
-      clearInterval(timing)
-    }, 300);
   }, [isFocused])
+
+  useEffect(() => {
+    setDataFilter(transactions.filter(transaction => transaction.status === 10))
+  }, [transactions])
 
   let [fontsLoaded] = useFonts({
     'Bebes Neue': require('../assets/fonts/BebasNeue-Regular.ttf'),

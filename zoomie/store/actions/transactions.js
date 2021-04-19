@@ -33,6 +33,7 @@ export function fetchAllTransactionById () {
       const filterData = data.filter(transaction => +transaction.Garage.userId === +userId)
       // console.log(filterData)
       dispatch(setTransactions(filterData));
+      dispatch(setLoading(false))
     } catch (err) {
         console.log(err);
         dispatch(setError(err))
@@ -43,13 +44,13 @@ export function fetchAllTransactionById () {
 export function fetchTransactionById (payload) {
   return async (dispatch) => {
     dispatch(setError(null))
-    console.log("masuk fetch transaksi by id")
+    // console.log("masuk fetch transaksi by id")
     const headers = {
       access_token: await AsyncStorage.getItem('@access_token')
     }
     const { data } = await axios.get(`/transactions/${payload}`, { headers });
     // console.log(data, "ini data dari fetchtransbyID")
-    console.log(data, "ini dari fetch transaction by id")
+    // console.log(data, "ini dari fetch transaction by id")
     dispatch(setTransactionsById(data))
     dispatch(setLoading(false))
   }
@@ -57,16 +58,28 @@ export function fetchTransactionById (payload) {
 
 export function updateTransactions (payload) {
   return async (dispatch) => {
+    console.log("masukupdate Transaksi")
     dispatch(setError(null))
     const headers = {
       access_token: await AsyncStorage.getItem('@access_token')
     }
-    const { data } = await axios.patch(`/transactions/${payload.id}`, { headers, data: {
-      date: payload.date,
-      status: payload.status,
-      price: payload.price,
-      description: payload.description
-    } });
-    console.log(data)
+    console.log(headers, "ini headers dari update")
+    console.log(payload.id, "ini payload dalam updateTransaksi")
+    axios({
+      url: 'http://192.168.100.18:3000' + '/transactions/' + `${payload.id}`,
+      method: 'PUT',
+      data: {
+        status: Number(payload.status),
+        price: Number(payload.price),
+        date: payload.date,
+        description: payload.description
+      }
+    })
+        .then(response => {
+          console.log(response)
+        })
+        .catch(err => {
+          console.log(err)
+        })
   }
 }

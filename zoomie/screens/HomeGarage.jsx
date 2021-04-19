@@ -5,35 +5,38 @@ import { useFonts } from '@expo-google-fonts/inter';
 import OrderCard from '../components/OrderCard';
 import OrderEmpty from '../components/OrderEmpty';
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchAllTransactionById } from '../store/actions/transactions'
+import { fetchAllTransactionById, setLoading } from '../store/actions/transactions'
 import { useIsFocused } from '@react-navigation/native'
 import { getDataGarage } from '../store/actions/garages'
 
 export default function HomeGarage (props) {
 
-  const transactions = useSelector(state => state.transactions.transactions)
+  const transactions = useSelector(state => state?.transactions?.transactions)
+  const loading = useSelector(state => state?.transactions?.loading)
   const garageLogIn = useSelector(state => state.garages.garageLogIn)
-  const [dataFilter, setDataFilter] = useState([])
+  const [dataFilter, setDataFilter] = useState(null)
   const dispatch = useDispatch()
   const isFocused = useIsFocused()
 
+
   useEffect(() => {
     console.log('masuk useEffect')
+    dispatch(setLoading(true))
     dispatch(fetchAllTransactionById())
     dispatch(getDataGarage())
-    const timing = setInterval(() => {
-      if (transactions) {
-        setDataFilter(transactions.filter(transaction => transaction.status < 10))
-        // console.log(dataFilter, "ini data filter")
-      } else null
-      clearInterval(timing)
-    }, 300);
   }, [isFocused])
+
+  useEffect(() => {
+    console.log(transactions, "<<<<<<<<<<<<<<<<<<<<<<<<<,")
+    let transactionsFiltered = transactions?.filter(transaction => transaction.status < 10)
+    setDataFilter(transactionsFiltered)
+        // console.log(dataFilter, "ini data filter")
+  }, [transactions])
 
   let [fontsLoaded] = useFonts({
     'Bebes Neue': require('../assets/fonts/BebasNeue-Regular.ttf'),
   });
-  if (!fontsLoaded || !transactions || !garageLogIn) {
+  if (!fontsLoaded || !dataFilter || !garageLogIn || !transactions || loading) {
     return <AppLoading />;
   }
   
@@ -50,11 +53,10 @@ export default function HomeGarage (props) {
       </View>
       <ScrollView>
         {
-          dataFilter.length === 0 ? <OrderEmpty /> :
-          dataFilter.map(transaction => {
-            return <OrderCard transaction={transaction} key={transaction.id} navigation={props.navigation}/>
+          dataFilter?.length == 0 ? <OrderEmpty /> :
+          dataFilter?.map((data, index) => {
+            return <OrderCard data={data} key={index} navigation={props.navigation}/>
           })
-
         }
         {/* <Text>{JSON.stringify(dataFilter)}</Text> */}
       </ScrollView>

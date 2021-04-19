@@ -1,13 +1,19 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity, Dimensions } from 'react-native';
 import AppLoading from 'expo-app-loading';
 import { useFonts } from '@expo-google-fonts/inter';
+import { useIsFocused } from '@react-navigation/native'
 
 const width = Dimensions.get('window').width; 
 
 export default function GarageCard(props) {
-  const { transaction, navigation } = props
-  let dateNewFormat = new Date(transaction.date).toLocaleDateString()
+  const { data, navigation } = props
+  let dateNewFormat = new Date(data.date).toLocaleDateString()
+  const isFocused = useIsFocused()
+
+  useEffect(() => {
+
+  }, [data, isFocused])
 
   let [fontsLoaded] = useFonts({
     'Bebes Neue': require('../assets/fonts/BebasNeue-Regular.ttf'),
@@ -18,7 +24,7 @@ export default function GarageCard(props) {
 
   const goToOrderDetail = () => {
     navigation.navigate('Edit Order', {
-      id: transaction.id
+      id: data.id
     });
   }
   
@@ -45,8 +51,8 @@ export default function GarageCard(props) {
       <View style={styles.cardInfo}>
         <View>
           <Text style={styles.cardDate} onPress={() => goToDetail()}>{dateNewFormat}</Text>
-          <Text style={styles.cardName} onPress={() => goToDetail()}>{transaction.User.name}</Text>
-          <Text style={styles.cardInfo} onPress={() => goToDetail()}>{transaction.description}</Text>
+          <Text style={styles.cardName} onPress={() => goToDetail()}>{data.User.name}</Text>
+          <Text style={styles.cardInfo} onPress={() => goToDetail()}>{data.description}</Text>
         </View>
         <View style={styles.btnGroups}>
           <TouchableOpacity style={styles.btnFavorite} onPress={() => finishOrder()}>
@@ -56,7 +62,7 @@ export default function GarageCard(props) {
             <Text style={styles.btnFavoriteText}>CHAT</Text>
           </TouchableOpacity>
         </View>
-        {/* <Text>{JSON.stringify(transaction)}</Text> */}
+        {/* <Text>{JSON.stringify(data)}</Text> */}
       </View>
     </View>
   );
