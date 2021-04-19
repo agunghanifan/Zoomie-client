@@ -31,7 +31,7 @@ export default function OrderHistoryBengkel (props) {
   
   return (
     <View style={styles.container}>
-      <View>
+      <ScrollView>
         <Text style={styles.title}>History Orders</Text>
         {
           dataFilter.length === 0 ? <OrderEmpty /> :
@@ -40,7 +40,7 @@ export default function OrderHistoryBengkel (props) {
           })
         }
         {/* <Text>{JSON.stringify(dataFilter)} ini filter</Text> */}
-      </View>
+      </ScrollView>
     </View>
   );
 }
