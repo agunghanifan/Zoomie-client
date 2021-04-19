@@ -26,7 +26,6 @@ export default function GarageCard(props) {
   }
   
   const booking = (id) => {
-    console.log(`booking garage`, id);
     props.props.navigation.navigate('Chat', {
       garage
     })
@@ -61,7 +60,7 @@ export default function GarageCard(props) {
           <Image 
             style={styles.cardImg}
             source={{
-              uri: 'https://cdn.medcom.id/images/library/images/WhatsApp%20Image%202020-02-20%20at%2012_21_13%20PM.jpeg'
+              uri: garage.image
             }}
           />
         </TouchableOpacity>

@@ -26,6 +26,7 @@ export default function GarageCard(props) {
   }
 
   const goToOrderDetail = () => {
+    
     navigation.navigate('Edit Order', {
       id: data.id
     });
@@ -37,8 +38,10 @@ export default function GarageCard(props) {
 
   const finishOrder = (id) => {
     dispatch(updateStatus(id))
-    console.log(`Order Finished!`);
-    props.navigation.navigate('Bookings History User')
+    const timing = setInterval(() => {
+      props.navigation.navigate('Order History Bengkel')
+      clearInterval(timing)
+    }, 3000);
   } 
 
   return (

@@ -5,12 +5,20 @@ import AppLoading from 'expo-app-loading';
 import { useFonts } from '@expo-google-fonts/inter';
 import axios from '../axios'
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useIsFocused } from '@react-navigation/native'
 
 export default function WelcomePage(props) {
+  const isFocused = useIsFocused()
   const dispatch = useDispatch();
   
   useEffect(_ => {
-    // check access token
+    const unsubscribe = props.navigation.addListener('focus', () => {
+      // check access token
+      checkLocalStorage()
+    });
+    return unsubscribe;
+  }, [])
+
   async function checkLocalStorage() {
     try {
       const id = await AsyncStorage.getItem('@id');
@@ -30,8 +38,6 @@ export default function WelcomePage(props) {
       console.log(err);
     }
   }
-  checkLocalStorage()
-  }, [])
 
   let [fontsLoaded] = useFonts({
     'Bebes Neue': require('../assets/fonts/BebasNeue-Regular.ttf'),

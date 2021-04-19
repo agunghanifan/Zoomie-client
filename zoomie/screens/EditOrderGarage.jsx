@@ -4,10 +4,9 @@ import AppLoading from 'expo-app-loading';
 import { useFonts } from '@expo-google-fonts/inter';
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchTransactionById, setLoading, updateTransactions } from '../store/actions/transactions'
-// import statusTranslate from '../helpers/statusTranslate'
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { Picker } from '@react-native-picker/picker';
 import RNPickerSelect from 'react-native-picker-select';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 const width = Dimensions.get('window').width;
 
@@ -70,7 +69,10 @@ export default function EditOrderGarage (props) {
     }
     console.log(data)
     dispatch(updateTransactions(data))
-    props.navigation.navigate('Main Garage');
+    const timing = setInterval(() => {
+      props.navigation.goBack()
+      clearInterval(timing)
+    }, 3000)
   }
 
   const onBack = () => {
@@ -92,61 +94,38 @@ export default function EditOrderGarage (props) {
             <Text style={{ fontSize: 14, fontWeight: 'bold'}}>{transactionsById?.description}</Text>
           </View>
         </View>
-        <View style={{ marginTop: 40 }}>
-          <Button onPress={showDatepicker} title="Show date picker!" />
-        </View>
-        <View style={{ left: 150 }}>
-          {show && (
-            <DateTimePicker
-              testID="dateTimePicker"
-              value={date}
-              mode={mode}
-              is24Hour={true}
-              display="default"
-              onChange={onChange}
-            />
-          )}
-        </View>
         <View style={styles.detailOrder}>
-          {/* <Text style={styles.label}>Service Date</Text>
-          <TextInput
-            style={styles.textArea}
-            placeholder="Date"
-            value={serviceDate}
-            onChange={(e) => setServiceDate(e.nativeEvent.target)}
-          /> */}
+          <View style={{ marginTop: 40 }}>
+            <Button onPress={showDatepicker} title="Show date picker!" />
+          </View>
+          <View style={{ left: 150 }}>
+            {show && (
+              <DateTimePicker
+                testID="dateTimePicker"
+                value={date}
+                mode={mode}
+                is24Hour={true}
+                display="default"
+                onChange={onChange}
+              />
+            )}
+          </View>
           <Text style={styles.label}>Status</Text>
-          {/* <TextInput
-            style={styles.textinput}
-            placeholder="Status"
-            value={status}
-            onChangeText={setStatus}
-          /> */}
-          <RNPickerSelect
-            value={status}
-            onValueChange={(value) => setStatus(value)}
-            items={[
-              { label:"Wait for repairshop's confirm", value:"0"  },
-              { label:"Booked / Confirmed by repairshop", value:"1"  },
-              { label:"On Progress / On Maintenance", value:"2"  },
-              { label:"On Queue", value:"3"  },
-              { label:"Finished", value:"10"  },
-              { label:"this book already deleted", value:"99"  },
-            ]}
-          />
-          {/* <Picker
-            // style={styles.textArea}
-            selectedValue={status}
-            onValueChange={(itemValue, itemIndex) =>
-              setStatus(itemValue)
-            }>
-            <Picker.Item style={styles.textArea} label="Wait for repairshop's confirm" value="0" />
-            <Picker.Item label="Booked / Confirmed by repairshop" value="1" />
-            <Picker.Item label="On Progress / On Maintenance" value="2" />
-            <Picker.Item label="On Queue" value="3" />
-            <Picker.Item label="Finished" value="10" />
-            <Picker.Item label="this book already deleted" value="99" />
-          </Picker> */}
+          <View style={styles.textinput}>
+            <RNPickerSelect
+              value={status}
+              onValueChange={(value) => setStatus(value)}
+              items={[
+                { label:"Wait for repairshop's confirm", value:"0" },
+                { label:"Booked / Confirmed by repairshop", value:"1" },
+                { label:"On Progress / On Maintenance", value:"2" },
+                { label:"On Queue", value:"3" },
+                { label:"Finished", value:"10" },
+                { label:"this book already deleted", value:"99" },
+              ]}
+            />
+            <MaterialCommunityIcons style={styles.arrow} name="arrow-down-bold" />
+          </View>
           <Text style={styles.label}>NOTE</Text>
           <TextInput
             multiline
@@ -278,4 +257,8 @@ const styles = StyleSheet.create({
     color: '#ffffff',
     fontSize: 18,
   },
+  arrow: {
+    left: 120,
+    bottom: 10
+  }
 })

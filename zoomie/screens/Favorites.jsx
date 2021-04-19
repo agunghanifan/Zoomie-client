@@ -57,6 +57,7 @@ export default function Favorites(props) {
   return (
     <View style={styles.container}>
       <View>
+        <Text style={styles.title}>LIST FAVORITES</Text>
         <Image 
           style={styles.tinyProfPic}
           source={{
@@ -66,9 +67,6 @@ export default function Favorites(props) {
         {
           image && <Image source={{ uri: image }} style={styles.profilPic} />
         }
-      </View>
-      <View>
-        <Text style={styles.title}>LIST FAVORITES REPAIR SHOP </Text>
       </View>
       <ScrollView>
         {
@@ -95,6 +93,7 @@ const styles = StyleSheet.create({
     marginTop: 60
   },
   tinyProfPic: {
+    position: 'absolute',
     alignSelf: 'flex-end',
     width: 50,
     height: 50,
@@ -112,6 +111,7 @@ const styles = StyleSheet.create({
     right: 20,
   },
   title: {
+    marginTop: 9,
     left: 14,
     fontFamily: 'Bebes Neue',
     fontStyle: 'normal',
