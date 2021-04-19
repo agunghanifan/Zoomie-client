@@ -7,13 +7,9 @@ import { useIsFocused } from '@react-navigation/native'
 const width = Dimensions.get('window').width; 
 
 export default function GarageCard(props) {
-  const { data, navigation } = props
-  let dateNewFormat = new Date(data.date).toLocaleDateString()
+  // const { data, navigation } = props
+  // let dateNewFormat = new Date(data.date).toLocaleDateString()
   const isFocused = useIsFocused()
-
-  useEffect(() => {
-
-  }, [data, isFocused])
 
   let [fontsLoaded] = useFonts({
     'Bebes Neue': require('../assets/fonts/BebasNeue-Regular.ttf'),
@@ -21,43 +17,34 @@ export default function GarageCard(props) {
   if (!fontsLoaded) {
     return <AppLoading />;
   }
-
-  const goToOrderDetail = () => {
-    navigation.navigate('Edit Order', {
-      id: data.id
-    });
-  }
   
-  const chat = () => {
-    props.props.navigation.navigate('Chat');
+  const goToChat = () => {
+    props.props.navigation.navigate('Chat', {
+      garage
+    })
   }
 
   return (
-    <View style={styles.card}>
-      <View>
-        <TouchableOpacity onPress={() => goToOrderDetail()}>
+    <TouchableOpacity onPress={() => goToChat()}>
+      <View style={styles.card}>
+        <View>
           <Image 
             style={styles.cardImg}
             source={{
               uri: 'https://cdn.pixabay.com/photo/2015/03/04/22/35/head-659652_960_720.png'
             }}
           />
-        </TouchableOpacity>
-      </View>
-      <View style={styles.cardInfo}>
-        <View>
-          <Text style={styles.cardDate} onPress={() => goToDetail()}>{dateNewFormat}</Text>
-          <Text style={styles.cardName} onPress={() => goToDetail()}>{data.User.name}</Text>
-          <Text style={styles.cardInfo} onPress={() => goToDetail()}>{data.description}</Text>
         </View>
-        <View style={styles.btnGroups}>
-          <TouchableOpacity style={styles.btnBook} onPress={() => chat()}>
-            <Text style={styles.btnFavoriteText}>CHAT</Text>
-          </TouchableOpacity>
+        <View style={styles.cardInfo}>
+          <View>
+            <Text style={styles.cardName} onPress={() => goToChat()}>name</Text>
+            <Text style={styles.cardInfo} onPress={() => goToChat()}>decription</Text>
+          </View>
+          <View style={styles.btnGroups}>
+          </View>
         </View>
-        {/* <Text>{JSON.stringify(data)}</Text> */}
       </View>
-    </View>
+    </TouchableOpacity>
   );
 }
 
@@ -65,7 +52,6 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: '#ffffff',
     width: width * 0.9,
-    justifyContent: 'space-around',
     margin: 20,
     marginBottom: 10,
     marginTop: 10,

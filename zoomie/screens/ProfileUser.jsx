@@ -1,13 +1,14 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 import { StyleSheet, Text, View, Image, Alert, Button, TouchableOpacity } from 'react-native';
 import AppLoading from 'expo-app-loading';
+import { useSelector, useDispatch } from 'react-redux';
 import { useFonts } from '@expo-google-fonts/inter';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from '../axios'
 import { useIsFocused } from "@react-navigation/native";
 import * as ImagePicker from 'expo-image-picker';
+
 
 export default function ProfileUser (props) {
   const user = useSelector(state => state.users.user);
@@ -60,31 +61,26 @@ export default function ProfileUser (props) {
   };
 
   async function uploadImage () {
-    let formData = new FormData()
-    let fileType= image.substring(image.lastIndexOf('.') + 1)
-    formData.append("image", {
-        uri: image,
-        name: `photo.${fileType}`,
-        type: `image/${fileType}`
-      })
-    const headers = {
-      access_token: await AsyncStorage.getItem('@access_token')
+    try {
+      let formData = new FormData()
+      let fileType= image.substring(image.lastIndexOf('.') + 1)
+      formData.append("image", {
+          uri: image,
+          name: `photo.${fileType}`,
+          type: `image/${fileType}`
+        })
+      const headers = {
+        Accept: "application/json",
+        "Content-Type": "multipart/form-data",
+        access_token: await AsyncStorage.getItem('@access_token')
+      }
+      console.log(`mengupload `, image);
+      const { data } = await axios.patch('/upload-avatar', formData, { headers })
+      Alert.alert("Success", `your avatar has been changed!`)
+    } catch (error) {
+      console.log(error, 'error upload file');
+      Alert.alert("Error", `error upload file, try again later!`)
     }
-    console.log(`mengupload `, image);
-    // axios({
-    //     method: 'PUT',
-    //     url: `http://54.255.251.4/tukang/${idTukang}/avatar`,
-    //     headers: {
-    //         Accept: "application/json",
-    //         "Content-Type": "multipart/form-data",
-    //         access_token: token
-    //     },
-    //     data: formData
-    // })
-    // .then(result => {
-    //   console.log(`terupload`);
-    // })
-    // .catch(err => console.log('eror upload profile>>>', err))
   }
 
   // ini logic load font
@@ -129,9 +125,9 @@ export default function ProfileUser (props) {
           image && <Image source={{ uri: image }} style={styles.profilPic} />
         }
       </TouchableOpacity>
-      <View style={{width:70, left:44, top: 5, height: 15}}>
-        <Button title="save" fontFamily="Bebes Neue" onPress={uploadImage} />
-      </View>
+      <TouchableOpacity style={styles.btnUpload} onPress={uploadImage}>
+        <Text style={styles.btnUploadText}>Save</Text>
+      </TouchableOpacity>
       <Text style={styles.textUsername}>{user.name}</Text>
       <Text style={styles.textEmail}>{user.email}</Text>
       <View style={styles.btnBox}>
@@ -158,6 +154,19 @@ const styles = StyleSheet.create({
     fontFamily: 'Bebes Neue',
     backgroundColor: '#F9F9F9'
   },
+  btnUpload: {
+    left: 47,
+    top: 5,
+    backgroundColor: 'blue',
+    width: 65,
+    padding: 5,
+  },
+  btnUploadText: {
+    alignSelf: 'center',
+    color: 'white',
+    fontFamily: 'Bebes Neue',
+    fontSize: 20,
+  },
   title: {
     left: 41,
     fontFamily: 'Bebes Neue',
@@ -181,14 +190,14 @@ const styles = StyleSheet.create({
   },
   textUsername: {
     left: 130,
-    top: -64,
+    top: -77,
     fontFamily: 'Bebes Neue',
     fontSize: 18,
     color: '#222222'
   },
   textEmail: {
     left: 130,
-    top: -64,
+    top: -77,
   },
   btnBox: {
     justifyContent: 'center',

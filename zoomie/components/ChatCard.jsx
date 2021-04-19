@@ -1,10 +1,17 @@
 import React from 'react'
 import { StyleSheet, Text, View, Dimensions, TouchableOpacity } from 'react-native';
+import Moment from 'moment';
 
 const width = Dimensions.get('window').width; 
 
 export default function ChatCard (props) {
-  const {color, align, message, time} = props;
+  const {color, align, chat } = props;
+
+  const formatTime = (date) => {
+    Moment.locale('en');
+    return Moment(date).format('hh:mm, DD MMM');
+  }
+
   return (
     <TouchableOpacity>
     <View
@@ -20,9 +27,9 @@ export default function ChatCard (props) {
           paddingLeft: 20,
           paddingRight: 20,
         }
-      }>
-      <Text style={styles.subheading}>{message}</Text>
-      <Text style={styles.heading2}>{time}</Text>
+    }>
+      <Text style={styles.subheading}>{chat.message}</Text>
+      <Text style={styles.heading2}>{formatTime(chat.createdAt)}</Text>
     </View>
   </TouchableOpacity>
   )

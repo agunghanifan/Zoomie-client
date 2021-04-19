@@ -30,14 +30,19 @@ export default function Login (props) {
         password
       }
       const { data } = await axios.post('/login', user)
-      await AsyncStorage.setItem('@access_token', data.data.access_token)
-      await AsyncStorage.setItem('@email', data.data.email)
-      await AsyncStorage.setItem('@username', data.data.username)
-      await AsyncStorage.setItem('@name', data.data.name)
-      await AsyncStorage.setItem('@id', data.data.id.toString())
-      await AsyncStorage.setItem('@roles', data.data.roles)
-      if (data.data.roles == 'user') props.navigation.replace('Main')
-      else props.navigation.replace('Main Garage')
+      console.log(data);
+      await AsyncStorage.setItem('@access_token', data.data.access_token);
+      await AsyncStorage.setItem('@email', data.data.email);
+      await AsyncStorage.setItem('@username', data.data.username);
+      await AsyncStorage.setItem('@name', data.data.name);
+      await AsyncStorage.setItem('@id', data.data.id.toString());
+      await AsyncStorage.setItem('@roles', data.data.roles);
+      if (data.data.roles == 'user') {
+        props.navigation.replace('Main');
+      }
+      else {
+        props.navigation.replace('Main Garage');
+      }
     }
     catch (err) {
       console.log(err);

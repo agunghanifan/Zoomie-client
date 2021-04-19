@@ -1,21 +1,89 @@
 import { StatusBar } from 'expo-status-bar';
-import React, { useEffect } from 'react';
-import { StyleSheet, Text, View, Image, Alert } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, Text, View, Image, Alert, TouchableOpacity } from 'react-native';
 import AppLoading from 'expo-app-loading';
-import { useFonts } from '@expo-google-fonts/inter';
-import { useIsFocused } from '@react-navigation/native'
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch, useSelector } from 'react-redux'
-import { currentUser } from '../store/actions/users'
+import { useFonts } from '@expo-google-fonts/inter';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from '../axios'
+import { useIsFocused } from '@react-navigation/native'
+import * as ImagePicker from 'expo-image-picker';
 
 export default function ProfileBengkel (props) {
   const isFocused = useIsFocused()
   const dispatch = useDispatch()
   const user = useSelector(state => state.users.user)
+  
+  const [image, setImage] = useState('https://image.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg');
 
   useEffect(() => {
-    dispatch(currentUser())
+    async function getGarage() {
+      try {
+        const id = await AsyncStorage.getItem('@id');
+        const headers = {
+          access_token: await AsyncStorage.getItem('@access_token')
+        }
+        const { data } = await axios.get('/garage/', { headers });
+        const dataFilter = data.filter(garage => +garage.userId === +id)
+        // console.log(dataFilter[0], 'filtered data');
+        dispatch({ type: 'user/setUser', payload: dataFilter[0] });
+        dataFilter[0].image ? setImage(dataFilter[0].image) : setImage('https://image.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg');        
+      }
+      catch (err) {
+        console.log(err);
+      }
+    }
+    
+    getGarage()
   }, [isFocused])
+
+  
+  useEffect(() => {
+    (async () => {
+      if (Platform.OS !== 'web') {
+        const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+        if (status !== 'granted') {
+          alert('Sorry, we need camera roll permissions to make this work!');
+        }
+      }
+    })();
+  }, []);
+  
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+    console.log(result);
+    if (!result.cancelled) {
+      setImage(result.uri);
+    }
+  };
+
+  async function uploadImage () {
+    try {
+      let formData = new FormData()
+      let fileType= image.substring(image.lastIndexOf('.') + 1)
+      formData.append("image", {
+          uri: image,
+          name: `photo.${fileType}`,
+          type: `image/${fileType}`
+        })
+      const headers = {
+        Accept: "application/json",
+        "Content-Type": "multipart/form-data",
+        access_token: await AsyncStorage.getItem('@access_token')
+      }
+      console.log(`mengupload `, image);
+      const { data } = await axios.patch('/garage/upload-avatar', formData, { headers })
+      Alert.alert("Success", `your avatar has been changed!`)
+    } catch (error) {
+      console.log(error, 'error upload file');
+      Alert.alert("Error", `error upload file, try again later!`)
+    }
+  }
   
   // ini logic load font
   let [fontsLoaded] = useFonts({
@@ -26,17 +94,13 @@ export default function ProfileBengkel (props) {
   }
   // end load font
 
-  // function historyOrders () {
-  //   console.log("masuk history Bookings")
-  //   props.navigation.navigate('Order History Bengkel')
-  // }
-
   function goToEditProfile () {
-    console.log("masuk page edit profile")
-    props.navigation.navigate('Edit Profil Bengkel')
+    props.navigation.navigate('Edit Profil Bengkel', {
+      garage: user
+    })
   }
-
-  function logOut () {
+  
+  function logOutBtn () {
     Alert.alert("Logout", "Are you sure to Logout?",
       [
         { text: "Cancel", onPress: () => null, style: "cancel" },
@@ -44,7 +108,7 @@ export default function ProfileBengkel (props) {
       ]
     );    
   }
-  
+
   async function logOut () {
     await AsyncStorage.clear();
     props.navigation.replace('Welcome Page');
@@ -52,16 +116,23 @@ export default function ProfileBengkel (props) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>MY PROFILE</Text>
-      <Image
-        style={styles.tinyLogo}
-        source={{
-          uri: 'https://image.freepik.com/free-photo/adorable-dark-skinned-adult-woman-dressed-yellow-jumper-using-mobile-phone-with-happy-expression_273609-34293.jpg'
-        }}
-      />
-      {/* <Text>{JSON.stringify(user)}</Text> */}
-      <Text style={styles.textUsername}>{user?.username}</Text>
-      <Text style={styles.textEmail}>{user?.email}</Text>
+      <Text style={styles.title}>GARAGE PROFILE</Text>
+      <TouchableOpacity onPress={pickImage}>
+        <Image
+          style={styles.tinyLogo}
+          source={{
+            uri: 'https://image.freepik.com/free-photo/adorable-dark-skinned-adult-woman-dressed-yellow-jumper-using-mobile-phone-with-happy-expression_273609-34293.jpg'
+          }}
+        />
+        {
+          image && <Image source={{ uri: image }} style={styles.profilPic} />
+        }
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.btnUpload} onPress={uploadImage}>
+        <Text style={styles.btnUploadText}>Save</Text>
+      </TouchableOpacity>
+      <Text style={styles.textUsername}>{user?.name}</Text>
+      <Text style={styles.textEmail}>{user?.address}</Text>
       <View style={styles.btnBox}>
         <View style={styles.capsText}>
           <Text style={{ fontSize: 16, fontWeight: 'bold' }} onPress={() => goToEditProfile()}>Edit Profile</Text>
@@ -70,7 +141,7 @@ export default function ProfileBengkel (props) {
       </View>
       <View style={styles.btnBox} >
         <View style={styles.capsText}>
-          <Text style={{ fontSize: 16, fontWeight: 'bold' }} onPress={() => logOut()}>Logout</Text>
+          <Text style={{ fontSize: 16, fontWeight: 'bold' }} onPress={() => logOutBtn()}>Logout</Text>
           <Text style={{ fontSize: 11 }}>Logout from App</Text>
         </View>
       </View>
@@ -86,6 +157,19 @@ const styles = StyleSheet.create({
     fontFamily: 'Bebes Neue',
     backgroundColor: '#F9F9F9'
   },
+  btnUpload: {
+    left: 47,
+    top: 5,
+    backgroundColor: 'blue',
+    width: 65,
+    padding: 5,
+  },
+  btnUploadText: {
+    alignSelf: 'center',
+    color: 'white',
+    fontFamily: 'Bebes Neue',
+    fontSize: 20,
+  },
   title: {
     left: 41,
     fontFamily: 'Bebes Neue',
@@ -93,22 +177,22 @@ const styles = StyleSheet.create({
     color: '#222222',
   },
   tinyLogo: {
-    width: 50,
-    height: 50,
+    width: 75,
+    height: 75,
     borderRadius: 50,
     left: 41,
     top: 10
   },
   textUsername: {
-    left: 113,
-    top: -35,
+    left: 130,
+    top: -77,
     fontFamily: 'Bebes Neue',
     fontSize: 18,
     color: '#222222'
   },
   textEmail: {
-    left: 113,
-    top: -35
+    left: 130,
+    top: -77,
   },
   btnBox: {
     justifyContent: 'center',
@@ -120,5 +204,13 @@ const styles = StyleSheet.create({
   },
   capsText: {
     left: 38
-  }
+  },
+  profilPic:{
+    position: 'absolute',
+    width: 75,
+    height: 75,
+    borderRadius: 50,
+    left: 41,
+    top: 10
+  },
 });

@@ -51,7 +51,8 @@ export default function SignupUser(props) {
           username: username.toLowerCase(),
           password,
           email: email.toLowerCase(),
-          name
+          name,
+          image: 'https://image.freepik.com/free-photo/adorable-dark-skinned-adult-woman-dressed-yellow-jumper-using-mobile-phone-with-happy-expression_273609-34293.jpg'
         }
         console.log(newUser);
         const { data } = await axios.post('/register', newUser)

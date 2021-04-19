@@ -3,64 +3,28 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, ScrollView, TextInput, Button, TouchableOpacity, Image, Dimensions, Alert } from 'react-native';
 import AppLoading from 'expo-app-loading';
 import { useFonts } from '@expo-google-fonts/inter';
-import * as ImagePicker from 'expo-image-picker';
-import base64 from 'react-native-base64'
 import { useDispatch, useSelector } from 'react-redux'
-import { currentUser } from '../store/actions/users'
-import { getDataGarage } from '../store/actions/garages'
 import { useIsFocused } from "@react-navigation/native";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from '../axios'
 
 const width = Dimensions.get('window').width; 
 
 export default function EditProfileBengkel (props) {
-  const garageLogIn = useSelector(state => state.garages.garageLogIn)
-  const [profilImage, setProfilImage] = useState(null);
+  const { garage } = props.route.params;
   // const [name, setName] = useState(user.name);
-  const [garageName, setGarageName] = useState(garageLogIn[0].name);
-  const [garageAddress, setGarageAddress] = useState(garageLogIn[0].address);
-  const [garageDescription, setGarageDescription] = useState(garageLogIn[0].description);
-  const [garageImage, setGarageImage] = useState(null);
+  const [garageName, setGarageName] = useState('');
+  const [garageAddress, setGarageAddress] = useState('');
+  const [garageDescription, setGarageDescription] = useState('');
   const dispatch = useDispatch()
   const isFocused = useIsFocused()
 
   useEffect(() => {
-    (async () => {
-      if (Platform.OS !== 'web') {
-        const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-        if (status !== 'granted') {
-          alert('Sorry, we need camera roll permissions to make this work!');
-        }
-      }
-    })();
-    dispatch(currentUser())
-    dispatch(getDataGarage())
+    setGarageName(garage.name);
+    setGarageAddress(garage.address);
+    setGarageDescription(garage.description);
   }, [isFocused]);
 
-  const pickProfilImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-    });
-    console.log(result);
-    if (!result.cancelled) {
-      setProfilImage(result.uri);
-    }
-  };
-
-  const pickGarageImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-    });
-    console.log(result);
-    if (!result.cancelled) {
-      setGarageImage(result.uri);
-    }
-  };
 
   // ini logic load font
   let [fontsLoaded] = useFonts({
@@ -71,7 +35,7 @@ export default function EditProfileBengkel (props) {
   }
   // end load font
 
-  const signUp = () => {
+  const editProfile = async () => {
     // Validation
     // check password and repeat password
     if (!garageName || !garageAddress || !garageDescription) {
@@ -79,43 +43,37 @@ export default function EditProfileBengkel (props) {
     }
     else {
       // if validated, then go to sign up process
-      const newUser = {
-        profilImage: base64.encode(profilImage),
-        garageName,
-        garageAddress,
-        garageDescription,
-        garageImage: base64.encode(garageImage)
+      try {
+        const updateProfile = {
+          name: garageName,
+          address: garageAddress,
+          description: garageDescription,
+        }
+        console.log(updateProfile);
+        const headers = {
+          access_token: await AsyncStorage.getItem('@access_token')
+        }
+        const { data } = await axios.put('/garage', updateProfile, { headers })
+        Alert.alert("Success", "Your Garage profile has been changed!")
+        props.navigation.goBack();
+      } catch (error) {
+        console.log(error);
       }
-      console.log(newUser);
     }
   }
 
   return (
     <ScrollView>
       <View style={styles.center}>
-        <Text style={styles.subTitle}>User Profile</Text>
-        {/* <TextInput style={styles.textinput} placeholder="Name" value={name} onChange={(event) => setName(event.nativeEvent.text)} /> */}
-        <View style={styles.uploadImage}>
-          <View>
-            <Button title="Pick an profile image" onPress={pickProfilImage} />
-          </View>
-          {profilImage && <Image source={{ uri: profilImage }} style={{ width: width * 0.4, height: width * 0.4 }} />}
-        </View>
         <Text style={styles.subTitle}>Garage Profile</Text>
         <TextInput style={styles.textinput} placeholder="Garage Name" value={garageName} onChange={(event) => setGarageName(event.nativeEvent.text)} />
         <TextInput style={styles.textinput} placeholder="Garage Address" value={garageAddress} onChange={(event) => setGarageAddress(event.nativeEvent.text)} />
-        <TextInput style={styles.textinput} multiline placeholder="Garage Description" value={garageDescription} onChange={(event) => setGarageDescription(event.nativeEvent.text)} />
-        <View style={styles.uploadImage}>
-          <View>
-            <Button title="Pick an garage image" onPress={pickGarageImage} />
-          </View>
-          {garageImage && <Image source={{ uri: garageImage }} style={{ width: width * 0.4, height: width * 0.4 }} />}
-        </View>
+        <TextInput style={styles.textArea} multiline placeholder="Garage Description" value={garageDescription} onChange={(event) => setGarageDescription(event.nativeEvent.text)} />
       </View>
       {/* <Text>{JSON.stringify(garageLogIn)}</Text>
       <Text>{JSON.stringify(user)}</Text> */}
       <View style={styles.center}>
-        <TouchableOpacity onPress={() => signUp()} style={styles.btnSignUp}>
+        <TouchableOpacity onPress={() => editProfile()} style={styles.btnSignUp}>
           <Text style={styles.btnSignUpText}>EDIT PROFILE</Text>
         </TouchableOpacity>
       </View>
@@ -168,6 +126,22 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
     elevation: 4,
     paddingLeft: 20,
+    fontFamily: 'Bebes Neue',
+    margin: 5
+  },
+  textArea: {
+    textAlignVertical: 'top',
+    backgroundColor: '#fff',
+    alignItems: 'flex-start',
+    justifyContent: 'flex-start',
+    width: 330,
+    minHeight: 130,
+    borderRadius: 4,
+    backgroundColor: '#ffffff',
+    elevation: 4,
+    paddingLeft: 20,
+    paddingTop: 15,
+    paddingBottom: 15,
     fontFamily: 'Bebes Neue',
     margin: 5
   },
