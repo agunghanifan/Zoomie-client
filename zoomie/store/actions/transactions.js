@@ -68,6 +68,7 @@ export function updateTransactions (payload) {
     axios({
       url: 'http://192.168.100.18:3000' + '/transactions/' + `${payload.id}`,
       method: 'PUT',
+      headers,
       data: {
         status: Number(payload.status),
         price: Number(payload.price),
@@ -76,7 +77,7 @@ export function updateTransactions (payload) {
       }
     })
         .then(response => {
-          console.log(response)
+          console.log(response, "ini response")
         })
         .catch(err => {
           console.log(err)
