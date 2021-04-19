@@ -20,14 +20,14 @@ export default function HomeGarage (props) {
 
 
   useEffect(() => {
-    console.log('masuk useEffect')
+    console.log('masuk useEffect home garage')
     dispatch(setLoading(true))
     dispatch(fetchAllTransactionById())
     dispatch(getDataGarage())
   }, [isFocused])
 
   useEffect(() => {
-    console.log(transactions, "<<<<<<<<<<<<<<<<<<<<<<<<<,")
+    console.log(transactions, "<<<<<<<<<<<<<<<<<<<<<<<<<, transaksion home garage useeffect")
     let transactionsFiltered = transactions?.filter(transaction => transaction.status < 10)
     setDataFilter(transactionsFiltered)
         // console.log(dataFilter, "ini data filter")

@@ -84,3 +84,9 @@ export function updateTransactions (payload) {
         })
   }
 }
+
+export function updateStatus (payload) {
+  return async (dispatch) => {
+    
+  }
+}

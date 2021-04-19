@@ -4,7 +4,7 @@ import AppLoading from 'expo-app-loading';
 import { useFonts } from '@expo-google-fonts/inter';
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchTransactionById, setLoading, updateTransactions } from '../store/actions/transactions'
-import statusTranslate from '../helpers/statusTranslate'
+// import statusTranslate from '../helpers/statusTranslate'
 import DateTimePicker from '@react-native-community/datetimepicker';
 
 const width = Dimensions.get('window').width;
@@ -14,7 +14,7 @@ export default function EditOrderGarage (props) {
   const { id } = props.route.params
   let loading = useSelector(state => state.transactions.loading)
   const dispatch = useDispatch()
-  const [serviceDate, setServiceDate] = useState('')
+  // const [serviceDate, setServiceDate] = useState('')
   const [status, setStatus] = useState('')
   const [note, setNote] = useState('')
   const [totalprice, setTotalPrice] = useState('')

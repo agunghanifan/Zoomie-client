@@ -3,6 +3,8 @@ import { StyleSheet, Text, View, Image, TouchableOpacity, Dimensions } from 'rea
 import AppLoading from 'expo-app-loading';
 import { useFonts } from '@expo-google-fonts/inter';
 import { useIsFocused } from '@react-navigation/native'
+import { useDispatch } from 'react-redux'
+import { updateStatus } from '../store/actions/transactions'
 
 const width = Dimensions.get('window').width; 
 
@@ -33,6 +35,7 @@ export default function GarageCard(props) {
   }
 
   const finishOrder = () => {
+    dispatchEvent(updateStatus())
     console.log(`Order Finished!`);
   } 
 
