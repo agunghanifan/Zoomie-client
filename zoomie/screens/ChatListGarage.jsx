@@ -1,39 +1,26 @@
 import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux'
 import { StyleSheet, Text, View, Image, ScrollView } from 'react-native';
 import AppLoading from 'expo-app-loading';
 import { useFonts } from '@expo-google-fonts/inter';
 import OrderCard from '../components/OrderCard';
 import ChatEmpty from '../components/ChatEmpty';
-import { useDispatch, useSelector } from 'react-redux'
 import { fetchAllTransactionById, setLoading } from '../store/actions/transactions'
 import { useIsFocused } from '@react-navigation/native'
 import { getDataGarage } from '../store/actions/garages'
 
 export default function HomeGarage (props) {
-
-  const loading = useSelector(state => state?.transactions?.loading)
-  const garageLogIn = useSelector(state => state.garages.garageLogIn)
-  const [dataFilter, setDataFilter] = useState(null)
-  const dispatch = useDispatch()
-  const isFocused = useIsFocused()
+  const chats = useSelector(state => state.chats.chats)
+  const isFocused = useIsFocused();
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    console.log('masuk useEffect')
-    dispatch(setLoading(true))
-    dispatch(fetchAllTransactionById())
-    dispatch(getDataGarage())
   }, [isFocused])
-
-  useEffect(() => {
-    let transactionsFiltered = transactions?.filter(transaction => transaction.status < 10)
-    setDataFilter(transactionsFiltered)
-        // console.log(dataFilter, "ini data filter")
-  }, [transactions])
 
   let [fontsLoaded] = useFonts({
     'Bebes Neue': require('../assets/fonts/BebasNeue-Regular.ttf'),
   });
-  if (!fontsLoaded || !dataFilter || !garageLogIn || !transactions || loading) {
+  if (!fontsLoaded) {
     return <AppLoading />;
   }
   

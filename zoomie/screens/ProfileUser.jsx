@@ -60,31 +60,27 @@ export default function ProfileUser (props) {
   };
 
   async function uploadImage () {
-    let formData = new FormData()
-    let fileType= image.substring(image.lastIndexOf('.') + 1)
-    formData.append("image", {
-        uri: image,
-        name: `photo.${fileType}`,
-        type: `image/${fileType}`
-      })
-    const headers = {
-      access_token: await AsyncStorage.getItem('@access_token')
+    try {
+      let formData = new FormData()
+      let fileType= image.substring(image.lastIndexOf('.') + 1)
+      formData.append("image", {
+          uri: image,
+          name: `photo.${fileType}`,
+          type: `image/${fileType}`
+        })
+      formData.append('file',image)
+      const headers = {
+        Accept: "application/json",
+        "Content-Type": "multipart/form-data",
+        access_token: await AsyncStorage.getItem('@access_token')
+      }
+      console.log(`mengupload `, image);
+      const { data } = await axios.patch('/upload-avatar', formData, { headers })
+      console.log(`terupload`);
+      Alert.alert("Success", "Your picture has been changed");
+    } catch (error) {
+      console.log(error, "err upload file");
     }
-    console.log(`mengupload `, image);
-    // axios({
-    //     method: 'PUT',
-    //     url: `http://54.255.251.4/tukang/${idTukang}/avatar`,
-    //     headers: {
-    //         Accept: "application/json",
-    //         "Content-Type": "multipart/form-data",
-    //         access_token: token
-    //     },
-    //     data: formData
-    // })
-    // .then(result => {
-    //   console.log(`terupload`);
-    // })
-    // .catch(err => console.log('eror upload profile>>>', err))
   }
 
   // ini logic load font
@@ -129,14 +125,14 @@ export default function ProfileUser (props) {
           image && <Image source={{ uri: image }} style={styles.profilPic} />
         }
       </TouchableOpacity>
-      <View style={{width:70, left:44, top: 5, height: 15}}>
-        <Button title="save" fontFamily="Bebes Neue" onPress={uploadImage} />
-      </View>
+      <TouchableOpacity style={styles.buttonSave} onPress={uploadImage}>
+        <Text style={{ fontFamily:"Bebes Neue", color:'white', alignSelf: 'center'  }}>save</Text>
+      </TouchableOpacity>
       <Text style={styles.textUsername}>{user.name}</Text>
       <Text style={styles.textEmail}>{user.email}</Text>
       <View style={styles.btnBox}>
         <View style={styles.capsText}>
-          <Text style={{ fontSize: 16, fontWeight: 'bold' }} onPress={() => historyBookings()}>Your Order and History</Text>
+          <Text style={{ fontSize: 16, fontWeight: 'bold'}} onPress={() => historyBookings()}>Your Order and History</Text>
           <Text style={{ fontSize: 11 }}>Your Order Process and Recent History Book</Text>
         </View>
       </View>
@@ -157,6 +153,16 @@ const styles = StyleSheet.create({
     paddingTop: 60,
     fontFamily: 'Bebes Neue',
     backgroundColor: '#F9F9F9'
+  },
+  buttonSave: {
+    alignContent: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'blue',
+    width:60,
+    left:48,
+    top: 5,
+    paddingTop: 5,
+    paddingBottom: 5,
   },
   title: {
     left: 41,
@@ -181,14 +187,14 @@ const styles = StyleSheet.create({
   },
   textUsername: {
     left: 130,
-    top: -64,
+    top: -80,
     fontFamily: 'Bebes Neue',
     fontSize: 18,
     color: '#222222'
   },
   textEmail: {
     left: 130,
-    top: -64,
+    top: -80,
   },
   btnBox: {
     justifyContent: 'center',
