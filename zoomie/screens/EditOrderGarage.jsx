@@ -6,6 +6,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { fetchTransactionById, setLoading, updateTransactions } from '../store/actions/transactions'
 // import statusTranslate from '../helpers/statusTranslate'
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { Picker } from '@react-native-picker/picker';
+import RNPickerSelect from 'react-native-picker-select';
 
 const width = Dimensions.get('window').width;
 
@@ -66,7 +68,7 @@ export default function EditOrderGarage (props) {
       description: String(note),
       price: String(totalprice)
     }
-    // console.log(data)
+    console.log(data)
     dispatch(updateTransactions(data))
     props.navigation.navigate('Main Garage');
   }
@@ -114,12 +116,37 @@ export default function EditOrderGarage (props) {
             onChange={(e) => setServiceDate(e.nativeEvent.target)}
           /> */}
           <Text style={styles.label}>Status</Text>
-          <TextInput
+          {/* <TextInput
             style={styles.textinput}
             placeholder="Status"
             value={status}
             onChangeText={setStatus}
+          /> */}
+          <RNPickerSelect
+            value={status}
+            onValueChange={(value) => setStatus(value)}
+            items={[
+              { label:"Wait for repairshop's confirm", value:"0"  },
+              { label:"Booked / Confirmed by repairshop", value:"1"  },
+              { label:"On Progress / On Maintenance", value:"2"  },
+              { label:"On Queue", value:"3"  },
+              { label:"Finished", value:"10"  },
+              { label:"this book already deleted", value:"99"  },
+            ]}
           />
+          {/* <Picker
+            // style={styles.textArea}
+            selectedValue={status}
+            onValueChange={(itemValue, itemIndex) =>
+              setStatus(itemValue)
+            }>
+            <Picker.Item style={styles.textArea} label="Wait for repairshop's confirm" value="0" />
+            <Picker.Item label="Booked / Confirmed by repairshop" value="1" />
+            <Picker.Item label="On Progress / On Maintenance" value="2" />
+            <Picker.Item label="On Queue" value="3" />
+            <Picker.Item label="Finished" value="10" />
+            <Picker.Item label="this book already deleted" value="99" />
+          </Picker> */}
           <Text style={styles.label}>NOTE</Text>
           <TextInput
             multiline

@@ -66,7 +66,7 @@ export function updateTransactions (payload) {
     console.log(headers, "ini headers dari update")
     console.log(payload.id, "ini payload dalam updateTransaksi")
     axios({
-      url: 'http://192.168.100.18:3000' + '/transactions/' + `${payload.id}`,
+      url: 'http://192.168.1.199:3000' + '/transactions/' + `${payload.id}`,
       method: 'PUT',
       headers,
       data: {
@@ -92,7 +92,7 @@ export function updateStatus (payload) {
       access_token: await AsyncStorage.getItem('@access_token')
     }
     axios({
-      url: 'http://192.168.100.18:3000' + '/transactions/' + `${payload}`,
+      url: 'http://192.168.1.199:3000' + '/transactions/' + `${payload}`,
       method: "PATCH",
       headers,
       data: {
