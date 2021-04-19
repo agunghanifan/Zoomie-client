@@ -57,7 +57,7 @@ export default function Favorites(props) {
   return (
     <View style={styles.container}>
       <View>
-        <Text style={styles.title}>LIST FAVORITES REPAIR SHOP </Text>
+        <Text style={styles.title}>LIST FAVORITES</Text>
         <Image 
           style={styles.tinyProfPic}
           source={{
