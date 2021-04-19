@@ -1,11 +1,20 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity, Dimensions } from 'react-native';
 import AppLoading from 'expo-app-loading';
 import { useFonts } from '@expo-google-fonts/inter';
+import { useIsFocused } from '@react-navigation/native'
 
 const width = Dimensions.get('window').width; 
 
 export default function GarageCard(props) {
+  const { data, navigation } = props
+  let dateNewFormat = new Date(data.date).toLocaleDateString()
+  const isFocused = useIsFocused()
+
+  useEffect(() => {
+
+  }, [data, isFocused])
+
   let [fontsLoaded] = useFonts({
     'Bebes Neue': require('../assets/fonts/BebasNeue-Regular.ttf'),
   });
@@ -14,7 +23,9 @@ export default function GarageCard(props) {
   }
 
   const goToOrderDetail = () => {
-    props.props.navigation.navigate('Edit Order');
+    navigation.navigate('Edit Order', {
+      id: data.id
+    });
   }
   
   const chat = () => {
@@ -39,9 +50,9 @@ export default function GarageCard(props) {
       </View>
       <View style={styles.cardInfo}>
         <View>
-          <Text style={styles.cardDate} onPress={() => goToDetail()}>2020 / 04 / 17</Text>
-          <Text style={styles.cardName} onPress={() => goToDetail()}>Bapack Sulthon</Text>
-          <Text style={styles.cardInfo} onPress={() => goToDetail()}>Astrea Supra</Text>
+          <Text style={styles.cardDate} onPress={() => goToDetail()}>{dateNewFormat}</Text>
+          <Text style={styles.cardName} onPress={() => goToDetail()}>{data.User.name}</Text>
+          <Text style={styles.cardInfo} onPress={() => goToDetail()}>{data.description}</Text>
         </View>
         <View style={styles.btnGroups}>
           <TouchableOpacity style={styles.btnFavorite} onPress={() => finishOrder()}>
@@ -51,6 +62,7 @@ export default function GarageCard(props) {
             <Text style={styles.btnFavoriteText}>CHAT</Text>
           </TouchableOpacity>
         </View>
+        {/* <Text>{JSON.stringify(data)}</Text> */}
       </View>
     </View>
   );

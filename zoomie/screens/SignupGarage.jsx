@@ -5,21 +5,19 @@ import AppLoading from 'expo-app-loading';
 import { useFonts } from '@expo-google-fonts/inter';
 import * as ImagePicker from 'expo-image-picker';
 import base64 from 'react-native-base64'
+import axios from '../axios/'
 
 const width = Dimensions.get('window').width; 
 
 export default function SignupUser(props) {
-  const [profilImage, setProfilImage] = useState(null);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [repeatPassword, setRepeatPassword] = useState('');
   const [email, setEmail] = useState('');
-  const [name, setName] = useState('');
-  const [garageName, setGarageName] = useState('');
-  const [garageStatus, setGarageStatus] = useState('');
-  const [garageAddress, setGarageAddress] = useState('');
-  const [garageDescription, setGarageDescription] = useState('');
-  const [garageImage, setGarageImage] = useState(null);
+  const [name, setName] = useState(''); // ini di replace ke garageName
+  const [address, setAddress] = useState('');
+  const [description, setDescription] = useState('');
+  const [image, setImage] = useState(null);
 
   useEffect(() => {
     (async () => {
@@ -32,19 +30,6 @@ export default function SignupUser(props) {
     })();
   }, []);
 
-  const pickProfilImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-    });
-    console.log(result);
-    if (!result.cancelled) {
-      setProfilImage(result.uri);
-    }
-  };
-
   const pickGarageImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -54,18 +39,9 @@ export default function SignupUser(props) {
     });
     console.log(result);
     if (!result.cancelled) {
-      setGarageImage(result.uri);
+      setImage(result.uri);
     }
   };
-
-  // ini logic load font
-  let [fontsLoaded] = useFonts({
-    'Bebes Neue': require('../assets/fonts/BebasNeue-Regular.ttf'),
-  });
-  if (!fontsLoaded) {
-    return <AppLoading />;
-  }
-  // end load font
   
   const goToLogin = () => {
     props.navigation.navigate('Login User');
@@ -76,14 +52,14 @@ export default function SignupUser(props) {
     return re.test(email);
   }
 
-  const signUp = () => {
+  const signUp = async () => {
     // Validation
     // check password and repeat password
     if (password !== repeatPassword || !password) {
       Alert.alert("password didn't match or please check your password!");
       setPassword('');
       setRepeatPassword('');
-    } else if (!username || !name || !garageName || !email || !garageAddress || !garageStatus || !garageDescription) {
+    } else if (!username || !name || !email || !address || !description) {
       Alert.alert("Please fill all of the field!");
     } else if (!validateEmail(email)) {
       Alert.alert("email format wrong!");
@@ -94,17 +70,33 @@ export default function SignupUser(props) {
         username,
         password,
         email: email.toLowerCase(),
-        name,
-        profilImage: base64.encode(profilImage),
-        garageName,
-        garageAddress,
-        garageStatus,
-        garageDescription,
-        garageImage: base64.encode(garageImage)
+        name, // delete plus screen 
+        address,
+        description,
+        image: base64.encode(image)
       }
-      console.log(newUser);
+      try {
+        console.log(newUser);
+        const { data } = await axios.post('/garage', newUser)
+        console.log(data);
+        Alert.alert(`Register Success`, `Please login using ${newUser.username}`);
+        props.navigation.replace('Login User')
+      }
+      catch (err) {
+        console.log(err.response.data);
+        Alert.alert(`Error`, err.response.data.errors[0].errors[0].message);
+      }
     }
   }
+
+  // ini logic load font
+  let [fontsLoaded] = useFonts({
+    'Bebes Neue': require('../assets/fonts/BebasNeue-Regular.ttf'),
+  });
+  if (!fontsLoaded) {
+    return <AppLoading />;
+  }
+  // end load font
 
   return (
     <ScrollView>
@@ -115,23 +107,21 @@ export default function SignupUser(props) {
         <TextInput style={styles.textinput} secureTextEntry={true} placeholder="Password" value={password} onChange={(event) => setPassword(event.nativeEvent.text)} />  
         <TextInput style={styles.textinput} secureTextEntry={true} placeholder="Repeat Password" value={repeatPassword} onChange={(event) => setRepeatPassword(event.nativeEvent.text)} />  
         <TextInput style={styles.textinput} placeholder="Email" value={email} onChange={(event) => setEmail(event.nativeEvent.text)} />
-        <TextInput style={styles.textinput} placeholder="Name" value={name} onChange={(event) => setName(event.nativeEvent.text)} />
-        <View style={styles.uploadImage}>
+        {/* <View style={styles.uploadImage}>
           <View>
             <Button title="Pick an profile image" onPress={pickProfilImage} />
           </View>
           {profilImage && <Image source={{ uri: profilImage }} style={{ width: width * 0.4, height: width * 0.4 }} />}
-        </View>
+        </View> */}
         <Text style={styles.subTitle}>Garage Profile</Text>
-        <TextInput style={styles.textinput} placeholder="Garage Name" value={garageName} onChange={(event) => setGarageName(event.nativeEvent.text)} />
-        <TextInput style={styles.textinput} placeholder="Garage Address" value={garageAddress} onChange={(event) => setGarageAddress(event.nativeEvent.text)} />
-        <TextInput style={styles.textinput} placeholder="Garage Status" value={garageStatus} onChange={(event) => setGarageStatus(event.nativeEvent.text)} />
-        <TextInput style={styles.textinput} placeholder="Garage Description" value={garageDescription} onChange={(event) => setGarageDescription(event.nativeEvent.text)} />
+        <TextInput style={styles.textinput} placeholder="Garage Name" value={name} onChange={(event) => setName(event.nativeEvent.text)} />
+        <TextInput style={styles.textinput} placeholder="Garage Address" value={address} onChange={(event) => setAddress(event.nativeEvent.text)} />
+        <TextInput multiline style={styles.textinput} placeholder="Garage Description" value={description} onChange={(event) => setDescription(event.nativeEvent.text)} />
         <View style={styles.uploadImage}>
           <View>
             <Button title="Pick an garage image" onPress={pickGarageImage} />
           </View>
-          {garageImage && <Image source={{ uri: garageImage }} style={{ width: width * 0.4, height: width * 0.4 }} />}
+          {image && <Image source={{ uri: image }} style={{ width: width * 0.4, height: width * 0.4 }} />}
         </View>
       </View>
       <Text style={styles.haveAccount} onPress={() => goToLogin()}>ALREADY HAVE AN ACCOUNT? &#8594;</Text>

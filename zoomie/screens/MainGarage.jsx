@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeGarage from './HomeGarage'
-import Favorites from './Favorites'
-import ProfileUser from './ProfileUser'
+import OrderHistoryBengkel from './OrderHistoryBengkel'
+import ProfileBengkel from './ProfileBengkel'
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 const Tab = createBottomTabNavigator();
@@ -21,18 +21,18 @@ export default function MainGarage() {
         }}
       />
       <Tab.Screen
-        name="Favorites"
-        component={Favorites}
+        name="Order History Bengkel"
+        component={OrderHistoryBengkel}
         options={{
-          tabBarLabel: 'Favorites',
+          tabBarLabel: 'History',
           tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons name="heart" color={color} size={size} />
+            <MaterialCommunityIcons name="cart" color={color} size={size} />
           ),
         }}
       />
       <Tab.Screen
-        name="Profile"
-        component={ProfileUser}
+        name="Profile Bengkel"
+        component={ProfileBengkel}
         options={{
           tabBarLabel: 'Profile',
           tabBarIcon: ({ color, size }) => (
