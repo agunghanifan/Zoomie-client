@@ -3,8 +3,6 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, ScrollView, TextInput, Button, TouchableOpacity, Image, Dimensions, Alert } from 'react-native';
 import AppLoading from 'expo-app-loading';
 import { useFonts } from '@expo-google-fonts/inter';
-import * as ImagePicker from 'expo-image-picker';
-import base64 from 'react-native-base64'
 import axios from '../axios'
 
 const width = Dimensions.get('window').width; 
@@ -15,31 +13,6 @@ export default function SignupUser(props) {
   const [repeatPassword, setRepeatPassword] = useState('');
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
-  // const [image, setImage] = useState(null);
-
-  useEffect(() => {
-    (async () => {
-      if (Platform.OS !== 'web') {
-        const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-        if (status !== 'granted') {
-          alert('Sorry, we need camera roll permissions to make this work!');
-        }
-      }
-    })();
-  }, []);
-  
-  const pickImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-    });
-    console.log(result);
-    if (!result.cancelled) {
-      setImage(result.uri);
-    }
-  };
 
   // ini logic load font
   let [fontsLoaded] = useFonts({
@@ -78,8 +51,7 @@ export default function SignupUser(props) {
           username: username.toLowerCase(),
           password,
           email: email.toLowerCase(),
-          name,
-          image: base64.encode(image)
+          name
         }
         console.log(newUser);
         const { data } = await axios.post('/register', newUser)
@@ -103,12 +75,6 @@ export default function SignupUser(props) {
         <TextInput style={styles.textinput} secureTextEntry={true} placeholder="Password" value={repeatPassword} onChange={(event) => setRepeatPassword(event.nativeEvent.text)} />  
         <TextInput style={styles.textinput} placeholder="Email" value={email} onChange={(event) => setEmail(event.nativeEvent.text)} />
         <TextInput style={styles.textinput} placeholder="Name" value={name} onChange={(event) => setName(event.nativeEvent.text)} />
-        {/* <View style={styles.uploadImage}>
-          <View>
-            <Button title="Pick an profile image" onPress={pickImage} />
-          </View>
-          {image && <Image source={{ uri: image }} style={{ width: width * 0.4, height: width * 0.4 }} />}
-        </View> */}
       </View>
       <Text style={styles.haveAccount} onPress={() => goToLogin()}>ALREADY HAVE AN ACCOUNT? &#8594;</Text>
       <View style={styles.center}>
