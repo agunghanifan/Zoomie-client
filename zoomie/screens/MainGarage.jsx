@@ -3,6 +3,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeGarage from './HomeGarage'
 import OrderHistoryBengkel from './OrderHistoryBengkel'
 import ProfileBengkel from './ProfileBengkel'
+import ChatListGarage from './ChatListGarage'
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 const Tab = createBottomTabNavigator();
@@ -27,6 +28,16 @@ export default function MainGarage() {
           tabBarLabel: 'History',
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="cart" color={color} size={size} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Chat List Garage"
+        component={ChatListGarage}
+        options={{
+          tabBarLabel: 'Chat List',
+          tabBarIcon: ({ color, size }) => (
+            <MaterialCommunityIcons name="chat" color={color} size={size} />
           ),
         }}
       />

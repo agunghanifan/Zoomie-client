@@ -24,7 +24,7 @@ export default function Home(props) {
           access_token: await AsyncStorage.getItem('@access_token')
         }
         const { data } = await axios.get('/garage', { headers });
-        dispatch(setGarages(data))
+        dispatch({ type: 'garages/setGarages', payload: data })
       } catch (error) {
         console.log(error.response);
       }
@@ -36,7 +36,7 @@ export default function Home(props) {
           access_token: await AsyncStorage.getItem('@access_token')
         }
         const { data } = await axios.get('/user/' + id, { headers });
-        dispatch(setUser(data));
+        dispatch({ type: 'user/setUser', payload: data });
         setImage(data.image)
       }
       catch (err) {
