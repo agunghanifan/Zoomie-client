@@ -49,7 +49,7 @@ export default function SignupUser(props) {
         name, // delete plus screen 
         address,
         description,
-        image: 'https://image.freepik.com/free-photo/adorable-dark-skinned-adult-woman-dressed-yellow-jumper-using-mobile-phone-with-happy-expression_273609-34293.jpg'
+        image: 'https://cdn.medcom.id/images/library/images/WhatsApp%20Image%202020-02-20%20at%2012_21_13%20PM.jpeg'
       }
       try {
         console.log(newUser);

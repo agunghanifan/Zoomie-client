@@ -93,7 +93,6 @@ export default function ProfileUser (props) {
   // end load font
 
   function historyBookings () {
-    console.log("masuk history Bookings")
     props.navigation.navigate('Bookings History User')
   }
 

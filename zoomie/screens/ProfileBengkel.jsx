@@ -179,7 +179,7 @@ const styles = StyleSheet.create({
   tinyLogo: {
     width: 75,
     height: 75,
-    borderRadius: 50,
+    borderRadius: 5,
     left: 41,
     top: 10
   },
@@ -209,7 +209,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width: 75,
     height: 75,
-    borderRadius: 50,
+    borderRadius: 5,
     left: 41,
     top: 10
   },
