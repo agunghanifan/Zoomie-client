@@ -1,13 +1,14 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 import { StyleSheet, Text, View, Image, Alert, Button, TouchableOpacity } from 'react-native';
 import AppLoading from 'expo-app-loading';
+import { useSelector, useDispatch } from 'react-redux';
 import { useFonts } from '@expo-google-fonts/inter';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from '../axios'
 import { useIsFocused } from "@react-navigation/native";
 import * as ImagePicker from 'expo-image-picker';
+
 
 export default function ProfileUser (props) {
   const user = useSelector(state => state.users.user);
@@ -68,7 +69,6 @@ export default function ProfileUser (props) {
           name: `photo.${fileType}`,
           type: `image/${fileType}`
         })
-      formData.append('file',image)
       const headers = {
         Accept: "application/json",
         "Content-Type": "multipart/form-data",
@@ -76,10 +76,10 @@ export default function ProfileUser (props) {
       }
       console.log(`mengupload `, image);
       const { data } = await axios.patch('/upload-avatar', formData, { headers })
-      console.log(`terupload`);
-      Alert.alert("Success", "Your picture has been changed");
+      Alert.alert("Success", `your avatar has been changed!`)
     } catch (error) {
-      console.log(error, "err upload file");
+      console.log(error, 'error upload file');
+      Alert.alert("Error", `error upload file, try again later!`)
     }
   }
 
@@ -93,7 +93,6 @@ export default function ProfileUser (props) {
   // end load font
 
   function historyBookings () {
-    console.log("masuk history Bookings")
     props.navigation.navigate('Bookings History User')
   }
 
@@ -125,14 +124,14 @@ export default function ProfileUser (props) {
           image && <Image source={{ uri: image }} style={styles.profilPic} />
         }
       </TouchableOpacity>
-      <TouchableOpacity style={styles.buttonSave} onPress={uploadImage}>
-        <Text style={{ fontFamily:"Bebes Neue", color:'white', alignSelf: 'center'  }}>save</Text>
+      <TouchableOpacity style={styles.btnUpload} onPress={uploadImage}>
+        <Text style={styles.btnUploadText}>Save</Text>
       </TouchableOpacity>
       <Text style={styles.textUsername}>{user.name}</Text>
       <Text style={styles.textEmail}>{user.email}</Text>
       <View style={styles.btnBox}>
         <View style={styles.capsText}>
-          <Text style={{ fontSize: 16, fontWeight: 'bold'}} onPress={() => historyBookings()}>Your Order and History</Text>
+          <Text style={{ fontSize: 16, fontWeight: 'bold' }} onPress={() => historyBookings()}>Your Order and History</Text>
           <Text style={{ fontSize: 11 }}>Your Order Process and Recent History Book</Text>
         </View>
       </View>
@@ -154,15 +153,18 @@ const styles = StyleSheet.create({
     fontFamily: 'Bebes Neue',
     backgroundColor: '#F9F9F9'
   },
-  buttonSave: {
-    alignContent: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'blue',
-    width:60,
-    left:48,
+  btnUpload: {
+    left: 47,
     top: 5,
-    paddingTop: 5,
-    paddingBottom: 5,
+    backgroundColor: 'blue',
+    width: 65,
+    padding: 5,
+  },
+  btnUploadText: {
+    alignSelf: 'center',
+    color: 'white',
+    fontFamily: 'Bebes Neue',
+    fontSize: 20,
   },
   title: {
     left: 41,
@@ -187,14 +189,14 @@ const styles = StyleSheet.create({
   },
   textUsername: {
     left: 130,
-    top: -80,
+    top: -77,
     fontFamily: 'Bebes Neue',
     fontSize: 18,
     color: '#222222'
   },
   textEmail: {
     left: 130,
-    top: -80,
+    top: -77,
   },
   btnBox: {
     justifyContent: 'center',

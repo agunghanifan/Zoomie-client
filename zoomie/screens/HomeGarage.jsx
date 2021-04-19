@@ -27,7 +27,7 @@ export default function HomeGarage (props) {
   }, [isFocused])
 
   useEffect(() => {
-    console.log(transactions, "<<<<<<<<<<<<<<<<<<<<<<<<<,")
+    // console.log(transactions, "<<<<<<<<<<<<<<<<<<<<<<<<<,")
     let transactionsFiltered = transactions?.filter(transaction => transaction.status < 10)
     setDataFilter(transactionsFiltered)
         // console.log(dataFilter, "ini data filter")

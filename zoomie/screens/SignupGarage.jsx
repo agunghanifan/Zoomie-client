@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, ScrollView, TextInput, Button, TouchableOpacity, Image, Dimensions, Alert } from 'react-native';
 import AppLoading from 'expo-app-loading';
 import { useFonts } from '@expo-google-fonts/inter';
-import * as ImagePicker from 'expo-image-picker';
 import base64 from 'react-native-base64'
 import axios from '../axios/'
 
@@ -17,32 +16,7 @@ export default function SignupUser(props) {
   const [name, setName] = useState(''); // ini di replace ke garageName
   const [address, setAddress] = useState('');
   const [description, setDescription] = useState('');
-  const [image, setImage] = useState(null);
 
-  useEffect(() => {
-    (async () => {
-      if (Platform.OS !== 'web') {
-        const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-        if (status !== 'granted') {
-          alert('Sorry, we need camera roll permissions to make this work!');
-        }
-      }
-    })();
-  }, []);
-
-  const pickGarageImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-    });
-    console.log(result);
-    if (!result.cancelled) {
-      setImage(result.uri);
-    }
-  };
-  
   const goToLogin = () => {
     props.navigation.navigate('Login User');
   }
@@ -59,6 +33,8 @@ export default function SignupUser(props) {
       Alert.alert("password didn't match or please check your password!");
       setPassword('');
       setRepeatPassword('');
+    } else if (password.length < 6) {
+      Alert.alert("password length minimal must be 6 digit!");
     } else if (!username || !name || !email || !address || !description) {
       Alert.alert("Please fill all of the field!");
     } else if (!validateEmail(email)) {
@@ -73,7 +49,7 @@ export default function SignupUser(props) {
         name, // delete plus screen 
         address,
         description,
-        image: base64.encode(image)
+        image: 'https://cdn.medcom.id/images/library/images/WhatsApp%20Image%202020-02-20%20at%2012_21_13%20PM.jpeg'
       }
       try {
         console.log(newUser);
@@ -107,22 +83,10 @@ export default function SignupUser(props) {
         <TextInput style={styles.textinput} secureTextEntry={true} placeholder="Password" value={password} onChange={(event) => setPassword(event.nativeEvent.text)} />  
         <TextInput style={styles.textinput} secureTextEntry={true} placeholder="Repeat Password" value={repeatPassword} onChange={(event) => setRepeatPassword(event.nativeEvent.text)} />  
         <TextInput style={styles.textinput} placeholder="Email" value={email} onChange={(event) => setEmail(event.nativeEvent.text)} />
-        {/* <View style={styles.uploadImage}>
-          <View>
-            <Button title="Pick an profile image" onPress={pickProfilImage} />
-          </View>
-          {profilImage && <Image source={{ uri: profilImage }} style={{ width: width * 0.4, height: width * 0.4 }} />}
-        </View> */}
         <Text style={styles.subTitle}>Garage Profile</Text>
         <TextInput style={styles.textinput} placeholder="Garage Name" value={name} onChange={(event) => setName(event.nativeEvent.text)} />
-        <TextInput style={styles.textinput} placeholder="Garage Address" value={address} onChange={(event) => setAddress(event.nativeEvent.text)} />
-        <TextInput multiline style={styles.textinput} placeholder="Garage Description" value={description} onChange={(event) => setDescription(event.nativeEvent.text)} />
-        <View style={styles.uploadImage}>
-          <View>
-            <Button title="Pick an garage image" onPress={pickGarageImage} />
-          </View>
-          {image && <Image source={{ uri: image }} style={{ width: width * 0.4, height: width * 0.4 }} />}
-        </View>
+        <TextInput style={styles.textinput} placeholder="Garage Address (city)" value={address} onChange={(event) => setAddress(event.nativeEvent.text)} />
+        <TextInput multiline style={styles.textArea} placeholder="Garage Description" value={description} onChange={(event) => setDescription(event.nativeEvent.text)} />
       </View>
       <Text style={styles.haveAccount} onPress={() => goToLogin()}>ALREADY HAVE AN ACCOUNT? &#8594;</Text>
       <View style={styles.center}>
@@ -179,6 +143,22 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
     elevation: 4,
     paddingLeft: 20,
+    fontFamily: 'Bebes Neue',
+    margin: 5
+  },
+  textArea: {
+    textAlignVertical: 'top',
+    backgroundColor: '#fff',
+    alignItems: 'flex-start',
+    justifyContent: 'flex-start',
+    width: 330,
+    minHeight: 130,
+    borderRadius: 4,
+    backgroundColor: '#ffffff',
+    elevation: 4,
+    paddingLeft: 20,
+    paddingTop: 15,
+    paddingBottom: 15,
     fontFamily: 'Bebes Neue',
     margin: 5
   },

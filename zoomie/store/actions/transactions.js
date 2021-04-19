@@ -21,7 +21,7 @@ export function setTransactionsById (payload) {
 export function fetchAllTransactionById () {
   return async (dispatch) => {
     try {
-      console.log("masuk fetchAllTransaction")
+      // console.log("masuk fetchAllTransaction")
       dispatch(setError(null))
       const headers = {
         access_token: await AsyncStorage.getItem('@access_token')
