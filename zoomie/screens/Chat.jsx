@@ -18,6 +18,7 @@ export default function Chat(props) {
   const chats = useSelector(state => state.chats.chats);
   const [yourstatus, setYourstatus] = useState('');
   const [chat, setChat] = useState('');
+  const [test, setTest] = useState('');
 
   const dispatch = useDispatch();
   // console.log(garage, "garage from chat");
@@ -25,9 +26,17 @@ export default function Chat(props) {
   useEffect(_ => {
     props.navigation.setOptions({ title: garage.name.toUpperCase()})
     getChats();
-    
     socket = io('http://192.168.0.150:3000');
+    socket.on("newChat", newChatCallback);
+
+    return () => {
+      socket.off('newChat', newChatCallback);
+    }
   }, []);
+
+  const newChatCallback = () => {
+    getChats();
+  }
 
   async function getChats () {
     try {
@@ -64,8 +73,6 @@ export default function Chat(props) {
         message: chat
       }
       const { data } = await axios.post('/chats/' + garage.id, newChat, { headers });
-      socket.emit('newChat', newChat);
-      getChats();
       setChat('')
     } catch (error) {
       console.log(error.response);

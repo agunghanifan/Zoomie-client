@@ -9,7 +9,7 @@ const width = Dimensions.get('window').width;
 
 export default function ActiveBookingUserCard (props) {
   const { transaction } = props;
-  console.log(transaction.User.image);
+  // console.log(transaction.User.image);
 
   let [fontsLoaded] = useFonts({
     'Bebes Neue': require('../assets/fonts/BebasNeue-Regular.ttf'),
@@ -20,7 +20,6 @@ export default function ActiveBookingUserCard (props) {
 
   const goToChat = (garage) => {
     console.log('Menuju halaman chat');
-    console.log(props.props);
     props.props.navigation.navigate('Chat', {
       garage
     });
