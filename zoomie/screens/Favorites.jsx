@@ -22,6 +22,7 @@ export default function Favorites(props) {
 
   async function getFavorites () {
     try {
+      dispatch({ type: 'favorites/setFavorites', payload: [] });
       const headers = {
         access_token: await AsyncStorage.getItem('@access_token')
       }

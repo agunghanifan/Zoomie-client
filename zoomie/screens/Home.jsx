@@ -23,6 +23,7 @@ export default function Home(props) {
 
   async function getGarages () {
     try {
+      dispatch({ type: 'garages/setGarages', payload: [] })
       const headers = {
         access_token: await AsyncStorage.getItem('@access_token')
       }

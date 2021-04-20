@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux'
-import { StyleSheet, Text, View, Image, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, Image, ScrollView, Dimensions } from 'react-native';
 import AppLoading from 'expo-app-loading';
 import { useFonts } from '@expo-google-fonts/inter';
 import HistoryCard from '../components/HistoryCard';
@@ -9,15 +9,22 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useIsFocused } from "@react-navigation/native";
 import axios from '../axios';
 
+const width = Dimensions.get('window').width; 
+
 export default function BookingsHistoryUser (props) {
   const transactions = useSelector(state => state.transactions.transactions);
   const dispatch = useDispatch();
   const isFocused = useIsFocused();
   const [image, setImage] = useState(null);
+  let order = 0;
+  let history = 0;
 
   useEffect(_ => {
+    const unsubscribe = props.navigation.addListener('focus', () => {
       fetchTransaction ()
       getUser ();
+    });
+    return unsubscribe;
   }, [isFocused])
 
   const fetchTransaction = async () => {
@@ -59,6 +66,24 @@ export default function BookingsHistoryUser (props) {
   if (!fontsLoaded || !transactions) {
     return <AppLoading />;
   }
+
+  let orderUserEmpty = () => {
+    return (
+      <View style={styles.containerEmpty}>
+        <Text style={styles.titleEmpty}>- No order yet -</Text>
+        <Text style={styles.subTitleEmpty}>lets book a order!</Text>
+      </View>
+    )
+  }
+
+  let historyUserEmpty = () => {
+    return (
+      <View style={styles.containerEmpty}>
+        <Text style={styles.titleEmpty}>- No history yet -</Text>
+        <Text style={styles.subTitleEmpty}>lets finish a order or book new order!</Text>
+      </View>
+    )
+  }
   
   return (
     <View style={styles.container}>
@@ -80,6 +105,7 @@ export default function BookingsHistoryUser (props) {
           {
             transactions.map(transaction => {
               if (transaction.status < 10) {
+                order++
                 return (
                   <ActiveBookingUserCard
                     props={props}
@@ -90,12 +116,14 @@ export default function BookingsHistoryUser (props) {
               }
             })
           }
+          { order == 0 ? orderUserEmpty() : <Text></Text> }
         </View>
         <View>
           <Text style={styles.subTitle}>History Booking's</Text>
           {
             transactions.map(transaction => {
               if (transaction.status >= 10 && transaction.status != 99) {
+                history++
                 return (
                   <HistoryCard
                     props={props}
@@ -106,6 +134,7 @@ export default function BookingsHistoryUser (props) {
               }
             })
           }
+          { history == 0 ? historyUserEmpty() : <Text></Text> }
         </View>
         {/* <Text>{JSON.stringify(transactions)}</Text> */}
       </ScrollView>
@@ -151,5 +180,25 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     fontSize: 24,
     marginBottom: 20,
+  },
+  containerEmpty: {
+    margin: 10,
+    alignSelf: 'center',
+    justifyContent: 'center',
+    marginBottom: 20,
+  },
+  titleEmpty: {
+    textAlign: 'center',
+    fontFamily: 'Bebes Neue',
+    fontStyle: 'normal',
+    fontSize: width * 0.06,
+    color: '#9B9B9B',
+  },
+  subTitleEmpty: {
+    textAlign: 'center',
+    fontFamily: 'Bebes Neue',
+    fontStyle: 'normal',
+    fontSize: width * 0.03,
+    color: '#9B9B9B',
   },
 });
