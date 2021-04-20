@@ -66,7 +66,7 @@ export function updateTransactions (payload) {
     console.log(headers, "ini headers dari update")
     console.log(payload.id, "ini payload dalam updateTransaksi")
     axios({
-      url: 'http://192.168.100.18:3000' + '/transactions/' + `${payload.id}`,
+      url: 'http://192.168.100.15:3000' + '/transactions/' + `${payload.id}`,
       method: 'PUT',
       headers,
       data: {
@@ -82,5 +82,28 @@ export function updateTransactions (payload) {
         .catch(err => {
           console.log(err)
         })
+  }
+}
+
+export function updateStatus (payload) {
+  return async (dispatch) => {
+    console.log("masuk sini")
+    const headers = {
+      access_token: await AsyncStorage.getItem('@access_token')
+    }
+    axios({
+      url: 'http://192.168.100.15:3000' + '/transactions/' + `${payload}`,
+      method: "PATCH",
+      headers,
+      data: {
+        status: 10,
+      }
+    })
+      .then(response => {
+        console.log(response, "ini dari update Status")
+      })
+      .catch(err => {
+        console.log(err)
+      })
   }
 }

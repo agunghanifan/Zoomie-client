@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, Image, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, Image, ScrollView, Alert } from 'react-native';
 import AppLoading from 'expo-app-loading';
 import { useFonts } from '@expo-google-fonts/inter';
 import OrderCard from '../components/OrderCard';
@@ -20,7 +20,8 @@ export default function HomeGarage (props) {
 
 
   useEffect(() => {
-    console.log('masuk useEffect')
+    console.log('masuk useEffect home garage')
+    setDataFilter(null)
     dispatch(setLoading(true))
     dispatch(fetchAllTransactionById())
     dispatch(getDataGarage())

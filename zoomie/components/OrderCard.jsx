@@ -3,6 +3,8 @@ import { StyleSheet, Text, View, Image, TouchableOpacity, Dimensions } from 'rea
 import AppLoading from 'expo-app-loading';
 import { useFonts } from '@expo-google-fonts/inter';
 import { useIsFocused } from '@react-navigation/native'
+import { useDispatch } from 'react-redux'
+import { updateStatus } from '../store/actions/transactions'
 
 const width = Dimensions.get('window').width; 
 
@@ -10,6 +12,7 @@ export default function GarageCard(props) {
   const { data, navigation } = props
   let dateNewFormat = new Date(data.date).toLocaleDateString()
   const isFocused = useIsFocused()
+  const dispatch = useDispatch()
 
   useEffect(() => {
 
@@ -23,6 +26,7 @@ export default function GarageCard(props) {
   }
 
   const goToOrderDetail = () => {
+    
     navigation.navigate('Edit Order', {
       id: data.id
     });
@@ -32,8 +36,12 @@ export default function GarageCard(props) {
     props.props.navigation.navigate('Chat');
   }
 
-  const finishOrder = () => {
-    console.log(`Order Finished!`);
+  const finishOrder = (id) => {
+    dispatch(updateStatus(id))
+    const timing = setInterval(() => {
+      props.navigation.navigate('Order History Bengkel')
+      clearInterval(timing)
+    }, 3000);
   } 
 
   return (
@@ -55,7 +63,7 @@ export default function GarageCard(props) {
           <Text style={styles.cardInfo} onPress={() => goToDetail()}>{data.description}</Text>
         </View>
         <View style={styles.btnGroups}>
-          <TouchableOpacity style={styles.btnFavorite} onPress={() => finishOrder()}>
+          <TouchableOpacity style={styles.btnFavorite} onPress={() => finishOrder(data.id)}>
             <Text style={styles.btnFavoriteText}>FINISH ORDER</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.btnBook} onPress={() => chat()}>
