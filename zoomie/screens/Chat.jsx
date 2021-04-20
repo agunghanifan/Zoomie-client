@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { Component, useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { StyleSheet, Text, View, Alert, FlatList, Dimensions, TouchableOpacity, TextInput, ScrollView } from 'react-native';
 import AppLoading from 'expo-app-loading';
@@ -7,8 +7,10 @@ import { Entypo } from '@expo/vector-icons';
 import ChatCard from '../components/ChatCard';
 import axios from '../axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import io from 'socket.io-client'
 
 const width = Dimensions.get('window').width; 
+let socket;
 
 export default function Chat(props) {
   const { garage } = props.route.params;
@@ -23,6 +25,8 @@ export default function Chat(props) {
   useEffect(_ => {
     props.navigation.setOptions({ title: garage.name.toUpperCase()})
     getChats();
+    
+    socket = io('http://192.168.0.150:3000');
   }, []);
 
   async function getChats () {
@@ -60,6 +64,7 @@ export default function Chat(props) {
         message: chat
       }
       const { data } = await axios.post('/chats/' + garage.id, newChat, { headers });
+      socket.emit('newChat', newChat);
       getChats();
       setChat('')
     } catch (error) {

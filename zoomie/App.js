@@ -111,14 +111,14 @@ export default function App() {
               headerTitleAlign: 'center'
             }}
           />
-          <Stack.Screen
+          {/* <Stack.Screen
             name="Bookings History User"
             component={BookingsHistoryUser}
             options={{
               title: 'Bookings & History',
               headerTitleAlign: 'center'
             }}
-          />
+          /> */}
           <Stack.Screen
             name="Checkout User"
             component={CheckoutUser}

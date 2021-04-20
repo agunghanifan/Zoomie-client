@@ -61,8 +61,12 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     paddingTop: 5,
     paddingRight: 5,
+    paddingBottom: 8,
     flexDirection: 'row',
     borderRadius: 8,
+    borderColor: '#4F4F4F',
+    borderTopWidth:5,
+    borderBottomWidth:1,
   },
   cardImg: {
     width: 110,

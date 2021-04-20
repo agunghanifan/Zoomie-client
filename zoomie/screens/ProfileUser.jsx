@@ -92,9 +92,9 @@ export default function ProfileUser (props) {
   }
   // end load font
 
-  function historyBookings () {
-    props.navigation.navigate('Bookings History User')
-  }
+  // function historyBookings () {
+  //   props.navigation.navigate('Bookings History User')
+  // }
 
   function logOutBtn () {
     Alert.alert("Logout", "Are you sure to Logout?",
@@ -129,12 +129,12 @@ export default function ProfileUser (props) {
       </TouchableOpacity>
       <Text style={styles.textUsername}>{user.name}</Text>
       <Text style={styles.textEmail}>{user.email}</Text>
-      <View style={styles.btnBox}>
+      {/* <View style={styles.btnBox}>
         <View style={styles.capsText}>
           <Text style={{ fontSize: 16, fontWeight: 'bold' }} onPress={() => historyBookings()}>Your Order and History</Text>
           <Text style={{ fontSize: 11 }}>Your Order Process and Recent History Book</Text>
         </View>
-      </View>
+      </View> */}
       <View style={styles.btnBox} >
         <View style={styles.capsText}>
           <Text style={{ fontSize: 16, fontWeight: 'bold'}} onPress={() => logOutBtn()}>Logout</Text>

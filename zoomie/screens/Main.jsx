@@ -3,6 +3,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Home from './Home'
 import Favorites from './Favorites'
 import ProfileUser from './ProfileUser'
+import BookingsHistoryUser from './BookingsHistoryUser'
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 const Tab = createBottomTabNavigator();
@@ -27,6 +28,16 @@ export default function Main() {
           tabBarLabel: 'Favorites',
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="heart" color={color} size={size} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Bookings History User"
+        component={BookingsHistoryUser}
+        options={{
+          tabBarLabel: 'Booking & History',
+          tabBarIcon: ({ color, size }) => (
+            <MaterialCommunityIcons name="cart" color={color} size={size} />
           ),
         }}
       />

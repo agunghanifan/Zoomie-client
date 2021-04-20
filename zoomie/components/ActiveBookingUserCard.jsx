@@ -79,12 +79,16 @@ const styles = StyleSheet.create({
     paddingRight: 5,
     flexDirection: 'row',
     borderRadius: 8,
+    borderColor: '#DB3022',
+    borderTopWidth:5,
+    borderBottomWidth:1,
   },
   cardImg: {
     width: 110,
     height: 110,
     top: -25,
     borderRadius: 10,
+    borderColor: '#DB3022',
   },
   cardInfo: {
     flexWrap: 'wrap',

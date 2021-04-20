@@ -81,8 +81,6 @@ export default function Favorites(props) {
           ))
         }
       </ScrollView>
-      <View>
-      </View>
     </View>
   );
 }

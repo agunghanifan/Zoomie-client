@@ -57,6 +57,8 @@ const styles = StyleSheet.create({
     padding: 10,
     flexDirection: 'row',
     borderRadius: 8,
+    borderColor: '#DB3022',
+    borderRightWidth:5,
   },
   cardImg: {
     width: 60,

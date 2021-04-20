@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux'
 import { StyleSheet, Text, View, Image, ScrollView } from 'react-native';
 import AppLoading from 'expo-app-loading';
@@ -13,20 +13,43 @@ export default function BookingsHistoryUser (props) {
   const transactions = useSelector(state => state.transactions.transactions);
   const dispatch = useDispatch();
   const isFocused = useIsFocused();
+  const [image, setImage] = useState(null);
 
   useEffect(_ => {
-    fetchTransaction ()
+    const unsubscribe = props.navigation.addListener('focus', () => {
+      fetchTransaction ()
+      getUser ();
+    });
+    return unsubscribe;
   }, [isFocused])
 
   const fetchTransaction = async () => {
     try {
+      const id = await AsyncStorage.getItem('@id')
+      console.log(id);
       const headers = {
         access_token: await AsyncStorage.getItem('@access_token')
       }
       const { data } = await axios.get('/transactions', { headers });
-      dispatch({ type: 'transactions/setTransactions', payload: data})
+      const filteredData = data.filter(trans => trans.User.id == id)
+      dispatch({ type: 'transactions/setTransactions', payload: filteredData})
     } catch (error) {
       console.log(error);
+    }
+  }
+
+  async function getUser () {
+    try {
+      const id = await AsyncStorage.getItem('@id');
+      const headers = {
+        access_token: await AsyncStorage.getItem('@access_token')
+      }
+      const { data } = await axios.get('/user/' + id, { headers });
+      dispatch({ type: 'user/setUser', payload: data });
+      setImage(data.image)
+    }
+    catch (err) {
+      console.log(err);
     }
   }
 
@@ -38,49 +61,73 @@ export default function BookingsHistoryUser (props) {
   }
   
   return (
-    <ScrollView>
+    <View style={styles.container}>
       <View>
-        <Text style={styles.title}>Current Booking's</Text>
+        <Text style={styles.title}>LIST FAVORITES</Text>
+        <Image 
+          style={styles.tinyProfPic}
+          source={{
+            uri: 'https://www.worldfuturecouncil.org/wp-content/uploads/2020/02/dummy-profile-pic-300x300-1.png'
+          }}
+        />
         {
-          transactions.map(transaction => {
-            if (transaction.status < 10) {
-              return (
-                <ActiveBookingUserCard
-                  props={props}
-                  transaction={transaction}
-                  key={transaction.id}
-                />
-              )
-            }
-          })
+          image && <Image source={{ uri: image }} style={styles.profilPic} />
         }
       </View>
-      <View>
-        <Text style={styles.title}>History Booking's</Text>
-        {
-          transactions.map(transaction => {
-            if (transaction.status >= 10 && transaction.status != 99) {
-              return (
-                <HistoryCard
-                  props={props}
-                  transaction={transaction}
-                  key={transaction.id}
-                />
-              )
-            }
-          })
-        }
-      </View>
-    </ScrollView>
+      <ScrollView>
+        <View>
+          <Text style={styles.subTitle}>Current Booking's</Text>
+          {
+            transactions.map(transaction => {
+              if (transaction.status < 10) {
+                return (
+                  <ActiveBookingUserCard
+                    props={props}
+                    transaction={transaction}
+                    key={transaction.id}
+                  />
+                )
+              }
+            })
+          }
+        </View>
+        <View>
+          <Text style={styles.subTitle}>History Booking's</Text>
+          {
+            transactions.map(transaction => {
+              if (transaction.status >= 10 && transaction.status != 99) {
+                return (
+                  <HistoryCard
+                    props={props}
+                    transaction={transaction}
+                    key={transaction.id}
+                  />
+                )
+              }
+            })
+          }
+        </View>
+      </ScrollView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: 10
+    marginTop: 60
   },
   tinyProfPic: {
+    position: 'absolute',
+    alignSelf: 'flex-end',
+    width: 50,
+    height: 50,
+    borderRadius: 50,
+    justifyContent: 'flex-end',
+    right: 20,
+  },
+  profilPic:{
+    position: 'absolute',
     alignSelf: 'flex-end',
     width: 50,
     height: 50,
@@ -89,15 +136,19 @@ const styles = StyleSheet.create({
     right: 20,
   },
   title: {
+    marginTop: 9,
     left: 14,
     fontFamily: 'Bebes Neue',
     fontStyle: 'normal',
     fontSize: 34,
     marginBottom: 20,
   },
-  title: {
-    margin: 10,
-    fontWeight: 'bold',
-    textAlign: 'center',
-  }
+  subTitle: {
+    marginTop: 9,
+    left: 14,
+    fontFamily: 'Bebes Neue',
+    fontStyle: 'normal',
+    fontSize: 24,
+    marginBottom: 20,
+  },
 });
