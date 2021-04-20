@@ -1,9 +1,11 @@
 import React from 'react';
-import { StyleSheet, Text, View, Image, TouchableOpacity, Dimensions } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity, Dimensions, Alert } from 'react-native';
 import statusTranslate from '../helpers/statusTranslate';
 import AppLoading from 'expo-app-loading';
 import { useFonts } from '@expo-google-fonts/inter';
 import Moment from 'moment';
+import axios from '../axios'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const width = Dimensions.get('window').width; 
 
@@ -28,6 +30,32 @@ export default function HistoryCard (props) {
     return Moment(date).format('ddd, DD MMM YYYY');
   }
 
+  const goToReview = async () => {
+    if (transaction.isReviewed == true) {
+      Alert.alert("Reviewed", "You already reviewed this garage!")
+    } else {
+      props.props.navigation.navigate('Review Form', {
+        transaction
+      });
+    }
+  }
+
+  const btnText = () => {
+    if (transaction.isReviewed) {
+      return (
+        <TouchableOpacity style={styles.btnBook} onPress={() => goToReview(transaction.Garage)}>
+          <Text style={styles.btnFavoriteText}>Reviewed &nbsp; &#10003;</Text>
+        </TouchableOpacity>
+      )
+    } else {
+      return (
+        <TouchableOpacity style={styles.btnFavorite} onPress={() => goToReview(transaction.Garage)}>
+          <Text style={styles.btnFavoriteText}>Review</Text>
+        </TouchableOpacity>
+      )
+    }
+  }
+
   return (
     <View style={styles.card}>
       <View>
@@ -40,14 +68,19 @@ export default function HistoryCard (props) {
           />
         </TouchableOpacity>
       </View>
-      <View style={styles.cardInfo} onPress={() => goToDetailOrder(transaction)}>
-        <TouchableOpacity onPress={() => goToDetailOrder(transaction)}>
-          <Text style={styles.cardDate} >{formatDate(transaction.date)}</Text>
-          <Text style={styles.cardName} >{transaction.Garage.name}</Text>
-          <Text style={styles.cardAddress} >{transaction.Garage.address}</Text>
-          <Text style={styles.cardStatus} >({statusTranslate(transaction.status)})</Text>
-          <Text style={styles.cardName} >{transaction.description}</Text>
-        </TouchableOpacity>
+      <View style={styles.cardInfo}>
+        <View onPress={() => goToDetailOrder(transaction)}>
+          <TouchableOpacity onPress={() => goToDetailOrder(transaction)}>
+            <Text style={styles.cardDate} >{formatDate(transaction.date)}</Text>
+            <Text style={styles.cardName} >{transaction.Garage.name}</Text>
+            <Text style={styles.cardAddress} >{transaction.Garage.address}</Text>
+            <Text style={styles.cardStatus} >({statusTranslate(transaction.status)})</Text>
+            <Text style={styles.cardName} >{transaction.description}</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.btnGroups}>
+          {btnText()}
+        </View>
       </View>
     </View>
   );
@@ -58,6 +91,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
     width: width * 0.9,
     margin: 20,
+    marginBottom: 15,
+    marginTop: 15,
     paddingLeft: 10,
     paddingTop: 5,
     paddingRight: 5,
@@ -67,6 +102,11 @@ const styles = StyleSheet.create({
     borderColor: '#4F4F4F',
     borderTopWidth:5,
     borderBottomWidth:1,
+  },
+  btnGroups: {
+    marginTop: 10,
+    marginBottom: 10,
+    flexDirection: 'row',
   },
   cardImg: {
     width: 110,
@@ -108,13 +148,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   btnFavorite: {
-    width: width * 0.22,
+    width: width * 0.4,
     height: 30,
     marginRight: 15,
-    backgroundColor: '#DB3022',
     borderRadius: 28,
     alignItems: 'center',
     justifyContent: 'center',
+    left: 20,
+    backgroundColor: '#DB3022',
   },
   btnFavoriteText: {
     fontFamily: 'Bebes Neue',
@@ -122,12 +163,14 @@ const styles = StyleSheet.create({
     fontSize: 11,
   },
   btnBook: {
-    width: width * 0.22,
+    width: width * 0.4,
     height: 30,
-    backgroundColor: '#4F4F4F',
+    marginRight: 15,
     borderRadius: 28,
     alignItems: 'center',
     justifyContent: 'center',
+    left: 20,
+    backgroundColor: '#4F4F4F',
   },
   btnBookText: {
     fontFamily: 'Bebes Neue',
@@ -142,6 +185,5 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     padding: 10,
-    
   },
 });

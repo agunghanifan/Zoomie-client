@@ -1,16 +1,40 @@
-import React, { useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux'
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity, Dimensions, Alert } from 'react-native';
 import AppLoading from 'expo-app-loading';
 import { useFonts } from '@expo-google-fonts/inter';
 import axios from '../axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import starRating from '../helpers/starRating';
 
 const width = Dimensions.get('window').width; 
 
 export default function GarageCard(props) {
   const { garage } = props;
-  const dispatch = useDispatch();
+  const [score, setScore] = useState('-')
+  
+  useEffect(_ => {
+    getReviews();
+  }, [])
+
+  const getReviews = async () => {
+    try {
+      const headers = {
+        access_token: await AsyncStorage.getItem('@access_token')
+      }
+      const { data } = await axios.get('/reviews/', { 
+          params: { 
+            garage: garage.id 
+          }, 
+          headers 
+        })
+      if (data.length > 0) {
+        let temp = data.reduce((n, {score}) => n + score, 0) / data.length;
+        setScore(temp.toFixed(1));
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   let [fontsLoaded] = useFonts({
     'Bebes Neue': require('../assets/fonts/BebasNeue-Regular.ttf'),
@@ -69,6 +93,7 @@ export default function GarageCard(props) {
         <View>
           <Text style={styles.cardName} onPress={() => goToDetail(garage)}>{garage.name}</Text>
           <Text style={styles.cardAddress} onPress={() => goToDetail(garage)}>{garage.address}</Text>
+          <Text onPress={() => goToDetail(garage)}>{starRating(score)}</Text>
         </View>
         <View style={styles.btnGroups}>
           <TouchableOpacity style={styles.btnFavorite} onPress={() => addFavorite(garage)}>

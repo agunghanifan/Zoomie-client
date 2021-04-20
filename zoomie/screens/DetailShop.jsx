@@ -1,18 +1,47 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { StyleSheet, Text, View, Image, ScrollView, Dimensions, TouchableOpacity } from 'react-native';
 import AppLoading from 'expo-app-loading';
 import { useFonts } from '@expo-google-fonts/inter';
+import axios from '../axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useDispatch, useSelector } from 'react-redux';
+import ReviewCard from '../components/ReviewCard';
+import ReviewEmpty from '../components/ReviewEmpty';
+import starRating from '../helpers/starRating';
 
 const width = Dimensions.get('window').width; 
 
 export default function DetailShop(props) {
   const { garage } = props.route.params;
-  // console.log(garage, "garage from detail");
+  const reviews = useSelector(state => state.reviews.reviews);
+
+  const dispatch = useDispatch();
+
+  useEffect(_ => {
+    getReviews();
+  }, [])
+
+  const getReviews = async () => {
+    try {
+      const headers = {
+        access_token: await AsyncStorage.getItem('@access_token')
+      }
+      const { data } = await axios.get('/reviews/', { 
+          params: { 
+            garage: garage.id 
+          }, 
+          headers 
+        })
+      dispatch({ type: 'reviews/setReviews', payload: data })
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   let [fontsLoaded] = useFonts({
     'Bebes Neue': require('../assets/fonts/BebasNeue-Regular.ttf'),
   });
-  if (!fontsLoaded) {
+  if (!fontsLoaded || !reviews) {
     return <AppLoading />;
   }
 
@@ -20,6 +49,15 @@ export default function DetailShop(props) {
     props.navigation.navigate('Chat', {
       garage
     })
+  }
+
+  const reviewAvg = () => {
+    if (reviews.length > 0) {
+      let temp = reviews.reduce((n, {score}) => n + score, 0) / reviews.length;
+      return temp.toFixed(1);
+    } else {
+      return '-'
+    }
   }
   
   return (
@@ -36,12 +74,25 @@ export default function DetailShop(props) {
         <View style={styles.containerTitle}>
           <Text style={styles.shopName}>{garage.name}</Text>
           <Text style={styles.shopAddress}>{garage.address}</Text>
+          <Text style={{ marginTop: 5 }}>{starRating(reviewAvg())}</Text>
         </View>
         <View style={styles.containerInfo}>
           <Text style={styles.shopInfo}>
             {garage.description}
           </Text>
         </View>
+        <View style={styles.containerReviews}>
+          <Text style={styles.shopReview}>Reviews: ( {reviewAvg()} / 5) </Text>
+        </View>
+        {
+          reviews.length < 1 ? <ReviewEmpty /> :
+          reviews.map(review => (
+            <ReviewCard 
+              review={review}
+              key={review.id}
+            />
+          ))
+        }
       </ScrollView>
       <View style={styles.containerBooking}>
         <TouchableOpacity style={styles.btnBooking} onPress={() => booking(garage.id)}>
@@ -57,6 +108,10 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   containerTitle: {
+    marginLeft: 14,
+  },
+  containerReviews: {
+    marginTop: 20,
     marginLeft: 14,
   },
   containerInfo: {
@@ -98,6 +153,12 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     fontSize: 20,
     color: '#9B9B9B',
+  },
+  shopReview: {
+    fontFamily: 'Bebes Neue',
+    fontStyle: 'normal',
+    fontSize: 20,
+    color: '#000',
   },
   shopInfo: {
     backgroundColor: '#fff',

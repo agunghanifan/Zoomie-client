@@ -2,22 +2,16 @@ import React, { useEffect } from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity, Dimensions, Alert } from 'react-native';
 import AppLoading from 'expo-app-loading';
 import { useFonts } from '@expo-google-fonts/inter';
-import { useIsFocused } from '@react-navigation/native'
 import { useDispatch } from 'react-redux'
 import { updateStatus } from '../store/actions/transactions'
 import statusTranslate from '../helpers/statusTranslate'
+import Moment from 'moment';
 
 const width = Dimensions.get('window').width; 
 
 export default function GarageCard(props) {
   const { data, navigation } = props
-  let dateNewFormat = new Date(data.date).toLocaleDateString()
-  const isFocused = useIsFocused()
   const dispatch = useDispatch()
-
-  useEffect(() => {
-
-  }, [data, isFocused])
 
   let [fontsLoaded] = useFonts({
     'Bebes Neue': require('../assets/fonts/BebasNeue-Regular.ttf'),
@@ -27,7 +21,6 @@ export default function GarageCard(props) {
   }
 
   const goToOrderDetail = () => {
-    
     navigation.navigate('Edit Order', {
       id: data.id
     });
@@ -53,6 +46,21 @@ export default function GarageCard(props) {
     dispatch(updateStatus(id))
   } 
 
+  const generateBtn = () => {
+    if (data.status > 0) {
+      return (
+        <TouchableOpacity style={styles.btnFavorite} onPress={() => finishOrderBtn(data.id)}>
+          <Text style={styles.btnFavoriteText}>FINISH ORDER</Text>
+        </TouchableOpacity>
+      )
+    }
+  }
+
+  const formatDate = (date) => {
+    Moment.locale('en');
+    return Moment(date).format('DD MMM YYYY');
+  }
+
   return (
     <View style={styles.card}>
       <View>
@@ -67,18 +75,16 @@ export default function GarageCard(props) {
       </View>
       <View style={styles.cardInfo}>
         <View>
-          <Text style={styles.cardDate} onPress={() => goToOrderDetail()}>{dateNewFormat}</Text>
+          <Text style={styles.cardDate} onPress={() => goToOrderDetail()}>{formatDate(data.date)}</Text>
           <Text style={styles.cardName} onPress={() => goToOrderDetail()}>{data.User.name}</Text>
           <Text style={styles.cardStatus} onPress={() => goToOrderDetail()}>{statusTranslate(data.status)}</Text>
           <Text style={styles.cardInfo} onPress={() => goToOrderDetail()}>{data.description}</Text>
         </View>
         <View style={styles.btnGroups}>
-          <TouchableOpacity style={styles.btnFavorite} onPress={() => finishOrderBtn(data.id)}>
-            <Text style={styles.btnFavoriteText}>FINISH ORDER</Text>
-          </TouchableOpacity>
           <TouchableOpacity style={styles.btnBook} onPress={() => chat()}>
             <Text style={styles.btnFavoriteText}>CHAT</Text>
           </TouchableOpacity>
+          {generateBtn()}
         </View>
         {/* <Text>{JSON.stringify(data)}</Text> */}
       </View>
@@ -97,6 +103,9 @@ const styles = StyleSheet.create({
     padding: 10,
     flexDirection: 'row',
     borderRadius: 8,
+    borderColor: '#DB3022',
+    borderTopWidth:5,
+    borderBottomWidth:1,
   },
   cardImg: {
     width: 110,
@@ -137,7 +146,7 @@ const styles = StyleSheet.create({
   btnFavorite: {
     width: width * 0.22,
     height: 30,
-    marginRight: 15,
+    marginLeft: 15,
     backgroundColor: '#DB3022',
     borderRadius: 28,
     alignItems: 'center',

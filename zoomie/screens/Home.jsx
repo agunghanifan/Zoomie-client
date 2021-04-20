@@ -62,11 +62,12 @@ export default function Home(props) {
       }
       const { data } = await axios.get('/garage', { headers });
       data.forEach(garage => {
-        if (garage.address.toLowerCase().includes(search.toLowerCase())) {
+        if (garage.address.toLowerCase().includes(search.toLowerCase()) || garage.name.toLowerCase().includes(search.toLowerCase())) {
           searchedGarage.push(garage);
         }
       });
       dispatch({ type: 'garages/setGarages', payload: searchedGarage })
+      setSearch('');
     } catch (error) {
       console.log(error.response);
     }
@@ -89,7 +90,7 @@ export default function Home(props) {
       <View style={styles.containerSearch}>
         <View>
           <TextInput style={styles.textinput}
-            placeholder="search area"
+            placeholder="search name / area"
             value={search}
             onChange={(event) => setSearch(event.nativeEvent.text)} 
           />

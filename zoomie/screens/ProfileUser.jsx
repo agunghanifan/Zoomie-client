@@ -106,8 +106,12 @@ export default function ProfileUser (props) {
   }
 
   async function logOut () {
-    await AsyncStorage.clear();
-    props.navigation.replace('Welcome Page');
+    try {
+      await AsyncStorage.clear();
+      props.navigation.replace('Welcome Page');
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   return (

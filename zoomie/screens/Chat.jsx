@@ -64,18 +64,20 @@ export default function Chat(props) {
   }
 
   const sendMessage = async () => {
-    try {
-      dispatch({ type: 'chats/setChats', payload: [] });
-      const headers = {
-        access_token: await AsyncStorage.getItem('@access_token')
+    if (chat) {
+      try {
+        dispatch({ type: 'chats/setChats', payload: [] });
+        const headers = {
+          access_token: await AsyncStorage.getItem('@access_token')
+        }
+        const newChat = {
+          message: chat
+        }
+        const { data } = await axios.post('/chats/' + garage.id, newChat, { headers });
+        setChat('')
+      } catch (error) {
+        console.log(error.response);
       }
-      const newChat = {
-        message: chat
-      }
-      const { data } = await axios.post('/chats/' + garage.id, newChat, { headers });
-      setChat('')
-    } catch (error) {
-      console.log(error.response);
     }
   }
 
