@@ -7,7 +7,7 @@ const width = Dimensions.get('window').width;
 
 export default function DetailShop(props) {
   const { garage } = props.route.params;
-  console.log(garage, "garage from detail");
+  // console.log(garage, "garage from detail");
 
   let [fontsLoaded] = useFonts({
     'Bebes Neue': require('../assets/fonts/BebasNeue-Regular.ttf'),
@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   containerTitle: {
-    margin: 14,
+    marginLeft: 14,
   },
   containerInfo: {
     marginLeft: 14,
@@ -100,10 +100,16 @@ const styles = StyleSheet.create({
     color: '#9B9B9B',
   },
   shopInfo: {
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    elevation: 1,
+    padding: 10,
     fontFamily: 'Bebes Neue',
     fontStyle: 'normal',
-    fontSize: 24,
+    fontSize: 22,
     marginBottom: 5,
     marginTop: 16,
+    borderLeftWidth: 3,
+    borderLeftColor: '#DB3022',
   },
 });

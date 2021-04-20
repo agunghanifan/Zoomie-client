@@ -26,7 +26,6 @@ export default function BookingsHistoryUser (props) {
   const fetchTransaction = async () => {
     try {
       const id = await AsyncStorage.getItem('@id')
-      console.log(id);
       const headers = {
         access_token: await AsyncStorage.getItem('@access_token')
       }
@@ -63,7 +62,7 @@ export default function BookingsHistoryUser (props) {
   return (
     <View style={styles.container}>
       <View>
-        <Text style={styles.title}>LIST FAVORITES</Text>
+        <Text style={styles.title}>Booking and Order</Text>
         <Image 
           style={styles.tinyProfPic}
           source={{
