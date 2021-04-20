@@ -12,7 +12,6 @@ const width = Dimensions.get('window').width;
 
 export default function Chat(props) {
   const { garage } = props.route.params;
-  console.log(garage);
 
   const chats = useSelector(state => state.chats.chats);
   const [yourstatus, setYourstatus] = useState('');
@@ -91,7 +90,7 @@ export default function Chat(props) {
     props.navigation.navigate('Success')
   }
   const setButton = () => {
-    if (yourstatus == 'garage') {
+    if (yourstatus == 'user') {
       return (
         <>
           <TouchableOpacity style={styles.btnBooking} onPress={() => bookingBtn()}>
@@ -103,7 +102,13 @@ export default function Chat(props) {
         </>
       )
     } else {
-
+      return (
+        <>
+          <TouchableOpacity style={styles.btnCancel2} onPress={() => goBack()}>
+            <Text style={styles.btnBookingText}>Back</Text>
+          </TouchableOpacity>
+        </>
+      )
     }
   }
   
@@ -206,6 +211,14 @@ const styles = StyleSheet.create({
   },
   btnCancel: {
     width: width * 0.4,
+    height: 48,
+    backgroundColor: '#4F4F4F',
+    borderRadius: 28,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  btnCancel2: {
+    width: width * 0.8,
     height: 48,
     backgroundColor: '#4F4F4F',
     borderRadius: 28,

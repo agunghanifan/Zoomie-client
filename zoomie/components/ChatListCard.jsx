@@ -7,8 +7,7 @@ import { useIsFocused } from '@react-navigation/native'
 const width = Dimensions.get('window').width; 
 
 export default function GarageCard(props) {
-  // const { data, navigation } = props
-  // let dateNewFormat = new Date(data.date).toLocaleDateString()
+  const { chat } = props;
   const isFocused = useIsFocused()
 
   let [fontsLoaded] = useFonts({
@@ -20,7 +19,7 @@ export default function GarageCard(props) {
   
   const goToChat = () => {
     props.props.navigation.navigate('Chat', {
-      garage
+      garage: chat.User
     })
   }
 
@@ -31,14 +30,14 @@ export default function GarageCard(props) {
           <Image 
             style={styles.cardImg}
             source={{
-              uri: 'https://cdn.pixabay.com/photo/2015/03/04/22/35/head-659652_960_720.png'
+              uri: chat.User.image
             }}
           />
         </View>
         <View style={styles.cardInfo}>
           <View>
-            <Text style={styles.cardName} onPress={() => goToChat()}>name</Text>
-            <Text style={styles.cardInfo} onPress={() => goToChat()}>decription</Text>
+            <Text style={styles.cardName} onPress={() => goToChat()}>{chat.User.name}</Text>
+            <Text style={styles.cardText} onPress={() => goToChat()}>Tap to reply chat</Text>
           </View>
           <View style={styles.btnGroups}>
           </View>
@@ -53,19 +52,16 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
     width: width * 0.9,
     margin: 20,
-    marginBottom: 10,
-    marginTop: 10,
+    marginBottom: 4,
+    marginTop: 4,
     padding: 10,
     flexDirection: 'row',
     borderRadius: 8,
   },
   cardImg: {
-    width: 110,
-    height: 110,
+    width: 60,
+    height: 60,
     borderRadius: 10,
-  },
-  cardInfo: {
-    marginLeft: 20,
   },
   cardName: {
     fontFamily: 'Bebes Neue',
@@ -74,6 +70,15 @@ const styles = StyleSheet.create({
     color: '#000',
   },
   cardInfo: {
+    left: 20,
+    top: 8,
+    fontFamily: 'Bebes Neue',
+    fontStyle: 'normal',
+    fontSize: 14,
+    color: '#9B9B9B',
+    justifyContent: 'center'
+  },
+  cardText: {
     fontFamily: 'Bebes Neue',
     fontStyle: 'normal',
     fontSize: 14,

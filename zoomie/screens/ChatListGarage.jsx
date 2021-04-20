@@ -11,6 +11,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function HomeGarage (props) {
   const chats = useSelector(state => state.chats.chats);
+  const chatGroups = useSelector(state => state.chats.chatGroups);
   const [image, setImage] = useState(null);
 
   const dispatch = useDispatch()
@@ -21,35 +22,14 @@ export default function HomeGarage (props) {
     getGarage();
   }, [isFocused]);
 
-  function groupBy(list, keyGetter) {
-    const map = new Map();
-    list.forEach((item) => {
-         const key = keyGetter(item);
-         const collection = map.get(key);
-         if (!collection) {
-             map.set(key, [item]);
-         } else {
-             collection.push(item);
-         }
-    });
-    return map;
-  }
-
   async function getChatGroups () {
     try {
       const headers = {
         access_token: await AsyncStorage.getItem('@access_token')
       }
-      const id = await AsyncStorage.getItem('@id');
-      const response = await axios.get('/garage/', { headers });
-      const dataFilter = response.data.filter(garage => +garage.userId === +id)
-
       const { data } = await axios.get('/chats/', { headers });
-      dispatch({ type: 'chats/setChats', payload: data });
-
-      const grouped = groupBy(data, element => element.garageId )
-      console.log(grouped.get(dataFilter[0].id));
-
+      dispatch({ type: 'chatGroups/setChatGroups', payload: data})
+      // console.log(data);
     } catch (error) {
       console.log(error);
     }
@@ -75,7 +55,7 @@ export default function HomeGarage (props) {
   let [fontsLoaded] = useFonts({
     'Bebes Neue': require('../assets/fonts/BebasNeue-Regular.ttf'),
   });
-  if (!fontsLoaded) {
+  if (!fontsLoaded || !chatGroups) {
     return <AppLoading />;
   }
   
@@ -94,8 +74,15 @@ export default function HomeGarage (props) {
         }
       </View>
       <ScrollView>
-        <ChatListCard props={props}/>
-        <ChatListCard props={props}/>
+        {
+          chatGroups.map(chat => (
+            <ChatListCard
+              props={props}
+              chat={chat}
+              key={chat.id}
+            />
+          ))
+        }
       </ScrollView>
     </View>
   );
