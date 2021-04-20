@@ -12,19 +12,24 @@ const width = Dimensions.get('window').width;
 
 export default function Chat(props) {
   const { garage } = props.route.params;
+  console.log(garage);
 
   const chats = useSelector(state => state.chats.chats);
+  const [yourstatus, setYourstatus] = useState('');
   const [chat, setChat] = useState('');
 
   const dispatch = useDispatch();
   // console.log(garage, "garage from chat");
 
   useEffect(_ => {
+    props.navigation.setOptions({ title: garage.name.toUpperCase()})
     getChats();
   }, []);
 
   async function getChats () {
     try {
+      let status = await AsyncStorage.getItem('@roles');
+      setYourstatus(status);
       const headers = {
         access_token: await AsyncStorage.getItem('@access_token')
       }
@@ -85,6 +90,22 @@ export default function Chat(props) {
     console.log(data);
     props.navigation.navigate('Success')
   }
+  const setButton = () => {
+    if (yourstatus == 'garage') {
+      return (
+        <>
+          <TouchableOpacity style={styles.btnBooking} onPress={() => bookingBtn()}>
+            <Text style={styles.btnBookingText}>SUBMIT BOOKING</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.btnCancel} onPress={() => goBack()}>
+            <Text style={styles.btnBookingText}>CANCEL</Text>
+          </TouchableOpacity>
+        </>
+      )
+    } else {
+
+    }
+  }
   
   return (
     <View style={styles.container}>
@@ -93,15 +114,23 @@ export default function Chat(props) {
         data={chats}
         keyExtractor={item => item.id.toString()}
         renderItem={({item}) => {
-          let color = item.sender == 'user' ? '#1EBE71': 'wheat';
-          let align = item.sender == 'user' ? 'flex-end': 'flex-start';
+          let color,align;
+          if (yourstatus == 'user') {
+            color = item.sender == 'user' ? '#22D781': 'wheat';
+            align = item.sender == 'user' ? 'flex-end': 'flex-start';
+          } else {
+            color = item.sender == 'garage' ? '#22D781': 'wheat';
+            align = item.sender == 'garage' ? 'flex-end': 'flex-start';
+          }
           return (
-            <ChatCard
-              color={color}
-              align={align}
-              chat={item}
-              key={item.id}
-            />
+            <>
+              <ChatCard
+                color={color}
+                align={align}
+                chat={item}
+                key={item.id}
+              />
+            </>
           );
         }}
       />
@@ -118,12 +147,7 @@ export default function Chat(props) {
         </TouchableOpacity>
       </View>
       <View style={styles.btnGroup}>
-        <TouchableOpacity style={styles.btnBooking} onPress={() => bookingBtn()}>
-          <Text style={styles.btnBookingText}>SUBMIT BOOKING</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.btnCancel} onPress={() => goBack()}>
-          <Text style={styles.btnBookingText}>CANCEL</Text>
-        </TouchableOpacity>
+        {setButton()}
       </View>
     </View>
   );
@@ -141,7 +165,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'row',
-    paddingTop: 20,
+    paddingTop: 10,
     paddingBottom: 10,
     paddingLeft: 5,
     paddingRight: 5,
@@ -154,11 +178,12 @@ const styles = StyleSheet.create({
     marginRight: 14,
   },
   chatInput: {
+    fontFamily: 'Bebes Neue',
     backgroundColor: '#F2F2F2',
     width: width * 0.75,
-    fontSize: 20,
-    paddingTop: 15,
-    paddingBottom: 15,
+    fontSize: 16,
+    paddingTop: 10,
+    paddingBottom: 10,
     paddingLeft: 25,
     paddingRight: 10,
     borderRadius: 50,

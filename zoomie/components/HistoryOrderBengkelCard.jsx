@@ -17,6 +17,10 @@ export default function HistoryOrderBengkel (props) {
     return <AppLoading />;
   }
 
+  function formatPrice(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
+
   return (
     <View style={styles.card}>
       <View>
@@ -24,7 +28,7 @@ export default function HistoryOrderBengkel (props) {
           <Image 
             style={styles.cardImg}
             source={{
-              uri: 'https://image.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg'
+              uri: transaction.User.image
             }}
           />
         </TouchableOpacity>
@@ -33,16 +37,16 @@ export default function HistoryOrderBengkel (props) {
         <View>
           <Text style={styles.cardName}>{transaction.User.name}</Text>
           <Text style={styles.cardAddress}>{transaction.User.email}</Text>
+          <Text style={styles.priceInfo}>
+            {statusTranslate(transaction.status)}
+          </Text>
         </View>
         <View style={styles.containerInfo}>
           <Text style={styles.shopInfo}>
             {transaction.description}
           </Text>
-          <Text style={styles.shopInfo}>
-            {transaction.price}
-          </Text>
-          <Text style={styles.shopInfo}>
-            {statusTranslate(transaction.status)}
+          <Text style={styles.priceInfo}>
+            Total: {formatPrice(transaction.price)}
           </Text>
         </View>
       </View>
@@ -58,6 +62,7 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     paddingTop: 5,
     paddingRight: 5,
+    paddingBottom: 5,
     flexDirection: 'row',
     borderRadius: 8,
   },
@@ -80,6 +85,18 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     fontSize: 14,
     color: '#9B9B9B',
+  },
+  shopInfo: {
+    fontFamily: 'Bebes Neue',
+    fontStyle: 'normal',
+    fontSize: 12,
+    color: '#000',
+  },
+  priceInfo: {
+    fontFamily: 'Bebes Neue',
+    fontStyle: 'normal',
+    fontSize: 16,
+    color: '#000',
   },
   btnGroups: {
     marginTop: 20,
@@ -114,7 +131,6 @@ const styles = StyleSheet.create({
   },
   containerInfo: {
     marginLeft: 14,
-    marginRight: 14,
   },
   containerBooking: {
     alignItems: 'center',

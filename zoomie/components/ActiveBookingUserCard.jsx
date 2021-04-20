@@ -9,7 +9,7 @@ const width = Dimensions.get('window').width;
 
 export default function ActiveBookingUserCard (props) {
   const { transaction } = props;
-  // console.log(transaction);
+  console.log(transaction.User.image);
 
   let [fontsLoaded] = useFonts({
     'Bebes Neue': require('../assets/fonts/BebasNeue-Regular.ttf'),
@@ -44,7 +44,7 @@ export default function ActiveBookingUserCard (props) {
           <Image 
             style={styles.cardImg}
             source={{
-              uri: 'https://cdn.medcom.id/images/library/images/WhatsApp%20Image%202020-02-20%20at%2012_21_13%20PM.jpeg'
+              uri: transaction.Garage.image
             }}
           />
         </TouchableOpacity>

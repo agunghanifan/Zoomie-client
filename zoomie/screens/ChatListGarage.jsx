@@ -17,17 +17,39 @@ export default function HomeGarage (props) {
   const isFocused = useIsFocused()
 
   useEffect(_ => {
-    getChats();
+    getChatGroups();
     getGarage();
   }, [isFocused]);
 
-  async function getChats () {
+  function groupBy(list, keyGetter) {
+    const map = new Map();
+    list.forEach((item) => {
+         const key = keyGetter(item);
+         const collection = map.get(key);
+         if (!collection) {
+             map.set(key, [item]);
+         } else {
+             collection.push(item);
+         }
+    });
+    return map;
+  }
+
+  async function getChatGroups () {
     try {
       const headers = {
         access_token: await AsyncStorage.getItem('@access_token')
       }
-      // const { data } = await axios.get('/chats/' + garage.id, { headers });
-      // dispatch({ type: 'chats/setChats', payload: data });
+      const id = await AsyncStorage.getItem('@id');
+      const response = await axios.get('/garage/', { headers });
+      const dataFilter = response.data.filter(garage => +garage.userId === +id)
+
+      const { data } = await axios.get('/chats/', { headers });
+      dispatch({ type: 'chats/setChats', payload: data });
+
+      const grouped = groupBy(data, element => element.garageId )
+      console.log(grouped.get(dataFilter[0].id));
+
     } catch (error) {
       console.log(error);
     }
