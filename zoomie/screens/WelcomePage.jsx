@@ -22,17 +22,19 @@ export default function WelcomePage(props) {
   async function checkLocalStorage() {
     try {
       const id = await AsyncStorage.getItem('@id');
-      const headers = {
-        access_token: await AsyncStorage.getItem('@access_token')
+      if (id) {
+        const headers = {
+          access_token: await AsyncStorage.getItem('@access_token')
+        }
+        // kalo ada token, dia pindah halaman 
+        if (headers.access_token) {
+          const { data } = await axios.get('/user/' + id, { headers });
+          dispatch({ type: 'user/setUser', payload: data });
+          if (data.roles == 'user') props.navigation.replace('Main')
+          else props.navigation.replace('Main Garage')
+        }
+        // kalo ga ada dia ga ngelakuin apa2
       }
-      // kalo ada token, dia pindah halaman 
-      if (headers.access_token) {
-        const { data } = await axios.get('/user/' + id, { headers });
-        dispatch({ type: 'user/setUser', payload: data });
-        if (data.roles == 'user') props.navigation.replace('Main')
-        else props.navigation.replace('Main Garage')
-      }
-      // kalo ga ada dia ga ngelakuin apa2
     }
     catch (err) {
       console.log(err);

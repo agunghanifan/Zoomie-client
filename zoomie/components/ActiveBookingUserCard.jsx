@@ -19,7 +19,6 @@ export default function ActiveBookingUserCard (props) {
   }
 
   const goToChat = (garage) => {
-    console.log('Menuju halaman chat');
     props.props.navigation.navigate('Chat', {
       garage
     });
@@ -71,8 +70,10 @@ export default function ActiveBookingUserCard (props) {
 const styles = StyleSheet.create({
   card: {
     backgroundColor: '#ffffff',
-    alignSelf: 'stretch',
+    width: width * 0.9,
     margin: 20,
+    marginBottom: 15,
+    marginTop: 15,
     paddingLeft: 10,
     paddingTop: 5,
     paddingRight: 5,

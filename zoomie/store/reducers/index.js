@@ -5,6 +5,7 @@ import chats from './chats';
 import items from './items';
 import transactions from './transactions';
 import garages from './garages';
+import reviews from './reviews';
 
 const reducer = combineReducers({
   users,
@@ -13,6 +14,7 @@ const reducer = combineReducers({
   items,
   transactions,
   garages,
+  reviews,
 })
 
 export default reducer;

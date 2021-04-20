@@ -29,8 +29,8 @@ export default function HomeGarage (props) {
   }, [isFocused])
 
   function reFetch () {
-    setDataFilter(null)
-    dispatch(setLoading(true))
+    // setDataFilter(null)
+    // dispatch(setLoading(true))
     dispatch(fetchAllTransactionById())
     dispatch(getDataGarage())
   }
@@ -53,10 +53,8 @@ export default function HomeGarage (props) {
   }
 
   useEffect(() => {
-    // console.log(transactions, "<<<<<<<<<<<<<<<<<<<<<<<<<,")
     let transactionsFiltered = transactions?.filter(transaction => transaction.status < 10)
     setDataFilter(transactionsFiltered)
-        // console.log(dataFilter, "ini data filter")
   }, [transactions])
 
   let [fontsLoaded] = useFonts({

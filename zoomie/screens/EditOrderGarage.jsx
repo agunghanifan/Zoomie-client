@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import { View, Text, StyleSheet, Dimensions, TouchableOpacity, ScrollView, TextInput, Button } from 'react-native'
+import { View, Text, StyleSheet, Dimensions, TouchableOpacity, ScrollView, TextInput, Button, Alert } from 'react-native'
 import AppLoading from 'expo-app-loading';
 import { useFonts } from '@expo-google-fonts/inter';
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchTransactionById, setLoading, updateTransactions } from '../store/actions/transactions'
 import DateTimePicker from '@react-native-community/datetimepicker';
 import RNPickerSelect from 'react-native-picker-select';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import Moment from 'moment';
 
 const width = Dimensions.get('window').width;
 
@@ -59,20 +59,35 @@ export default function EditOrderGarage (props) {
     return <AppLoading />;
   }
 
-  const goToSuccess = () => {
-    const data = {
-      id,
-      date,
-      status: String(status),
-      description: String(note),
-      price: String(totalprice)
+  const updateOrderBtn = () => {
+    Alert.alert("Update Order", "Update this booking order?",
+      [
+        { text: "Cancel", onPress: () => null, style: "cancel" },
+        { text: "Update", onPress: () => updateOrder() }
+      ]
+    );    
+  }
+
+  const updateOrder = () => {
+    if (!date || !status) {
+      Alert.alert("Error", "Please input Date and/or Status")
+    } else if( date < Date.now()) {
+      Alert.alert("Error", "Date cannot older than today")
+    } else {
+      const data = {
+        id,
+        date,
+        status: String(status),
+        description: String(note),
+        price: String(totalprice)
+      }
+      console.log(data)
+      dispatch(updateTransactions(data))
+      const timing = setInterval(() => {
+        props.navigation.goBack()
+        clearInterval(timing)
+      }, 0)
     }
-    console.log(data)
-    dispatch(updateTransactions(data))
-    const timing = setInterval(() => {
-      props.navigation.goBack()
-      clearInterval(timing)
-    }, 3000)
   }
 
   const onBack = () => {
@@ -81,6 +96,11 @@ export default function EditOrderGarage (props) {
     setNote('')
     setTotalPrice('')
     props.navigation.goBack()
+  }
+
+  const formatDate = (date) => {
+    Moment.locale('en');
+    return Moment(date).format('DD MMM YYYY');
   }
 
   return (
@@ -94,8 +114,11 @@ export default function EditOrderGarage (props) {
         </View>
         <View style={styles.detailOrder}>
           <Text style={styles.label}>Date</Text>
-          <View style={{ margin: 10 }}>
-            <Button onPress={showDatepicker} title="Show date picker!" />
+          <View style={{ width: 330, flexDirection: 'row', alignItems: 'center' }}>
+            <View style={styles.dateinput}>
+              <Text style={styles.customerName}>{formatDate(date)}</Text>
+            </View>
+            <Button onPress={showDatepicker} title="Pick Date" />
           </View>
           <View style={{ alignSelf: 'center' }}>
             {show && (
@@ -116,14 +139,13 @@ export default function EditOrderGarage (props) {
               onValueChange={(value) => setStatus(value)}
               items={[
                 { label:"Wait for repairshop's confirm", value:"0" },
-                { label:"Booked / Confirmed by repairshop", value:"1" },
+                { label:"Confirm this booking", value:"1" },
                 { label:"On Progress / On Maintenance", value:"2" },
                 { label:"On Queue", value:"3" },
                 { label:"Finished", value:"10" },
-                { label:"this book already deleted", value:"99" },
+                { label:"Delete Booking", value:"99" },
               ]}
             />
-            <MaterialCommunityIcons style={styles.arrow} name="arrow-down-bold" />
           </View>
           <Text style={styles.label}>NOTE</Text>
           <TextInput
@@ -133,7 +155,7 @@ export default function EditOrderGarage (props) {
             value={note}
             onChangeText={setNote}
           />
-          <Text style={styles.label}>Total Price</Text>
+          <Text style={styles.label}>Estimate Price</Text>
           <TextInput
             style={styles.textinput}
             placeholder="Total Price"
@@ -144,7 +166,7 @@ export default function EditOrderGarage (props) {
       </ScrollView>
       {/* <Text>{JSON.stringify(transactionsById)}</Text> */}
       <View style={styles.btnGroup}>
-        <TouchableOpacity style={styles.btnBooking} onPress={() => goToSuccess()}>
+        <TouchableOpacity style={styles.btnBooking} onPress={() => updateOrderBtn()}>
           <Text style={styles.btnBookingText}>Update Order</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.btnBack} onPress={() => onBack()}>
@@ -184,6 +206,19 @@ const styles = StyleSheet.create({
     fontFamily: 'Bebes Neue',
     margin: 5
   },
+  dateinput: {
+    backgroundColor: '#fff',
+    justifyContent: 'center',
+    width: 180,
+    height: 50,
+    borderRadius: 4,
+    backgroundColor: '#ffffff',
+    elevation: 4,
+    paddingLeft: 20,
+    fontFamily: 'Bebes Neue',
+    margin: 5,
+    marginLeft: 0,
+  },
   textArea: {
     textAlignVertical: 'top',
     backgroundColor: '#fff',
@@ -218,6 +253,8 @@ const styles = StyleSheet.create({
     padding: 18,
     paddingBottom: 25,
     height: 20,
+    borderColor: '#DB3022',
+    borderTopWidth:5,
   },
   detailOrder: {
     top: 50,

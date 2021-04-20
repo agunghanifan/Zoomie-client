@@ -16,11 +16,8 @@ export default function BookingsHistoryUser (props) {
   const [image, setImage] = useState(null);
 
   useEffect(_ => {
-    const unsubscribe = props.navigation.addListener('focus', () => {
       fetchTransaction ()
       getUser ();
-    });
-    return unsubscribe;
   }, [isFocused])
 
   const fetchTransaction = async () => {
@@ -29,9 +26,13 @@ export default function BookingsHistoryUser (props) {
       const headers = {
         access_token: await AsyncStorage.getItem('@access_token')
       }
-      const { data } = await axios.get('/transactions', { headers });
-      const filteredData = data.filter(trans => trans.User.id == id)
-      dispatch({ type: 'transactions/setTransactions', payload: filteredData})
+      const { data } = await axios.get('/transactions/', {
+          params: {
+            userId: id,
+          },
+          headers
+        });
+      dispatch({ type: 'transactions/setTransactions', payload: data})
     } catch (error) {
       console.log(error);
     }
@@ -106,6 +107,7 @@ export default function BookingsHistoryUser (props) {
             })
           }
         </View>
+        {/* <Text>{JSON.stringify(transactions)}</Text> */}
       </ScrollView>
     </View>
   );

@@ -1,46 +1,15 @@
 import React, { useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux'
 import { View, Text, StyleSheet, Dimensions, TouchableOpacity, ScrollView } from 'react-native';
 import statusTranslate from '../helpers/statusTranslate';
 import AppLoading from 'expo-app-loading';
 import { useFonts } from '@expo-google-fonts/inter';
 import Moment from 'moment';
-import axios from '../axios';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useIsFocused } from "@react-navigation/native";
-import { setTransactions } from '../store/actions/transactions'
 
 const width = Dimensions.get('window').width;
 
 export default function CheckoutUser(props) {
   const { transaction } = props.route.params;
-  const transactions = useSelector(state => state.transactions.transactions)
-  const dispatch = useDispatch();
-  const isFocused = useIsFocused();
-  let transactionGarage = [];
   
-  useEffect(_ => {
-    async function getTransactions () {
-      try {
-        const headers = {
-          access_token: await AsyncStorage.getItem('@access_token')
-        }
-        const { data } = await axios.get('/transactions', { headers });
-
-        data.forEach(trans => {
-          if (trans.Garage.id == transaction.Garage.id && trans.date == transaction.date && trans.status < 10 && trans.status >= 0) {
-            transactionGarage.push(trans)
-          }
-        })
-        console.log(transactionGarage, 'transactions');
-        dispatch(setTransactions(data))
-      } catch (error) {
-        console.log(error.response);
-      }
-    }
-    getTransactions ();
-  }, [isFocused])
-
   let [fontsLoaded] = useFonts({
     'Bebes Neue': require('../assets/fonts/BebasNeue-Regular.ttf'),
   });
@@ -50,10 +19,6 @@ export default function CheckoutUser(props) {
 
   const goBack = () => {
     props.navigation.goBack();
-  }
-
-  const countingQue = async () => {
-
   }
 
   const formatDate = (date) => {

@@ -13,7 +13,7 @@ import SignupGarage from './screens/SignupGarage'
 import Login from './screens/LogIn'
 import DetailShop from './screens/DetailShop'
 import ProfileUser from './screens/ProfileUser'
-import BookingsHistoryUser from './screens/BookingsHistoryUser'
+import ReviewForm from './screens/ReviewForm'
 import EditOrderGarage from './screens/EditOrderGarage'
 import CheckoutUser from './screens/CheckoutUser'
 import SuccessPage from './screens/SuccessPage'
@@ -39,6 +39,14 @@ export default function App() {
                 backgroundColor: '#DB3022',
                 elevation: 0
               },
+            }}
+          />
+          <Stack.Screen
+            name="Review Form"
+            component={ReviewForm}
+            options={{
+              title: 'You are going to review',
+              headerTitleAlign: 'center'
             }}
           />
           <Stack.Screen

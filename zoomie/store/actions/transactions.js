@@ -75,6 +75,7 @@ export function updateTransactions (payload) {
     axios.put('/transactions/' + `${payload.id}`, data, { headers })
       .then(response => {
         console.log(response, "ini response")
+        Alert.alert("Success", "Order has been updated")
       })
       .catch(err => {
         console.log(err)
