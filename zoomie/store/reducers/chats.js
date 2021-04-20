@@ -1,5 +1,6 @@
 const initialState = {
   chats: [],
+  chatGroups: [],
   status: [],
   loading: false,
   error: false,
@@ -8,6 +9,7 @@ const initialState = {
 export default function reducer (state = initialState, action) {
   const { type, payload } = action;
   if ( type === 'chats/setChats' ) return { ...state, chats: payload }
+  if ( type === 'chatGroups/setChatGroups' ) return { ...state, chatGroups: payload }
   if ( type === 'status/setStatus' ) return { ...state, status: payload }
   if ( type === 'loading/setLoading' ) return { ...state, loading: payload }
   if ( type === 'error/setError' ) return { ...state, error: payload }

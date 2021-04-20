@@ -11,7 +11,7 @@ function statusTranslate (statusCode) {
     case 10:
       return 'Finished'
     case 99:
-      return 'this book already deleted'
+      return 'Delete Booking'
     default:
       return 'Please contact administrator'
   }

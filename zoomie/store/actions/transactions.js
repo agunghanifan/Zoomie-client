@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Alert } from 'react-native';
 import axios from '../../axios/'
 
 export function setTransactions (payload) {
@@ -58,52 +59,46 @@ export function fetchTransactionById (payload) {
 
 export function updateTransactions (payload) {
   return async (dispatch) => {
-    console.log("masukupdate Transaksi")
+    // console.log("masukupdate Transaksi")
     dispatch(setError(null))
     const headers = {
       access_token: await AsyncStorage.getItem('@access_token')
     }
-    console.log(headers, "ini headers dari update")
-    console.log(payload.id, "ini payload dalam updateTransaksi")
-    axios({
-      url: 'http://192.168.100.15:3000' + '/transactions/' + `${payload.id}`,
-      method: 'PUT',
-      headers,
-      data: {
-        status: Number(payload.status),
-        price: Number(payload.price),
-        date: payload.date,
-        description: payload.description
-      }
-    })
-        .then(response => {
-          console.log(response, "ini response")
-        })
-        .catch(err => {
-          console.log(err)
-        })
+    const data = {
+      status: Number(payload.status),
+      price: Number(payload.price),
+      date: payload.date,
+      description: payload.description
+    }
+    // console.log(headers, "ini headers dari update")
+    // console.log(payload.id, "ini payload dalam updateTransaksi")
+    axios.put('/transactions/' + `${payload.id}`, data, { headers })
+      .then(response => {
+        console.log(response, "ini response")
+      })
+      .catch(err => {
+        console.log(err)
+      })
   }
 }
 
 export function updateStatus (payload) {
   return async (dispatch) => {
-    console.log("masuk sini")
     const headers = {
       access_token: await AsyncStorage.getItem('@access_token')
     }
-    axios({
-      url: 'http://192.168.100.15:3000' + '/transactions/' + `${payload}`,
-      method: "PATCH",
-      headers,
-      data: {
-        status: 10,
-      }
-    })
+    const data = {
+      status: 10
+    }
+    console.log(payload, 'payload id');
+    axios.patch('/transactions/' + `${payload}`, data, { headers })
       .then(response => {
         console.log(response, "ini dari update Status")
+        dispatch(fetchAllTransactionById());
+        Alert.alert("Success", "Transaction finished!")
       })
       .catch(err => {
-        console.log(err)
+        console.log(err.response)
       })
   }
 }

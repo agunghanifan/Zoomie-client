@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react';
-import { StyleSheet, Text, View, Image, TouchableOpacity, Dimensions } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity, Dimensions, Alert } from 'react-native';
 import AppLoading from 'expo-app-loading';
 import { useFonts } from '@expo-google-fonts/inter';
 import { useIsFocused } from '@react-navigation/native'
 import { useDispatch } from 'react-redux'
 import { updateStatus } from '../store/actions/transactions'
+import statusTranslate from '../helpers/statusTranslate'
 
 const width = Dimensions.get('window').width; 
 
@@ -33,15 +34,23 @@ export default function GarageCard(props) {
   }
   
   const chat = () => {
-    props.props.navigation.navigate('Chat');
+    props.navigation.navigate('Chat', {
+      garage: data.User,
+      title: 'WHATEVER'
+    })
+  }
+  
+  function finishOrderBtn (id) {
+    Alert.alert("Finish Order", "Are you sure to finish this order?",
+      [
+        { text: "Cancel", onPress: () => null, style: "cancel" },
+        { text: "Finish!", onPress: () => finishOrder(id) }
+      ]
+    );    
   }
 
   const finishOrder = (id) => {
     dispatch(updateStatus(id))
-    const timing = setInterval(() => {
-      props.navigation.navigate('Order History Bengkel')
-      clearInterval(timing)
-    }, 3000);
   } 
 
   return (
@@ -51,19 +60,20 @@ export default function GarageCard(props) {
           <Image 
             style={styles.cardImg}
             source={{
-              uri: 'https://cdn.pixabay.com/photo/2015/03/04/22/35/head-659652_960_720.png'
+              uri: data.User.image
             }}
           />
         </TouchableOpacity>
       </View>
       <View style={styles.cardInfo}>
         <View>
-          <Text style={styles.cardDate} onPress={() => goToDetail()}>{dateNewFormat}</Text>
-          <Text style={styles.cardName} onPress={() => goToDetail()}>{data.User.name}</Text>
-          <Text style={styles.cardInfo} onPress={() => goToDetail()}>{data.description}</Text>
+          <Text style={styles.cardDate} onPress={() => goToOrderDetail()}>{dateNewFormat}</Text>
+          <Text style={styles.cardName} onPress={() => goToOrderDetail()}>{data.User.name}</Text>
+          <Text style={styles.cardStatus} onPress={() => goToOrderDetail()}>{statusTranslate(data.status)}</Text>
+          <Text style={styles.cardInfo} onPress={() => goToOrderDetail()}>{data.description}</Text>
         </View>
         <View style={styles.btnGroups}>
-          <TouchableOpacity style={styles.btnFavorite} onPress={() => finishOrder(data.id)}>
+          <TouchableOpacity style={styles.btnFavorite} onPress={() => finishOrderBtn(data.id)}>
             <Text style={styles.btnFavoriteText}>FINISH ORDER</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.btnBook} onPress={() => chat()}>
@@ -93,8 +103,12 @@ const styles = StyleSheet.create({
     height: 110,
     borderRadius: 10,
   },
-  cardInfo: {
-    marginLeft: 20,
+  cardStatus: {
+    marginLeft: 5,
+    fontFamily: 'Bebes Neue',
+    fontStyle: 'normal',
+    fontSize: 14,
+    color: '#000',
   },
   cardName: {
     fontFamily: 'Bebes Neue',
@@ -103,6 +117,7 @@ const styles = StyleSheet.create({
     color: '#000',
   },
   cardInfo: {
+    marginLeft: 5,
     fontFamily: 'Bebes Neue',
     fontStyle: 'normal',
     fontSize: 14,

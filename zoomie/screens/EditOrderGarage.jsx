@@ -89,16 +89,15 @@ export default function EditOrderGarage (props) {
         <Text style={styles.title}>ORDER INFO</Text>
         <View style={styles.cardInfo}>
           <View style={styles.paddingCardText}>
-            
-            <Text style={{ fontSize: 14, fontWeight: 'bold'}}>{transactionsById?.User?.name}</Text>
-            <Text style={{ fontSize: 14, fontWeight: 'bold'}}>{transactionsById?.description}</Text>
+            <Text style={styles.customerName}>Mr/Mrs. {transactionsById?.User?.name}</Text>
           </View>
         </View>
         <View style={styles.detailOrder}>
-          <View style={{ marginTop: 40 }}>
+          <Text style={styles.label}>Date</Text>
+          <View style={{ margin: 10 }}>
             <Button onPress={showDatepicker} title="Show date picker!" />
           </View>
-          <View style={{ left: 150 }}>
+          <View style={{ alignSelf: 'center' }}>
             {show && (
               <DateTimePicker
                 testID="dateTimePicker"
@@ -164,8 +163,13 @@ const styles = StyleSheet.create({
     left: 10,
     top: 19,
     fontFamily: 'Bebes Neue',
-    fontWeight: 'bold',
-    fontSize: 16
+    color: '#000',
+    fontSize: 26,
+  },
+  customerName: {
+    fontFamily: 'Bebes Neue',
+    color: '#000',
+    fontSize: 22,
   },
   textinput: {
     backgroundColor: '#fff',
@@ -181,40 +185,39 @@ const styles = StyleSheet.create({
     margin: 5
   },
   textArea: {
+    textAlignVertical: 'top',
     backgroundColor: '#fff',
     alignItems: 'flex-start',
     justifyContent: 'flex-start',
     width: 330,
-    height: 80,
+    minHeight: 105,
     borderRadius: 4,
     backgroundColor: '#ffffff',
     elevation: 4,
+    padding: 15,
     paddingLeft: 20,
     fontFamily: 'Bebes Neue',
     margin: 5
   },
   label: {
-    left: 30,
+    left: 13,
     fontFamily: 'Bebes Neue',
-    alignSelf: 'flex-start'
+    alignSelf: 'flex-start',
+    fontSize: 18,
   },
   cardInfo: {
     alignSelf: 'center',
     width: width * 0.9,
-    height: 108,
+    paddingBottom: 25,
     top: 30,
     borderRadius: 10,
     backgroundColor: '#ffffff',
   },
   paddingCardText: {
+    fontFamily: 'Bebes Neue',
     padding: 18,
-    paddingBottom: 30,
-    shadowColor: '#000000',
-    shadowRadius: 10,
-    shadowOffset: {
-      height: 10,
-      width: 10
-    }
+    paddingBottom: 25,
+    height: 20,
   },
   detailOrder: {
     top: 50,
