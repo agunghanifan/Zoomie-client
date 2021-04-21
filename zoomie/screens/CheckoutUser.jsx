@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { View, Text, StyleSheet, Dimensions, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, Dimensions, TouchableOpacity, ScrollView, Image } from 'react-native';
 import statusTranslate from '../helpers/statusTranslate';
 import AppLoading from 'expo-app-loading';
 import { useFonts } from '@expo-google-fonts/inter';
@@ -41,6 +41,14 @@ export default function CheckoutUser(props) {
           <Text style={styles.title}>REPAIR SHOP INFO</Text>
         </View>
         <View style={styles.containerCard}>
+          <View>
+            <Image 
+              style={styles.cardImg}
+              source={{
+                uri: transaction.Garage.image
+              }}
+            />
+          </View>
           <View style={styles.paddingCardText}>
             <Text style={styles.garageName}>{transaction.Garage.name}</Text>
             <Text style={styles.garageAddress}>{transaction.Garage.address}</Text>
@@ -82,6 +90,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginBottom: 20,
     backgroundColor: '#ffffff',
+    flexDirection: 'row',
   },
   containerStatus: {
     alignSelf: 'center',
@@ -100,6 +109,12 @@ const styles = StyleSheet.create({
     padding: 10,
     paddingTop: 20,
     paddingBottom: 25,
+  },
+  cardImg: {
+    margin: 5,
+    width: 85,
+    height: 85,
+    borderRadius: 10,
   },
   priceText: {
     fontFamily: 'Montserrat',

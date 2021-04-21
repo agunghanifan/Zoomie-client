@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
   },
   cardInfo: {
     width: width * 0.48,
-    marginLeft: 20,
+    marginLeft: 15,
   },
   cardName: {
     fontFamily: 'Bebes Neue',
@@ -128,7 +128,7 @@ const styles = StyleSheet.create({
   cardStatus: {
     fontFamily: 'Montserrat',
     fontStyle: 'normal',
-    fontSize: 15,
+    fontSize: 12,
     color: '#000',
   },
   cardAddress: {

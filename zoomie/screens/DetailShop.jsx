@@ -83,7 +83,7 @@ export default function DetailShop(props) {
           </Text>
         </View>
         <View style={styles.containerReviews}>
-          <Text style={styles.shopReview}>Reviews: ( {reviewAvg()} / 5) </Text>
+          <Text style={styles.shopReview}>Reviews: ( {reviewAvg()} / 5 ) </Text>
         </View>
         {
           reviews.length < 1 ? <ReviewEmpty /> :

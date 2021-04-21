@@ -13,7 +13,12 @@ export default function FavoriteCard(props) {
   const [score, setScore] = useState('-')
 
   useEffect(_ => {
+    let mounted = true;
     getReviews();
+    
+    return function cleanup () {
+      mounted = false;
+    }
   }, [])
 
   const getReviews = async () => {
@@ -50,8 +55,10 @@ export default function FavoriteCard(props) {
     })
   }
 
-  const booking = () => {
-    props.props.navigation.navigate('Chat');
+  const booking = (garage) => {
+    props.props.navigation.navigate('Chat', {
+      garage
+    })
   }
   
   const deleteFavoriteBtn = (id) => {
@@ -99,7 +106,7 @@ export default function FavoriteCard(props) {
           <TouchableOpacity style={styles.btnFavorite}>
             <Text style={styles.btnFavoriteText} onPress={() => deleteFavoriteBtn(favorite.id)}>DELETE FAVORITE</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.btnBook} onPress={() => booking()}>
+          <TouchableOpacity style={styles.btnBook} onPress={() => booking(favorite.Garage)}>
             <Text style={styles.btnFavoriteText}>BOOK</Text>
           </TouchableOpacity>
         </View>
@@ -130,6 +137,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   cardInfo: {
+    width: width * 0.48,
     marginLeft: 20,
   },
   cardName: {

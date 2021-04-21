@@ -11,37 +11,56 @@ import { useIsFocused } from "@react-navigation/native";
 
 export default function Home(props) {
   const garages = useSelector(state => state.garages.garages);
+  const loading = useSelector(state => state.garages.loading);
   const [search, setSearch] = useState('')
   const dispatch = useDispatch();
-  const isFocused = useIsFocused();
   const [image, setImage] = useState(null);
+  const isFocused = useIsFocused();
+
+  // useEffect(_ => {
+  //   let mounted = true;
+  //     getUser()
+  //     getGarages ();
+      
+  //   return function cleanup () {
+  //     mounted = false;
+  //   }
+  // }, [])
 
   useEffect(_ => {
-    getUser()
-    getGarages ();
+    const unsubscribe = props.navigation.addListener('focus', () => {
+      getUser()
+      getGarages ();
+    });
+    return unsubscribe;
   }, [isFocused])
+
 
   async function getGarages () {
     try {
+      dispatch({ type: 'loading/setLoading', payload: true })
       dispatch({ type: 'garages/setGarages', payload: [] })
       const headers = {
         access_token: await AsyncStorage.getItem('@access_token')
       }
       const { data } = await axios.get('/garage', { headers });
       dispatch({ type: 'garages/setGarages', payload: data })
+      dispatch({ type: 'loading/setLoading', payload: false })
     } catch (error) {
       console.log(error.response);
     }
   }
   async function getUser() {
     try {
+      dispatch({ type: 'loading/setLoading', payload: true })
       const id = await AsyncStorage.getItem('@id');
       const headers = {
         access_token: await AsyncStorage.getItem('@access_token')
       }
       const { data } = await axios.get('/user/' + id, { headers });
       dispatch({ type: 'user/setUser', payload: data });
-      setImage(data.image)
+      setImage(data.image);
+      dispatch({ type: 'loading/setLoading', payload: false });
     }
     catch (err) {
       console.log(err);
@@ -52,7 +71,7 @@ export default function Home(props) {
     'Bebes Neue': require('../assets/fonts/BebasNeue-Regular.ttf'),
     'Montserrat': require('../assets/fonts/Montserrat-Medium.ttf'),
   });
-  if (!fontsLoaded || !garages) {
+  if (!fontsLoaded || !garages || loading) {
     return <AppLoading />;
   }
 
@@ -124,7 +143,6 @@ export default function Home(props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: 60
   },
   containerSearch: {
     flexDirection:'row',

@@ -18,8 +18,11 @@ export default function HomeGarage (props) {
   const isFocused = useIsFocused()
 
   useEffect(_ => {
-    getChatGroups();
-    getGarage();
+    const unsubscribe = props.navigation.addListener('focus', () => {
+      getChatGroups();
+      getGarage();
+    });
+    return unsubscribe;
   }, [isFocused]);
 
   async function getChatGroups () {
@@ -91,7 +94,6 @@ export default function HomeGarage (props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: 60
   },
   header: {
     justifyContent: 'center',

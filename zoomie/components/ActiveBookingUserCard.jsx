@@ -92,8 +92,8 @@ const styles = StyleSheet.create({
     borderColor: '#DB3022',
   },
   cardInfo: {
-    flexWrap: 'wrap',
-    marginLeft: 20,
+    width: width * 0.48,
+    marginLeft: 15,
   },
   cardName: {
     fontFamily: 'Bebes Neue',
@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
   cardStatus: {
     fontFamily: 'Montserrat',
     fontStyle: 'normal',
-    fontSize: 15,
+    fontSize: 12,
     color: '#000',
   },
   cardAddress: {

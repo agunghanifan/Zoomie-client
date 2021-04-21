@@ -80,7 +80,6 @@ export default function OrderHistoryBengkel (props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: 60
   },
   header: {
     justifyContent: 'center',
