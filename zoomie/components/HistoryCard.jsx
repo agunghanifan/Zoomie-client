@@ -14,6 +14,7 @@ export default function HistoryCard (props) {
 
   let [fontsLoaded] = useFonts({
     'Bebes Neue': require('../assets/fonts/BebasNeue-Regular.ttf'),
+    'Montserrat': require('../assets/fonts/Montserrat-Medium.ttf'),
   });
   if (!fontsLoaded) {
     return <AppLoading />;
@@ -125,20 +126,20 @@ const styles = StyleSheet.create({
     color: '#000',
   },
   cardStatus: {
-    fontFamily: 'Bebes Neue',
+    fontFamily: 'Montserrat',
     fontStyle: 'normal',
     fontSize: 15,
     color: '#000',
   },
   cardAddress: {
-    fontFamily: 'Bebes Neue',
+    fontFamily: 'Montserrat',
     fontStyle: 'normal',
     fontSize: 14,
     color: '#9B9B9B',
   },
   cardDate: {
     alignSelf: 'flex-end',
-    fontFamily: 'Bebes Neue',
+    fontFamily: 'Montserrat',
     fontStyle: 'normal',
     fontSize: 14,
     color: '#9B9B9B',

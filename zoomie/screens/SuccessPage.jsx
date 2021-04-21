@@ -9,6 +9,7 @@ const width = Dimensions.get('window').width;
 export default function SuccessPage(props) {
   let [fontsLoaded] = useFonts({
     'Bebes Neue': require('../assets/fonts/BebasNeue-Regular.ttf'),
+    'Montserrat': require('../assets/fonts/Montserrat-Medium.ttf'),
   });
   if (!fontsLoaded) {
     return <AppLoading />;
@@ -83,7 +84,7 @@ const styles = StyleSheet.create({
     margin: 15,
   },
   successText: {
-    fontFamily: 'Bebes Neue',
+    fontFamily: 'Montserrat',
     fontStyle: 'normal',
     fontSize: width * 0.05,
     color: '#AFADAD',

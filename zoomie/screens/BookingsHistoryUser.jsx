@@ -62,6 +62,7 @@ export default function BookingsHistoryUser (props) {
 
   let [fontsLoaded] = useFonts({
     'Bebes Neue': require('../assets/fonts/BebasNeue-Regular.ttf'),
+    'Montserrat': require('../assets/fonts/Montserrat-Medium.ttf'),
   });
   if (!fontsLoaded || !transactions) {
     return <AppLoading />;
@@ -176,7 +177,7 @@ const styles = StyleSheet.create({
   subTitle: {
     marginTop: 9,
     left: 14,
-    fontFamily: 'Bebes Neue',
+    fontFamily: 'Montserrat',
     fontStyle: 'normal',
     fontSize: 24,
     marginBottom: 20,
@@ -196,7 +197,7 @@ const styles = StyleSheet.create({
   },
   subTitleEmpty: {
     textAlign: 'center',
-    fontFamily: 'Bebes Neue',
+    fontFamily: 'Montserrat',
     fontStyle: 'normal',
     fontSize: width * 0.03,
     color: '#9B9B9B',

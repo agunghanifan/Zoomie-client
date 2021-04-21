@@ -29,6 +29,7 @@ export default function EditProfileBengkel (props) {
   // ini logic load font
   let [fontsLoaded] = useFonts({
     'Bebes Neue': require('../assets/fonts/BebasNeue-Regular.ttf'),
+    'Montserrat': require('../assets/fonts/Montserrat-Medium.ttf'),
   });
   if (!fontsLoaded) {
     return <AppLoading />;
@@ -126,7 +127,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
     elevation: 4,
     paddingLeft: 20,
-    fontFamily: 'Bebes Neue',
+    fontFamily: 'Montserrat',
     margin: 5
   },
   textArea: {
@@ -142,7 +143,7 @@ const styles = StyleSheet.create({
     paddingLeft: 20,
     paddingTop: 15,
     paddingBottom: 15,
-    fontFamily: 'Bebes Neue',
+    fontFamily: 'Montserrat',
     margin: 5
   },
   title: {
@@ -156,7 +157,7 @@ const styles = StyleSheet.create({
   },
   subTitle: {
     marginTop: 20,
-    fontFamily: 'Bebes Neue',
+    fontFamily: 'Montserrat',
     fontStyle: 'normal',
     fontSize: 16,
     alignSelf: 'flex-start',

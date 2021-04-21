@@ -12,6 +12,7 @@ export default function CheckoutUser(props) {
   
   let [fontsLoaded] = useFonts({
     'Bebes Neue': require('../assets/fonts/BebasNeue-Regular.ttf'),
+    'Montserrat': require('../assets/fonts/Montserrat-Medium.ttf'),
   });
   if (!fontsLoaded) {
     return <AppLoading />;
@@ -101,7 +102,7 @@ const styles = StyleSheet.create({
     paddingBottom: 25,
   },
   priceText: {
-    fontFamily: 'Bebes Neue',
+    fontFamily: 'Montserrat',
     fontStyle: 'normal',
     fontSize: 26,
     marginBottom: 5
@@ -162,19 +163,19 @@ const styles = StyleSheet.create({
     color: '#000',
   },
   garageAddress: {
-    fontFamily: 'Bebes Neue',
+    fontFamily: 'Montserrat',
     fontStyle: 'normal',
     fontSize: 14,
     color: '#9B9B9B',
   },
   garageTextInfo: {
-    fontFamily: 'Bebes Neue',
+    fontFamily: 'Montserrat',
     fontStyle: 'normal',
     fontSize: 18,
     color: '#000',
   },
   status: {
-    fontFamily: 'Bebes Neue',
+    fontFamily: 'Montserrat',
     fontStyle: 'normal',
     fontSize: 20,
     color: '#000',

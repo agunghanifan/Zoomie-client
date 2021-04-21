@@ -50,6 +50,7 @@ export default function Home(props) {
 
   let [fontsLoaded] = useFonts({
     'Bebes Neue': require('../assets/fonts/BebasNeue-Regular.ttf'),
+    'Montserrat': require('../assets/fonts/Montserrat-Medium.ttf'),
   });
   if (!fontsLoaded || !garages) {
     return <AppLoading />;
@@ -178,7 +179,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
     elevation: 4,
     paddingLeft: 20,
-    fontFamily: 'Bebes Neue',
+    fontFamily: 'Montserrat',
     margin: 5,
   },
 });

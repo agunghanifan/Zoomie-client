@@ -38,6 +38,7 @@ export default function FavoriteCard(props) {
 
   let [fontsLoaded] = useFonts({
     'Bebes Neue': require('../assets/fonts/BebasNeue-Regular.ttf'),
+    'Montserrat': require('../assets/fonts/Montserrat-Medium.ttf'),
   });
   if (!fontsLoaded) {
     return <AppLoading />;
@@ -137,7 +138,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   cardAddress: {
-    fontFamily: 'Bebes Neue',
+    fontFamily: 'Montserrat',
     fontStyle: 'normal',
     fontSize: 14,
     color: '#9B9B9B',

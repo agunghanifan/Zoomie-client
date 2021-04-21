@@ -54,6 +54,7 @@ export default function Chat(props) {
 
   let [fontsLoaded] = useFonts({
     'Bebes Neue': require('../assets/fonts/BebasNeue-Regular.ttf'),
+    'Montserrat': require('../assets/fonts/Montserrat-Medium.ttf'),
   });
   if (!fontsLoaded || !chats) {
     return <AppLoading />;
@@ -197,7 +198,7 @@ const styles = StyleSheet.create({
     marginRight: 14,
   },
   chatInput: {
-    fontFamily: 'Bebes Neue',
+    fontFamily: 'Montserrat',
     backgroundColor: '#F2F2F2',
     width: width * 0.75,
     fontSize: 16,

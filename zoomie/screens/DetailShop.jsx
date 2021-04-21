@@ -40,6 +40,7 @@ export default function DetailShop(props) {
 
   let [fontsLoaded] = useFonts({
     'Bebes Neue': require('../assets/fonts/BebasNeue-Regular.ttf'),
+    'Montserrat': require('../assets/fonts/Montserrat-Medium.ttf'),
   });
   if (!fontsLoaded || !reviews) {
     return <AppLoading />;
@@ -149,13 +150,13 @@ const styles = StyleSheet.create({
     marginTop: 16,
   },
   shopAddress: {
-    fontFamily: 'Bebes Neue',
+    fontFamily: 'Montserrat',
     fontStyle: 'normal',
     fontSize: 20,
     color: '#9B9B9B',
   },
   shopReview: {
-    fontFamily: 'Bebes Neue',
+    fontFamily: 'Montserrat',
     fontStyle: 'normal',
     fontSize: 20,
     color: '#000',
@@ -165,7 +166,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     elevation: 1,
     padding: 10,
-    fontFamily: 'Bebes Neue',
+    fontFamily: 'Montserrat',
     fontStyle: 'normal',
     fontSize: 22,
     marginBottom: 5,

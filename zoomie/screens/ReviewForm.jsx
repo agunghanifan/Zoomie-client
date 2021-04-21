@@ -15,7 +15,8 @@ export default function ReviewForm (props) {
 
   // ini logic load font
   let [fontsLoaded] = useFonts({
-    'Bebes Neue': require('../assets/fonts/BebasNeue-Regular.ttf')
+    'Bebes Neue': require('../assets/fonts/BebasNeue-Regular.ttf'),
+    'Montserrat': require('../assets/fonts/Montserrat-Medium.ttf'),
   });
   if (!fontsLoaded) {
     return <AppLoading />;
@@ -133,7 +134,7 @@ const styles = StyleSheet.create({
   },
   label: {
     alignSelf: 'flex-start',
-    fontFamily: 'Bebes Neue',
+    fontFamily: 'Montserrat',
     fontStyle: 'normal',
     fontSize: 18,
     left: 15,
@@ -178,7 +179,7 @@ const styles = StyleSheet.create({
     color: '#000',
     elevation: 4,
     paddingLeft: 20,
-    fontFamily: 'Bebes Neue',
+    fontFamily: 'Montserrat',
     margin: 5
   },
   textArea: {
@@ -192,17 +193,17 @@ const styles = StyleSheet.create({
     color: '#000',
     elevation: 4,
     padding: 20,
-    fontFamily: 'Bebes Neue',
+    fontFamily: 'Montserrat',
     margin: 5
   },
   dropdownText: {
     position: 'absolute',
     color: '#000',
-    fontFamily: 'Bebes Neue',
+    fontFamily: 'Montserrat',
   },
   shopAddress: {
     alignSelf: 'center',
-    fontFamily: 'Bebes Neue',
+    fontFamily: 'Montserrat',
     fontStyle: 'normal',
     fontSize: 20,
     color: '#9B9B9B',
