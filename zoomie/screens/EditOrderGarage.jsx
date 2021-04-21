@@ -72,7 +72,7 @@ export default function EditOrderGarage (props) {
   const updateOrder = () => {
     if (!date || !status) {
       Alert.alert("Error", "Please input Date and/or Status")
-    } else if( date < Date.now()) {
+    } else if( date <= Date.now()) {
       Alert.alert("Error", "Date cannot older than today")
     } else {
       const data = {
