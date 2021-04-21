@@ -68,7 +68,7 @@ export default function DetailShop(props) {
           <Image 
             style={styles.repairShopPicture}
             source={{
-              uri: 'https://cdn.medcom.id/images/library/images/WhatsApp%20Image%202020-02-20%20at%2012_21_13%20PM.jpeg'
+              uri: garage.image
             }}
           />
         </View>

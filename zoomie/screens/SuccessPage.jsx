@@ -86,8 +86,9 @@ const styles = StyleSheet.create({
   successText: {
     fontFamily: 'Montserrat',
     fontStyle: 'normal',
-    fontSize: width * 0.05,
+    fontSize: width * 0.035,
     color: '#AFADAD',
+    fontWeight: 'bold'
   },
   successImg: {
     width: width * 0.8,

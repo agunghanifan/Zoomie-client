@@ -76,7 +76,7 @@ export default function HistoryCard (props) {
             <Text style={styles.cardName} >{transaction.Garage.name}</Text>
             <Text style={styles.cardAddress} >{transaction.Garage.address}</Text>
             <Text style={styles.cardStatus} >({statusTranslate(transaction.status)})</Text>
-            <Text style={styles.cardName} >{transaction.description}</Text>
+            <Text style={styles.cardDescription} >{transaction.description}</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.btnGroups}>
@@ -125,11 +125,19 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: '#000',
   },
+  cardDescription: {
+    left: 10,
+    fontFamily: 'Montserrat',
+    fontStyle: 'normal',
+    fontSize: 12,
+    color: '#000',
+  },
   cardStatus: {
     fontFamily: 'Montserrat',
     fontStyle: 'normal',
     fontSize: 12,
     color: '#000',
+    fontWeight: 'bold',
   },
   cardAddress: {
     fontFamily: 'Montserrat',
@@ -141,7 +149,7 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
     fontFamily: 'Montserrat',
     fontStyle: 'normal',
-    fontSize: 14,
+    fontSize: 12,
     color: '#9B9B9B',
   },
   btnGroups: {

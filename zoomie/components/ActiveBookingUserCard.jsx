@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
     fontFamily: 'Montserrat',
     fontStyle: 'normal',
-    fontSize: 14,
+    fontSize: 12,
     color: '#9B9B9B',
   },
   btnGroups: {

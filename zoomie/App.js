@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, LogBox } from 'react-native';
 import { Provider } from "react-redux";
 import store from "./store/";
 import { NavigationContainer } from "@react-navigation/native";
@@ -22,8 +22,8 @@ import OrderHistoryBengkel from './screens/OrderHistoryBengkel'
 import EditProfileBengkel from './screens/EditProfileBengkel'
 
 const Stack = createStackNavigator();
-
 export default function App() {
+  LogBox.ignoreAllLogs()
   return (
     <Provider store={store}>
       <NavigationContainer>

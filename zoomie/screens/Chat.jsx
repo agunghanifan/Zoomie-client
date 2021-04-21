@@ -1,4 +1,4 @@
-import React, { Component, useEffect, useState } from 'react';
+import React, { Component, useEffect, useRef, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { StyleSheet, Text, View, Alert, FlatList, Dimensions, TouchableOpacity, TextInput, ScrollView } from 'react-native';
 import AppLoading from 'expo-app-loading';
@@ -34,14 +34,22 @@ export default function Chat(props) {
     }
   }, []);
 
+  // useEffect(_ => {
+  //   let mounted = true;
+  //   dispatch({ type: 'chats/setChats', payload: [] });
+
+  //   return function cleanup () {
+  //     mounted = false;
+  //   }
+  // }, [])
+
   const newChatCallback = () => {
     getChats();
   }
 
   async function getChats () {
     try {
-      // dispatch({ type: 'chats/setChats', payload: [] });
-      dispatch({ type: 'loading/setLoading', payload: true });
+      // dispatch({ type: 'loading/setLoading', payload: true });
       let status = await AsyncStorage.getItem('@roles');
       setYourstatus(status);
       const headers = {
@@ -49,7 +57,7 @@ export default function Chat(props) {
       }
       const { data } = await axios.get('/chats/' + garage.id, { headers });
       dispatch({ type: 'chats/setChats', payload: data });
-      dispatch({ type: 'loading/setLoading', payload: false });
+      // dispatch({ type: 'loading/setLoading', payload: false });
     } catch (error) {
       console.log(error.response);
     }
@@ -59,7 +67,7 @@ export default function Chat(props) {
     'Bebes Neue': require('../assets/fonts/BebasNeue-Regular.ttf'),
     'Montserrat': require('../assets/fonts/Montserrat-Medium.ttf'),
   });
-  if (!fontsLoaded || !chats || loading) {
+  if (!fontsLoaded || !chats) {
     return <AppLoading />;
   }
 
