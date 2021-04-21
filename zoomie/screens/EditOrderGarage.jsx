@@ -54,6 +54,7 @@ export default function EditOrderGarage (props) {
 
   let [fontsLoaded] = useFonts({
     'Bebes Neue': require('../assets/fonts/BebasNeue-Regular.ttf'),
+    'Montserrat': require('../assets/fonts/Montserrat-Medium.ttf'),
   });
   if (!fontsLoaded || !transactionsById || loading) {
     return <AppLoading />;
@@ -71,7 +72,7 @@ export default function EditOrderGarage (props) {
   const updateOrder = () => {
     if (!date || !status) {
       Alert.alert("Error", "Please input Date and/or Status")
-    } else if( date < Date.now()) {
+    } else if( date <= Date.now()) {
       Alert.alert("Error", "Date cannot older than today")
     } else {
       const data = {
@@ -203,7 +204,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
     elevation: 4,
     paddingLeft: 20,
-    fontFamily: 'Bebes Neue',
+    fontFamily: 'Montserrat',
     margin: 5
   },
   dateinput: {
@@ -215,7 +216,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
     elevation: 4,
     paddingLeft: 20,
-    fontFamily: 'Bebes Neue',
+    fontFamily: 'Montserrat',
     margin: 5,
     marginLeft: 0,
   },
@@ -231,12 +232,12 @@ const styles = StyleSheet.create({
     elevation: 4,
     padding: 15,
     paddingLeft: 20,
-    fontFamily: 'Bebes Neue',
+    fontFamily: 'Montserrat',
     margin: 5
   },
   label: {
     left: 13,
-    fontFamily: 'Bebes Neue',
+    fontFamily: 'Montserrat',
     alignSelf: 'flex-start',
     fontSize: 18,
   },
@@ -249,7 +250,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
   },
   paddingCardText: {
-    fontFamily: 'Bebes Neue',
+    fontFamily: 'Montserrat',
     padding: 18,
     paddingBottom: 25,
     height: 20,

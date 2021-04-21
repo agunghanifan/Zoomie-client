@@ -86,6 +86,7 @@ export default function ProfileUser (props) {
   // ini logic load font
   let [fontsLoaded] = useFonts({
     'Bebes Neue': require('../assets/fonts/BebasNeue-Regular.ttf'),
+    'Montserrat': require('../assets/fonts/Montserrat-Medium.ttf'),
   });
   if (!fontsLoaded || !user) {
     return <AppLoading />
@@ -194,7 +195,7 @@ const styles = StyleSheet.create({
   textUsername: {
     left: 130,
     top: -77,
-    fontFamily: 'Bebes Neue',
+    fontFamily: 'Montserrat',
     fontSize: 18,
     color: '#222222'
   },

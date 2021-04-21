@@ -12,6 +12,7 @@ export default function GarageCard(props) {
 
   let [fontsLoaded] = useFonts({
     'Bebes Neue': require('../assets/fonts/BebasNeue-Regular.ttf'),
+    'Montserrat': require('../assets/fonts/Montserrat-Medium.ttf'),
   });
   if (!fontsLoaded) {
     return <AppLoading />;
@@ -67,7 +68,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   cardStatus: {
-    fontFamily: 'Bebes Neue',
+    fontFamily: 'Montserrat',
     fontStyle: 'normal',
     fontSize: 14,
     color: '#000',
@@ -82,20 +83,20 @@ const styles = StyleSheet.create({
     width: width * 0.5,
     left: 10,
     marginLeft: 5,
-    fontFamily: 'Bebes Neue',
+    fontFamily: 'Montserrat',
     fontStyle: 'normal',
     fontSize: 14,
     color: '#9B9B9B',
   },
   cardMessage: {
     width: width * 0.5,
-    fontFamily: 'Bebes Neue',
+    fontFamily: 'Montserrat',
     fontStyle: 'normal',
     fontSize: 14,
     color: '#535C66',
   },
   cardDate: {
-    fontFamily: 'Bebes Neue',
+    fontFamily: 'Montserrat',
     fontStyle: 'normal',
     fontSize: 14,
     color: '#9B9B9B',

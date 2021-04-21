@@ -11,6 +11,7 @@ export default function ChatCard (props) {
 
   let [fontsLoaded] = useFonts({
     'Bebes Neue': require('../assets/fonts/BebasNeue-Regular.ttf'),
+    'Montserrat': require('../assets/fonts/Montserrat-Medium.ttf'),
   });
   if (!fontsLoaded) {
     return <AppLoading />;
@@ -60,6 +61,6 @@ const styles = StyleSheet.create({
   subheading: {
     fontSize: 16,
     color: 'black',
-    fontFamily: 'Bebes Neue',
+    fontFamily: 'Montserrat',
   },
 });

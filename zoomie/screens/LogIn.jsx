@@ -12,7 +12,8 @@ export default function Login (props) {
 
   // ini logic load font
   let [fontsLoaded] = useFonts({
-    'Bebes Neue': require('../assets/fonts/BebasNeue-Regular.ttf')
+    'Bebes Neue': require('../assets/fonts/BebasNeue-Regular.ttf'),
+    'Montserrat': require('../assets/fonts/Montserrat-Medium.ttf'),
   });
   if (!fontsLoaded) {
     return <AppLoading />;
@@ -118,7 +119,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
     elevation: 4,
     paddingLeft: 20,
-    fontFamily: 'Bebes Neue',
+    fontFamily: 'Montserrat',
     margin: 5
   },
   title: {

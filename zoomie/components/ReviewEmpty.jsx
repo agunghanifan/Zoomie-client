@@ -8,6 +8,7 @@ const width = Dimensions.get('window').width;
 export default function SuccessPage(props) {
   let [fontsLoaded] = useFonts({
     'Bebes Neue': require('../assets/fonts/BebasNeue-Regular.ttf'),
+    'Montserrat': require('../assets/fonts/Montserrat-Medium.ttf'),
   });
   if (!fontsLoaded) {
     return <AppLoading />;
@@ -36,7 +37,7 @@ const styles = StyleSheet.create({
   },
   subTitle: {
     textAlign: 'center',
-    fontFamily: 'Bebes Neue',
+    fontFamily: 'Montserrat',
     fontStyle: 'normal',
     fontSize: width * 0.03,
     color: '#9B9B9B',
