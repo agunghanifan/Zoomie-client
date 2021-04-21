@@ -26,7 +26,7 @@ export default function Chat(props) {
   useEffect(_ => {
     props.navigation.setOptions({ title: garage.name.toUpperCase()})
     getChats();
-    socket = io('http://192.168.0.150:3000');
+    socket = io('http://192.168.100.15:3000');
     socket.on("newChat", newChatCallback);
 
     return () => {
