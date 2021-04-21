@@ -6,35 +6,38 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useFonts } from '@expo-google-fonts/inter';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from '../axios'
-import { useIsFocused } from "@react-navigation/native";
 import * as ImagePicker from 'expo-image-picker';
 
 
 export default function ProfileUser (props) {
   const user = useSelector(state => state.users.user);
-
   const dispatch = useDispatch();
-  const isFocused = useIsFocused();
 
   const [image, setImage] = useState('https://image.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg');
 
   useEffect(_ => {
-    async function getUser() {
-      try {
-        const id = await AsyncStorage.getItem('@id');
-        const headers = {
-          access_token: await AsyncStorage.getItem('@access_token')
-        }
-        const { data } = await axios.get('/user/' + id, { headers });
-        dispatch({ type: 'user/setUser', payload: data });
-        setImage(data.image)
-      }
-      catch (err) {
-        console.log(err);
-      }
-    }
+    let mounted = true;
     getUser()
-  }, [isFocused])
+    
+    return function cleanup () {
+      mounted = false;
+    }
+  }, [])
+
+  async function getUser() {
+    try {
+      const id = await AsyncStorage.getItem('@id');
+      const headers = {
+        access_token: await AsyncStorage.getItem('@access_token')
+      }
+      const { data } = await axios.get('/user/' + id, { headers });
+      dispatch({ type: 'user/setUser', payload: data });
+      setImage(data.image)
+    }
+    catch (err) {
+      console.log(err);
+    }
+  }
 
   useEffect(() => {
     (async () => {
@@ -154,7 +157,6 @@ export default function ProfileUser (props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 60,
     fontFamily: 'Bebes Neue',
     backgroundColor: '#F9F9F9'
   },

@@ -11,23 +11,29 @@ import { useIsFocused } from "@react-navigation/native";
 
 export default function Favorites(props) {
   const favorites = useSelector(state => state.favorites.favorites);
+  const loading = useSelector(state => state.favorites.loading);
   const dispatch = useDispatch();
   const isFocused = useIsFocused();
   const [image, setImage] = useState(null);
 
   useEffect(_ => {
-    getFavorites ();
-    getUser ();
+    const unsubscribe = props.navigation.addListener('focus', () => {
+      getFavorites ();
+      getUser ();
+    });
+    return unsubscribe;
   }, [isFocused])
 
   async function getFavorites () {
     try {
+      dispatch({ type: 'loading/setLoading', payload: true })
       dispatch({ type: 'favorites/setFavorites', payload: [] });
       const headers = {
         access_token: await AsyncStorage.getItem('@access_token')
       }
       const { data } = await axios.get('/favorites', { headers });
       dispatch({ type: 'favorites/setFavorites', payload: data });
+      dispatch({ type: 'loading/setLoading', payload: false })
     } catch (error) {
       console.log(error);
     }
@@ -51,7 +57,7 @@ export default function Favorites(props) {
   let [fontsLoaded] = useFonts({
     'Bebes Neue': require('../assets/fonts/BebasNeue-Regular.ttf'),
   });
-  if (!fontsLoaded || !favorites) {
+  if (!fontsLoaded || !favorites || loading) {
     return <AppLoading />;
   }
   
@@ -89,7 +95,6 @@ export default function Favorites(props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: 60
   },
   tinyProfPic: {
     position: 'absolute',

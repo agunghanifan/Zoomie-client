@@ -16,9 +16,9 @@ export default function Chat(props) {
   const { garage } = props.route.params;
 
   const chats = useSelector(state => state.chats.chats);
+  const loading = useSelector(state => state.chats.loading);
   const [yourstatus, setYourstatus] = useState('');
   const [chat, setChat] = useState('');
-  const [test, setTest] = useState('');
 
   const dispatch = useDispatch();
   // console.log(garage, "garage from chat");
@@ -26,7 +26,7 @@ export default function Chat(props) {
   useEffect(_ => {
     props.navigation.setOptions({ title: garage.name.toUpperCase()})
     getChats();
-    socket = io('http://192.168.100.15:3000');
+    socket = io('http://192.168.0.150:3000');
     socket.on("newChat", newChatCallback);
 
     return () => {
@@ -40,6 +40,8 @@ export default function Chat(props) {
 
   async function getChats () {
     try {
+      // dispatch({ type: 'chats/setChats', payload: [] });
+      dispatch({ type: 'loading/setLoading', payload: true });
       let status = await AsyncStorage.getItem('@roles');
       setYourstatus(status);
       const headers = {
@@ -47,6 +49,7 @@ export default function Chat(props) {
       }
       const { data } = await axios.get('/chats/' + garage.id, { headers });
       dispatch({ type: 'chats/setChats', payload: data });
+      dispatch({ type: 'loading/setLoading', payload: false });
     } catch (error) {
       console.log(error.response);
     }
@@ -56,7 +59,7 @@ export default function Chat(props) {
     'Bebes Neue': require('../assets/fonts/BebasNeue-Regular.ttf'),
     'Montserrat': require('../assets/fonts/Montserrat-Medium.ttf'),
   });
-  if (!fontsLoaded || !chats) {
+  if (!fontsLoaded || !chats || loading) {
     return <AppLoading />;
   }
 

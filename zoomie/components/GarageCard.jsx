@@ -131,6 +131,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   cardInfo: {
+    width: width * 0.48,
     marginLeft: 20,
   },
   cardName: {

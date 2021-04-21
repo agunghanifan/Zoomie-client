@@ -6,37 +6,49 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useFonts } from '@expo-google-fonts/inter';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from '../axios'
-import { useIsFocused } from '@react-navigation/native'
 import * as ImagePicker from 'expo-image-picker';
 
 export default function ProfileBengkel (props) {
-  const isFocused = useIsFocused()
   const dispatch = useDispatch()
   const user = useSelector(state => state.users.user)
   
   const [image, setImage] = useState('https://image.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg');
 
   useEffect(() => {
-    async function getGarage() {
-      try {
-        const id = await AsyncStorage.getItem('@id');
-        const headers = {
-          access_token: await AsyncStorage.getItem('@access_token')
-        }
-        const { data } = await axios.get('/garage/', { headers });
-        const dataFilter = data.filter(garage => +garage.userId === +id)
-        // console.log(dataFilter[0], 'filtered data');
-        dispatch({ type: 'user/setUser', payload: dataFilter[0] });
-        dataFilter[0].image ? setImage(dataFilter[0].image) : setImage('https://image.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg');        
-      }
-      catch (err) {
-        console.log(err);
-      }
-    }
-    
+    let mounted = true;
     getGarage()
-  }, [isFocused])
+    
+    return function cleanup () {
+      mounted = false;
+    }
+  }, [])
 
+  
+  useEffect(() => {
+    let mounted = true;
+    getGarage()
+    
+    return function cleanup () {
+      mounted = false;
+    }
+  }, [user])
+
+  async function getGarage() {
+    try {
+      const id = await AsyncStorage.getItem('@id');
+      const headers = {
+        access_token: await AsyncStorage.getItem('@access_token')
+      }
+      const { data } = await axios.get('/garage/', { headers });
+      const dataFilter = data.filter(garage => +garage.userId === +id)
+      // console.log(dataFilter[0], 'filtered data');
+      dispatch({ type: 'user/setUser', payload: dataFilter[0] });
+      dataFilter[0].image ? setImage(dataFilter[0].image) : setImage('https://image.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg');        
+    }
+    catch (err) {
+      console.log(err);
+    }
+  }
   
   useEffect(() => {
     (async () => {
@@ -154,7 +166,6 @@ export default function ProfileBengkel (props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 60,
     fontFamily: 'Bebes Neue',
     backgroundColor: '#F9F9F9'
   },

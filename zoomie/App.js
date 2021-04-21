@@ -70,9 +70,9 @@ export default function App() {
             component={Main}
             options={{
               title: '',
-              headerShown: false,
               headerStyle: {
                 backgroundColor: '#F2F2F2',
+                elevation: 0,
               },
             }}
           />
@@ -81,7 +81,6 @@ export default function App() {
             component={MainGarage}
             options={{
               title: '',
-              headerShown: false,
               headerStyle: {
                 backgroundColor: '#F2F2F2',
               },
